@@ -1,11 +1,9 @@
 package com.veil.extendedscripts;
 
-import com.veil.extendedscripts.constants.EntityType;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +21,7 @@ import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.scripted.NpcAPI;
+import noppes.npcs.scripted.constants.EntityType;
 import noppes.npcs.scripted.entity.ScriptNpc;
 
 import java.util.List;
@@ -116,7 +115,7 @@ public class WorldClippers extends Item {
         }
 
         IEntity npcEntity = AbstractNpcAPI.Instance().getIEntity(targetEntity);
-        if (npcEntity.getType() == EntityType.Instance.NPC) {
+        if (npcEntity.getType() == EntityType.NPC) {
             ScriptNpc npc = (ScriptNpc) npcEntity;
             customName = " named \"" + npc.getName() + "\"";
         }

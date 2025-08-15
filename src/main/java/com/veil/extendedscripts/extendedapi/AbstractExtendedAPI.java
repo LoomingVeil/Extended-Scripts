@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.extendedapi;
 
 import com.veil.extendedscripts.extendedapi.constants.*;
-import noppes.npcs.api.IWorld;
-import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.extendedapi.IWorld;
+import noppes.npcs.extendedapi.entity.IEntity;
 
 /**
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.

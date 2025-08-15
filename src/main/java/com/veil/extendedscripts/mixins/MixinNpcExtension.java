@@ -1,0 +1,35 @@
+package com.veil.extendedscripts.mixins;
+
+import com.mojang.authlib.GameProfile;
+import noppes.npcs.entity.EntityNPCInterface;
+import noppes.npcs.scripted.entity.ScriptNpc;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+
+@Mixin(value={ScriptNpc.class})
+public class MixinNpcExtension {
+    @Shadow
+    public EntityNPCInterface npc;
+
+    @Unique
+    public int getAnimationType() {
+        return npc.currentAnimation.ordinal();
+    }
+
+    @Unique
+    public void setPlayerSkinName(String playerName) {
+        npc.display.playerProfile = new GameProfile(null, playerName);
+        this.npc.updateClient = true;
+    }
+
+    @Unique
+    public String getPlayerSkinName() {
+        if (npc.display.playerProfile == null) {
+            return "";
+        }
+        String ret = npc.display.playerProfile.getName();
+        if (ret == null) return "";
+        return ret;
+    }
+}

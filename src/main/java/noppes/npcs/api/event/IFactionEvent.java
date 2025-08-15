@@ -1,0 +1,16 @@
+package noppes.npcs.api.event;
+
+import cpw.mods.fml.common.eventhandler.Cancelable;
+import noppes.npcs.api.handler.data.IFaction;
+
+public interface IFactionEvent extends IPlayerEvent {
+
+    IFaction getFaction();
+
+    @Cancelable
+    interface FactionPoints extends IFactionEvent {
+        boolean decreased();
+
+        int getPoints();
+    }
+}

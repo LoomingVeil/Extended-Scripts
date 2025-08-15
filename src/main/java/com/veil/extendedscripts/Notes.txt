@@ -1,0 +1,32 @@
+Things I want to add:
+ - Support sub tags for /inspect
+ - Add /inspect tphere
+ - Add /inspect self
+ - Fix issues with cones and pyramids in the shape class
+ - Improved Overlay class
+ - Make the rest of the GUIs (Anvil, Enchantment Table, and Brewing Stand)
+ - Make it so that when opening the Furnace time has passed
+ - Modifying entity jump power both vertically and horizontally
+ - Custom Commands
+ - Make it so when you change dimension and login if you were flying beforehand you keep flying
+ - Fix flight when switching gamemodes
+ - Function to prevent players from moving
+ - Add a function for preventing players from using commands
+ - Continue searching for more Enums to implement (Nbt data types)
+ - Figure out if setAnimation(7) doing nothing is intentional
+ - See if we can change how ctrl + backspace works in the code editor
+ - See if we can make right-clicking be a previous option button
+ - Add functions realted to ids, getting next available ids and check if theyre used.
+ - Make custom particles possible if they aren't already.
+ - Make a keepInventory for single players
+
+Event stuff that IDK how to do yet:
+ - Add Slot Changed Event
+ - Death event that lets you escape death
+ - Damage event that lets you take no damage
+
+Things that might just be impossible:
+ - Making some working version of player.stopUsingItem()
+ - Reading the player's controls
+ - Include Shift Click equipping for scripted item armor
+ - Check if texture exists

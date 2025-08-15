@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.veil.extendedscripts.mixins",
+  "refmap": "mixins.extendedscripts.refmap.json",
+  "mixins": [
+    "MixinAttributeControllerExtension",
+    "MixinPlayerExtension",
+    "MixinEntityExtension",
+    "MixinScriptedItemExtension",
+    "MixinScriptedItemScriptExtension",
+    "MixinItemExtension",
+    "MixinBlockExtension",
+    "MixinWorldExtension",
+    "MixinNpcExtension"
+  ],
+  "client": [],
+  "server": [],
+  "minVersion": "0.7.11"
+}

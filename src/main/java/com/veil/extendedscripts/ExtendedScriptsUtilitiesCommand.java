@@ -10,6 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExtendedScriptsUtilitiesCommand extends CommandBase {
@@ -141,8 +142,14 @@ public class ExtendedScriptsUtilitiesCommand extends CommandBase {
                     if (result) {
                         sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully unregistered "+key+"."));
                     } else {
-                        sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Could not find attribute "+key+"."));
-                        sender.addChatMessage(ChatUtils.fillChatWithColor(red+"Use /kam attribute list <page> for a full list of attributes"));
+                        result = Arrays.asList(ExtendedAPI.Instance.getAttributeKeyList()).contains(key);
+
+                        if (result) {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"You can only remove custom attributes!"));
+                        } else {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Could not find attribute "+key+"."));
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(red+"Use /kam attribute list <page> for a full list of attributes"));
+                        }
                     }
                 }
             }

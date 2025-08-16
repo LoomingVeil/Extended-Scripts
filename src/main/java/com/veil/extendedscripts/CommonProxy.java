@@ -1,6 +1,6 @@
 package com.veil.extendedscripts;
 
-import com.veil.extendedscripts.constants.Keys;
+import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -41,7 +41,14 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         AbstractNpcAPI.Instance().addGlobalObject("extAPI", ExtendedAPI.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("Key", new Keys());
+        AbstractNpcAPI.Instance().addGlobalObject("AnimationType", AnimationType.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("Color", ColorCodes.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("EntityType", EntityType.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("JobType", JobType.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("Key", Keys.Instance);
+        AbstractNpcAPI.Instance().addGlobalObject("RoleType", JobType.Instance);
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

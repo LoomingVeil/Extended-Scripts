@@ -62,7 +62,6 @@ public class ExtendedWorldData extends WorldSavedData {
         nbt.setTag(DATA_ID, list);
     }
 
-    // Getter and setter for your data
     public Collection<AttributeDefinition> getExtendedAttributes() {
         return extendedAttributes;
     }

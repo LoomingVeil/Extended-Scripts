@@ -1,7 +1,7 @@
 package com.veil.extendedscripts.extendedapi;
 
 import com.veil.extendedscripts.extendedapi.constants.*;
-import noppes.npcs.extendedapi.IWorld;
+import noppes.npcs.api.IWorld;
 import noppes.npcs.extendedapi.entity.IEntity;
 
 /**
@@ -33,7 +33,7 @@ public interface AbstractExtendedAPI {
     String[] getEntityNameList();
 
     /**
-     * Creates an instance of an IEntity that can be spawned in the world with IWorld.spawnEntityInWorld(entity)
+     * Creates an instance of an IEntity that can be spawned in the world with {@link IWorld#spawnEntityInWorld(noppes.npcs.api.entity.IEntity)}
      * @param entityName To see all valid names, call {@link #getEntityNameList()}
      * @return An IEntity or null if entityName is invalid
      */
@@ -53,7 +53,7 @@ public interface AbstractExtendedAPI {
      * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
      * @param displayName This name will show up on your item.
      * @param colorCode Takes one of Minecraft's 16 colors 0-9 and a-f. See {@link IColorCodes}.
-     * @param attributeType 0. Flat, 1. Percent, 2. Magic. {@link IAttributeValueType}
+     * @param attributeType 0. Flat, 1. Percent, 2. Magic. See {@link IAttributeValueType}
      * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link IAttributeSection}
      */
     void registerAttribute(String key, String displayName, char colorCode, int attributeType, int section);

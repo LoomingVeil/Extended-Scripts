@@ -15,6 +15,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 
+import java.io.File;
+
 @Mod(modid = ExtendedScripts.MODID, version = Tags.VERSION, name = "Veil's Extended Scripts", acceptedMinecraftVersions = "[1.7.10]")
 public class ExtendedScripts {
     public static final String MODID = "extendedscripts";
@@ -24,7 +26,7 @@ public class ExtendedScripts {
     public static final int GUI_PERSISTENT_VIRTUAL_FURNACE = 2;
     public static final int GUI_VIRTUAL_ANVIL = 3;
     public static Item scriptedItem;
-    public static final Item worldClippers = new WorldClippers();
+    public static final WorldClippers worldClippers = new WorldClippers();
     @SidedProxy(clientSide = "com.veil.extendedscripts.ClientProxy", serverSide = "com.veil.extendedscripts.CommonProxy")
     public static CommonProxy proxy;
 
@@ -86,7 +88,7 @@ public class ExtendedScripts {
     public static ExtendedWorldData getExtendedWorldData() {
         World overworld = MinecraftServer.getServer().worldServerForDimension(0);
 
-        MapStorage storage = overworld.perWorldStorage;
+        MapStorage storage = overworld.mapStorage;
         String DATA_ID = ExtendedWorldData.DATA_ID;
 
         ExtendedWorldData instance = (ExtendedWorldData) storage.loadData(ExtendedWorldData.class, DATA_ID);
@@ -97,6 +99,26 @@ public class ExtendedScripts {
         }
 
         return instance;
+    }
+
+    public static File getModWorldDirectory() {
+        World overworld = MinecraftServer.getServer().worldServerForDimension(0);
+        File worldDirectory = overworld.getSaveHandler().getWorldDirectory();
+
+        // Create a new File object for your mod's folder
+        File modDirectory = new File(worldDirectory, MODID);
+
+        // Check if the directory exists and create it if it doesn't
+        if (!modDirectory.exists()) {
+            boolean success = modDirectory.mkdirs();
+            if (success) {
+                System.out.println("Created save data directory: " + modDirectory.getAbsolutePath());
+            } else {
+                System.err.println("Failed to create save data directory: " + modDirectory.getAbsolutePath());
+            }
+        }
+
+        return modDirectory;
     }
 }
 

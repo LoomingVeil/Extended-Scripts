@@ -12,13 +12,15 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types)
+ - Continue searching for more Enums to implement (Nbt data types, Mouse buttons)
  - Figure out if setAnimation(7) doing nothing is intentional
  - See if we can change how ctrl + backspace works in the code editor
  - See if we can make right-clicking be a previous option button
- - Add functions realted to ids, getting next available ids and check if theyre used.
+ - Add functions realted to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
  - Make a keepInventory for single players
+ - Fix the version thing
+ - Make /veil attribute remove give a different error message when you try to remove a base attribte.
 
 Event stuff that IDK how to do yet:
  - Add Slot Changed Event

@@ -8,8 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
@@ -28,9 +31,9 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class WorldClippers extends Item {
+public class WorldClippers extends ItemSword {
     public WorldClippers() {
-        super();
+        super(ToolMaterial.WOOD);
         this.setUnlocalizedName("world_clippers");
         this.setTextureName("extendedscripts:world_clippers");
         this.setCreativeTab(CustomItems.tab);
@@ -39,7 +42,48 @@ public class WorldClippers extends Item {
     }
 
     @Override
+    public boolean func_150897_b(Block block) {
+        // false = not effective against any block. No idea what this function is
+        if (block == Blocks.web) return true;
+        return false;
+    }
+
+    @Override
+    public float func_150931_i() { // I believe this getDamageToEntity;
+        return 0;
+    }
+
+    @Override
+    public EnumAction getItemUseAction(ItemStack stack) {
+        return EnumAction.none;
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_) {
+        return false;
+    }
+
+    @Override
+    public float getDigSpeed(ItemStack stack, Block block, int meta) {
+        if (block != Blocks.web) {
+            return 15;
+        }
+        return 0.0F;
+    }
+
+    @Override
+    public boolean canHarvestBlock(Block block, ItemStack stack) {
+        if (block == Blocks.web) return true;
+        return false;
+    }
+
+    @Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        setBlockTarget(item, world, player, x, y, z);
+        return true;
+    }
+
+    public void setBlockTarget(ItemStack item, World world, EntityPlayer player, int x, int y, int z) {
         if (!world.isRemote) {
             NBTTagCompound inspectTag = getInspectTag(item);
 
@@ -55,15 +99,15 @@ public class WorldClippers extends Item {
 
             // Lazy way to go about it, but it works
             AbstractNpcAPI.Instance().getIItemStack(item).setLore(new String[] {
-                    "§f" + world.getBlock(x, y ,z).getLocalizedName(),
-                    "§fAt: " + x + ", " + y + ", " + z,
-                    "§fIn Dimension: " + world.provider.getDimensionName()
+                "§f" + world.getBlock(x, y ,z).getLocalizedName(),
+                "§fAt: " + x + ", " + y + ", " + z,
+                "§fIn Dimension: " + world.provider.getDimensionName()
             });
 
             player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Block Target Acquired"));
         }
-        return true;
     }
+
 
     @Override
     public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
@@ -216,14 +260,12 @@ public class WorldClippers extends Item {
         list.add("§cCut open the world and see whats inside §f/inspect.");
     }
 
-
     @Override
     public boolean hasEffect(ItemStack item, int pass) {
         return hasInspectTag(item);
     }
 
     public static boolean hasInspectTag(ItemStack item) {
-        // Check if the item has our custom "InspectTarget" NBT tag, and if its type is not 0 (no target)
         if (item.hasTagCompound()) {
             NBTTagCompound tag = item.getTagCompound();
             if (tag.hasKey("InspectTarget")) {
@@ -231,7 +273,7 @@ public class WorldClippers extends Item {
                 return inspectTag.getByte("TargetType") != (byte) 0; // True if type is 1 (block) or 2 (entity)
             }
         }
-        return false; // No NBT, or no target set
+        return false;
     }
 
     /**

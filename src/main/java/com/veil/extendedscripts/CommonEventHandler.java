@@ -191,11 +191,10 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (!event.entity.worldObj.isRemote) {
-            return;
-        }
-
         if (event.entity instanceof EntityPlayer) {
+            if (!event.entity.worldObj.isRemote) {
+                return;
+            }
             EntityPlayer genericPlayer = (EntityPlayer) event.entity;
             EntityPlayerSP ClientPlayer = (EntityPlayerSP) event.entity;
 

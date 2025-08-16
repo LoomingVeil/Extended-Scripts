@@ -220,7 +220,7 @@ public class WorldClippers extends ItemSword {
             }
 
             Entity foundEntity = null;
-            List<Entity> allLoadedEntities = targetWorld.loadedEntityList;
+            List<Entity> allLoadedEntities = new java.util.ArrayList<>(targetWorld.loadedEntityList);
             for (Object obj : allLoadedEntities) {
                 if (obj instanceof Entity) {
                     Entity entity = (Entity) obj;

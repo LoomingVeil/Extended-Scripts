@@ -19,8 +19,7 @@ Things I want to add:
  - Add functions realted to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
  - Make a keepInventory for single players
- - Fix the version thing
- - Make /veil attribute remove give a different error message when you try to remove a base attribte.
+ - Hide the +4 damage on the World Clippers
 
 Event stuff that IDK how to do yet:
  - Add Slot Changed Event

@@ -1,6 +1,8 @@
 package com.veil.extendedscripts.mixins;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import noppes.npcs.api.AbstractNpcAPI;
@@ -12,12 +14,18 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value={ScriptItemStack.class})
-public class MixinItemExtension {
+public class MixinItemExtension implements noppes.npcs.extendedapi.item.IItemStack {
     @Shadow
     public ItemStack item;
 
     @Unique
-    public void setUnbreakable(IItemStack item, boolean value) {
-        item.getNbt().setBoolean("Unbreakable", value);
+    public void setUnbreakable(boolean value) {
+        IItemStack npcItem = AbstractNpcAPI.Instance().getIItemStack(item);
+        npcItem.getNbt().setBoolean("Unbreakable", value);
+    }
+
+    @Unique
+    public int getNumericalId() {
+        return item.getItem().getIdFromItem(item.getItem());
     }
 }

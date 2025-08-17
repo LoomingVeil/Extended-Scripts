@@ -40,15 +40,18 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        AbstractNpcAPI.Instance().addGlobalObject("extAPI", ExtendedAPI.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("AnimationType", AnimationType.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("Color", ColorCodes.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("EntityType", EntityType.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("JobType", JobType.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("Key", Keys.Instance);
-        AbstractNpcAPI.Instance().addGlobalObject("RoleType", JobType.Instance);
+        AbstractNpcAPI API = AbstractNpcAPI.Instance();
+        API.addGlobalObject("extAPI", ExtendedAPI.Instance);
+        API.addGlobalObject("AnimationType", AnimationType.Instance);
+        API.addGlobalObject("Color", ColorCodes.Instance);
+        API.addGlobalObject("EntityType", EntityType.Instance);
+        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
+        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+        API.addGlobalObject("JobType", JobType.Instance);
+        API.addGlobalObject("Key", Keys.Instance);
+        API.addGlobalObject("RoleType", JobType.Instance);
+        API.addGlobalObject("MouseButton", MouseButton.Instance);
+        // AbstractNpcAPI.Instance().events().register(new HotbarSlotChangedEvent()); // Unnecessary
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

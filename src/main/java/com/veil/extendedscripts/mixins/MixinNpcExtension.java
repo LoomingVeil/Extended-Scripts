@@ -2,13 +2,14 @@ package com.veil.extendedscripts.mixins;
 
 import com.mojang.authlib.GameProfile;
 import noppes.npcs.entity.EntityNPCInterface;
+import noppes.npcs.extendedapi.entity.ICustomNpc;
 import noppes.npcs.scripted.entity.ScriptNpc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value={ScriptNpc.class})
-public class MixinNpcExtension {
+public class MixinNpcExtension implements ICustomNpc {
     @Shadow
     public EntityNPCInterface npc;
 

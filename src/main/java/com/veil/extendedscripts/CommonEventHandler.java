@@ -13,6 +13,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,6 +25,10 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.Clone;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.controllers.ScriptController;
+import noppes.npcs.controllers.data.PlayerDataScript;
 import org.lwjgl.Sys;
 
 import java.util.*;
@@ -56,14 +61,25 @@ public class CommonEventHandler {
                         ItemStack oldStack = player.inventory.getStackInSlot(previousSlot);
                         ItemStack newStack = player.inventory.getStackInSlot(currentSlot);
 
-                        HotbarSlotChangedEvent customEvent = new HotbarSlotChangedEvent(player, previousSlot, currentSlot, oldStack, newStack);
-                        MinecraftForge.EVENT_BUS.post(customEvent);
-                        // NpcAPI.EVENT_BUS.post(customEvent);
+                        HotbarSlotChangedEvent hotbarEvent = new HotbarSlotChangedEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player), previousSlot, currentSlot, oldStack, newStack);
+
+                        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(hotbarEvent.getPlayer());
+                        handler.callScript(hotbarEvent.getHookName(), hotbarEvent);
+                        AbstractNpcAPI.Instance().events().post(hotbarEvent);
 
                         // Update the last known slot for the next tick
                         lastHotbarSlot.put(playerUUID, currentSlot);
                     }
                 }
+
+            }
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(player);
+            float horzMoveMultiplier = props.getHorizontalJumpPower();
+            float speedMultiplier = 0.01F;
+
+            if (player.moveForward > 0.001 && !player.onGround && !player.capabilities.isFlying && !player.isInWater()) {
+                player.motionX += -Math.sin(Math.toRadians(player.rotationYaw)) * (horzMoveMultiplier - 1) * speedMultiplier;
+                player.motionZ +=  Math.cos(Math.toRadians(player.rotationYaw)) * (horzMoveMultiplier - 1) * speedMultiplier;
             }
         }
     }
@@ -186,7 +202,8 @@ public class CommonEventHandler {
     public void onJump(LivingEvent.LivingJumpEvent event) {
         ExtendedScriptEntityProperties properties = ExtendedScripts.getEntityProperties(event.entity);
         float jumpBoost = properties.getVerticalJumpPower();
-        event.entity.motionY += 0.225 * (jumpBoost - 1);
+        // event.entity.motionY += 0.225 * (jumpBoost - 1);
+        event.entity.motionY += (jumpBoost - 1) * 0.1F;
     }
 
     @SubscribeEvent

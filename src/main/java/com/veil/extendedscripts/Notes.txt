@@ -6,7 +6,6 @@ Things I want to add:
  - Improved Overlay class
  - Make the rest of the GUIs (Anvil, Enchantment Table, and Brewing Stand)
  - Make it so that when opening the Furnace time has passed
- - Modifying entity jump power both vertically and horizontally
  - Custom Commands
  - Make it so when you change dimension and login if you were flying beforehand you keep flying
  - Fix flight when switching gamemodes
@@ -20,9 +19,14 @@ Things I want to add:
  - Make custom particles possible if they aren't already.
  - Make a keepInventory for single players
  - Hide the +4 damage on the World Clippers
+ - Fix the issue where loaded scripts improperly show §
+ - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
+ - Add custom projectiles
+ - Add some try statements so that the mod doesn't crash without CustomNpc+
+ - Make a command for viewing and managing stored data
+ - Add bounciness
 
 Event stuff that IDK how to do yet:
- - Add Slot Changed Event
  - Death event that lets you escape death
  - Damage event that lets you take no damage
 

@@ -2,28 +2,25 @@ package com.veil.extendedscripts.properties;
 
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.PacketHandler;
+import com.veil.extendedscripts.constants.DataType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import java.util.EnumMap;
+
 public class ExtendedScriptEntityProperties implements IExtendedEntityProperties {
     public static final String PROPERTY_ID = ExtendedScripts.MODID + "_EntityProperties";
     private final Entity entity;
-    private float gravity = 1;
-    private float downwardGravity = -1;
-    private float upwardGravity = -1;
-    private float underwaterGravity = 1;
-    private float underwaterDownwardGravity = -1;
-    private float underwaterUpwardGravity = -1;
-    private float verticalJumpPower = 1;
-    private float horizontalJumpPower = 1;
-    private float maxFallDistance = 3;
-    private boolean canMove = true;
+    private final EnumMap<EntityAttribute, Object> entityAttributes = new EnumMap<>(EntityAttribute.class);
 
     public ExtendedScriptEntityProperties(Entity entity) {
         this.entity = entity;
+        for (EntityAttribute attr : EntityAttribute.values()) {
+            entityAttributes.put(attr, attr.getDefaultValue());
+        }
     }
 
     // Static helper to register properties onto an entity
@@ -36,7 +33,7 @@ public class ExtendedScriptEntityProperties implements IExtendedEntityProperties
     }
 
 
-    // Static helper to retrieve properties from a entity
+    // Static helper to retrieve properties from an entity
     public static ExtendedScriptEntityProperties get(Entity entity) {
         return (ExtendedScriptEntityProperties) entity.getExtendedProperties(PROPERTY_ID);
     }
@@ -44,59 +41,49 @@ public class ExtendedScriptEntityProperties implements IExtendedEntityProperties
     @Override
     public void saveNBTData(NBTTagCompound compound) {
         NBTTagCompound savedNBT = new NBTTagCompound();
-        savedNBT.setFloat("Gravity", this.gravity);
-        savedNBT.setFloat("DownwardGravity", this.downwardGravity);
-        savedNBT.setFloat("UpwardGravity", this.upwardGravity);
-        savedNBT.setFloat("UnderwaterGravity", this.underwaterGravity);
-        savedNBT.setFloat("UnderwaterDownwardGravity", this.underwaterDownwardGravity);
-        savedNBT.setFloat("UnderwaterUpwardGravity", this.underwaterUpwardGravity);
-        savedNBT.setFloat("VerticalJumpPower", this.verticalJumpPower);
-        savedNBT.setFloat("HorizontalJumpPower", this.horizontalJumpPower);
-        savedNBT.setFloat("maxFallDistance", this.maxFallDistance);
-        savedNBT.setBoolean("canMove", false);
-        compound.setTag("EntityData", savedNBT);
+
+        for (EntityAttribute attr : entityAttributes.keySet()) {
+            if (attr.getType() == Float.class) {
+                savedNBT.setFloat(attr.asCamelCase(), (float) entityAttributes.get(attr));
+            } else if (attr.getType() == Boolean.class) {
+                savedNBT.setBoolean(attr.asCamelCase(), (boolean) entityAttributes.get(attr));
+            }
+        }
+
+        compound.setTag("extendedEntityData", savedNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        if (compound.hasKey("EntityData", 10)) {
-            NBTTagCompound savedNBT = compound.getCompoundTag("EntityData");
-            if (savedNBT.hasKey("Gravity", 5)) {
-                this.gravity = savedNBT.getFloat("Gravity");
-            }
-
-            if (savedNBT.hasKey("DownwardGravity", 5)) {
-                this.downwardGravity = savedNBT.getFloat("DownwardGravity");
-            }
-
-            if (savedNBT.hasKey("UpwardGravity", 5)) {
-                this.upwardGravity = savedNBT.getFloat("UpwardGravity");
-            }
-
-            if (savedNBT.hasKey("UnderwaterGravity", 5)) {
-                this.underwaterGravity = savedNBT.getFloat("UnderwaterGravity");
-            }
-
-            if (savedNBT.hasKey("UnderwaterDownwardGravity", 5)) {
-                this.underwaterDownwardGravity = savedNBT.getFloat("UnderwaterDownwardGravity");
-            }
-
-            if (savedNBT.hasKey("UnderwaterUpwardGravity", 5)) {
-                this.underwaterUpwardGravity = savedNBT.getFloat("UnderwaterUpwardGravity");
-            }
-
-            if (savedNBT.hasKey("VerticalJumpPower", 5)) {
-                this.verticalJumpPower = savedNBT.getFloat("VerticalJumpPower");
-            }
-
-            if (savedNBT.hasKey("HorizontalJumpPower", 5)) {
-                this.horizontalJumpPower = savedNBT.getFloat("HorizontalJumpPower");
-            }
-
-            if (savedNBT.hasKey("maxFallDistance", 5)) {
-                this.maxFallDistance = savedNBT.getFloat("maxFallDistance");
+        if (compound.hasKey("extendedEntityData", 10)) {
+            NBTTagCompound savedNBT = compound.getCompoundTag("extendedEntityData");
+            for (EntityAttribute attr : entityAttributes.keySet()) {
+                if (savedNBT.hasKey(attr.asCamelCase(), DataType.Instance.valueOf(attr.getType().getTypeName()))) {
+                    if (attr.getType() == Float.class) {
+                        entityAttributes.put(attr, savedNBT.getFloat(attr.asCamelCase()));
+                    } else if (attr.getType() == Boolean.class) {
+                        entityAttributes.put(attr, savedNBT.getBoolean(attr.asCamelCase()));
+                    }
+                }
             }
         }
+    }
+
+    public void init(Entity entity, World world) {
+        // No special initialization needed here as loadNBTData handles data loading
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T get(EntityAttribute attr) {
+        return (T) entityAttributes.get(attr);
+    }
+
+    // Generic setter
+    public <T> void set(EntityAttribute attr, T value) {
+        if (!attr.getType().isInstance(value)) {
+            throw new IllegalArgumentException("Invalid type for " + attr + ". Expected " + attr.getType());
+        }
+        entityAttributes.put(attr, value);
     }
 
     public void syncToPlayer() {
@@ -105,11 +92,7 @@ public class ExtendedScriptEntityProperties implements IExtendedEntityProperties
         }
     }
 
-    public void init(Entity entity, World world) {
-        // No special initialization needed here as loadNBTData handles data loading
-    }
-
-    public float getGravity() {
+    /*public float getGravity() {
         return gravity;
     }
 
@@ -196,5 +179,5 @@ public class ExtendedScriptEntityProperties implements IExtendedEntityProperties
 
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
-    }
+    }*/
 }

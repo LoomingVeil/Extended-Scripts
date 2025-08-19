@@ -2,6 +2,8 @@ package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
+import com.veil.extendedscripts.properties.EntityAttribute;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -37,6 +39,7 @@ public class CommonProxy {
 
         FMLCommonHandler.instance().bus().register(new ScriptedObjectEventHandler());
         MinecraftForge.EVENT_BUS.register(new ScriptedObjectEventHandler());
+        CustomNpcEventHandler.init();
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -52,6 +55,19 @@ public class CommonProxy {
         API.addGlobalObject("RoleType", JobType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         // AbstractNpcAPI.Instance().events().register(new HotbarSlotChangedEvent()); // Unnecessary
+        AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase(), "Upward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_GRAVITY.asSnakeCase(), "Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY.asSnakeCase(), "Downward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_UPWARD_GRAVITY.asSnakeCase(), "Upward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_VERTICAL.asSnakeCase(), "Jump Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_HORIZONTAL.asSnakeCase(), "Jump Breadth", ColorCodes.Instance.DARK_GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase(), "Max Fall Distance", ColorCodes.Instance.WHITE, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+
+        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), "Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

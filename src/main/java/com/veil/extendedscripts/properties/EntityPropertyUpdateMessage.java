@@ -23,7 +23,7 @@ public class EntityPropertyUpdateMessage implements IMessage {
     public EntityPropertyUpdateMessage() {} // Required default constructor
 
     public EntityPropertyUpdateMessage(ExtendedScriptEntityProperties props) {
-        this.gravity = props.getGravity();
+        /*this.gravity = props.getGravity();
         this.downwardGravity = props.getDownwardGravity();
         this.upwardGravity = props.getUpwardGravity();
         this.underwaterGravity = props.getUnderwaterGravity();
@@ -32,7 +32,7 @@ public class EntityPropertyUpdateMessage implements IMessage {
         this.verticalJumpPower = props.getVerticalJumpPower();
         this.horizontalJumpPower = props.getHorizontalJumpPower();
         this.maxFallDistance = props.getMaxFallDistance();
-        this.canMove = props.getCanMove();
+        this.canMove = props.getCanMove();*/
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EntityPropertyUpdateMessage implements IMessage {
                         ExtendedScriptEntityProperties props = ExtendedScriptEntityProperties.get(player);
                         if (props != null) {
                             // Update the client's local EEP data
-                            props.setGravity(message.gravity);
+                            /*props.setGravity(message.gravity);
                             props.setDownwardGravity(message.downwardGravity);
                             props.setUpwardGravity(message.upwardGravity);
                             props.setUnderwaterGravity(message.underwaterGravity);
@@ -85,7 +85,7 @@ public class EntityPropertyUpdateMessage implements IMessage {
                             props.setVerticalJumpPower(message.verticalJumpPower);
                             props.setHorizontalJumpPower(message.horizontalJumpPower);
                             props.setMaxFallDistance(message.maxFallDistance);
-                            props.setCanMove(message.canMove);
+                            props.setCanMove(message.canMove);*/
                             // System.out.println("Client received entity EEP sync");
                         }
                     }

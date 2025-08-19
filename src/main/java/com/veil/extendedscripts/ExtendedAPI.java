@@ -1,6 +1,8 @@
 package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
+import com.veil.extendedscripts.properties.EntityAttribute;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
@@ -8,10 +10,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.entity.IPlayer;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -154,6 +158,16 @@ public class ExtendedAPI {
         } else {
             System.out.println("Attempted to register an attribute "+newAttribute.getKey()+" that already exists!");
         }
+    }
+
+    public static float getAttribute(EntityPlayer player, EntityAttribute key) {
+        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getDisplayName());
+        return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
+    }
+
+    public static float getAttribute(EntityPlayer player, PlayerAttribute key) {
+        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getDisplayName());
+        return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.veil.extendedscripts.mixins;
 
 import com.veil.extendedscripts.ExtendedScripts;
+import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.properties.ExtendedScriptEntityProperties;
 import net.minecraft.entity.Entity;
 import noppes.npcs.api.AbstractNpcAPI;
@@ -32,134 +33,115 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
      */
     public void setGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setGravity(value);
+        props.set(EntityAttribute.GRAVITY, value);
     }
 
     @Unique
     public float getGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getGravity();
+        return props.get(EntityAttribute.GRAVITY);
     }
 
     @Unique
-    /**
-     * Sets the entity's gravity when moving upward. Upward gravity overrides general gravity's upward force.
-     * @param value gravity strength. -1 for disabled
-     */
     public void setUpwardGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setUpwardGravity(value);
+        props.set(EntityAttribute.UPWARD_GRAVITY, value);
     }
 
     @Unique
     public float getUpwardGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getUpwardGravity();
+        return props.get(EntityAttribute.UPWARD_GRAVITY);
     }
 
     @Unique
-    /**
-     * Sets the entity's gravity when falling downward. Downward gravity overrides general gravity's downward force.
-     * @param value gravity strength. -1 for disabled
-     */
     public void setDownwardGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setDownwardGravity(value);
+        props.set(EntityAttribute.DOWNWARD_GRAVITY, value);
     }
 
     @Unique
     public float getDownwardGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getDownwardGravity();
+        return props.get(EntityAttribute.DOWNWARD_GRAVITY);
     }
 
     @Unique
     public void setUnderwaterGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setUnderwaterGravity(value);
+        props.set(EntityAttribute.UNDERWATER_GRAVITY, value);
     }
 
     @Unique
     public float getUnderwaterGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getDownwardGravity();
+        return props.get(EntityAttribute.UNDERWATER_GRAVITY);
     }
 
     @Unique
     public void setUnderwaterUpwardGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setUnderwaterUpwardGravity(value);
+        props.set(EntityAttribute.UNDERWATER_UPWARD_GRAVITY, value);
     }
 
     @Unique
     public float getUnderwaterUpwardGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getUnderwaterUpwardGravity();
+        return props.get(EntityAttribute.UNDERWATER_UPWARD_GRAVITY);
     }
 
     @Unique
     public void setUnderwaterDownwardGravity(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setUnderwaterDownwardGravity(value);
+        props.set(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY, value);
     }
 
     @Unique
     public float getUnderwaterDownwardGravity() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getUnderwaterDownwardGravity();
+        return props.get(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY);
     }
 
     @Unique
-    /**
-     * Sets the max fall distance before an entity takes fall damage. Default is 3.
-     */
     public void setMaxFallDistance(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setMaxFallDistance(value);
+        props.set(EntityAttribute.MAX_FALL_DISTANCE, value);
     }
 
     @Unique
     public float getMaxFallDistance() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getMaxFallDistance();
+        return props.get(EntityAttribute.MAX_FALL_DISTANCE);
     }
 
     @Unique
     public void setCanMove(boolean value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setCanMove(value);
+        props.set(EntityAttribute.CAN_MOVE, value);
     }
 
     @Unique
     public boolean getCanMove() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getCanMove();
+        return props.get(EntityAttribute.CAN_MOVE);
     }
 
     @Unique
-    /**
-     * Modify how high you go when you jump. Default is 1.
-     * @param value
-     */
     public void setJumpBoost(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setVerticalJumpPower(value);
+        props.set(EntityAttribute.JUMP_POWER_VERTICAL, value);
     }
 
     @Unique
     public float getJumpBoost() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getVerticalJumpPower();
+        return props.get(EntityAttribute.JUMP_POWER_VERTICAL);
     }
 
+    @Unique
     public void setJumpBreadth(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.setHorizontalJumpPower(value);
-    }
-
-    public float getJumpBreadth() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.getHorizontalJumpPower();
+        props.set(EntityAttribute.JUMP_POWER_HORIZONTAL, value);
     }
 
     @Unique

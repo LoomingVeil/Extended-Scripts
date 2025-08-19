@@ -11,9 +11,8 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types, Mouse buttons)
+ - Continue searching for more Enums to implement (Nbt data types)
  - Figure out if setAnimation(7) doing nothing is intentional
- - See if we can change how ctrl + backspace works in the code editor
  - See if we can make right-clicking be a previous option button
  - Add functions realted to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
@@ -25,6 +24,7 @@ Things I want to add:
  - Add some try statements so that the mod doesn't crash without CustomNpc+
  - Make a command for viewing and managing stored data
  - Add bounciness
+ - Fix negative gravity not working on entities with 0 y motion
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death
@@ -35,3 +35,4 @@ Things that might just be impossible:
  - Reading the player's controls
  - Include Shift Click equipping for scripted item armor
  - Check if texture exists
+ - See if we can change how ctrl + backspace works in the code editor

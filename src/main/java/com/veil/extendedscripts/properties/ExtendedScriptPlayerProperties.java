@@ -2,26 +2,35 @@ package com.veil.extendedscripts.properties;
 
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.PacketHandler;
+import com.veil.extendedscripts.constants.DataType;
 import com.veil.extendedscripts.guis.VirtualFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-public class ExtendedScriptPlayerProperties implements IExtendedEntityProperties {
+import java.util.EnumMap;
+
+public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperties implements IExtendedEntityProperties {
     // Unique identifier for these properties
     public static final String PROPERTY_ID = ExtendedScripts.MODID + "_PlayerProperties";
+    private final EnumMap<PlayerAttribute, Object> playerAttributes = new EnumMap<>(PlayerAttribute.class);
     private final EntityPlayer player;
     private VirtualFurnace virtualFurnace;
+    private ItemStack attributeCore; // Attributes added to the core apply to the player.
     private float verticalFlightSpeed = 1;
     private float horizontalFlightSpeed = 1;
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
 
     public ExtendedScriptPlayerProperties(EntityPlayer player) {
+        super(player);
         this.player = player;
+        playerAttributes.put(PlayerAttribute.CAN_FLY, PlayerAttribute.CAN_FLY.getDefaultValue());
+        playerAttributes.put(PlayerAttribute.LAST_SEEN_FLYING, PlayerAttribute.LAST_SEEN_FLYING.getDefaultValue());
     }
 
     // Static helper to register properties onto a player
@@ -40,23 +49,33 @@ public class ExtendedScriptPlayerProperties implements IExtendedEntityProperties
         if (this.virtualFurnace != null) {
             this.virtualFurnace.writeToNBT(savedNBT); // Save the furnace's state to a sub-tag
         }
-        savedNBT.setFloat("VerticalFlightSpeed", this.verticalFlightSpeed);
-        savedNBT.setFloat("HorizontalFlightSpeed", this.horizontalFlightSpeed);
-        savedNBT.setBoolean("CanFly", this.canFly);
-        savedNBT.setBoolean("LastSeenFlying", this.lastSeenFlying);
-        compound.setTag("PlayerData", savedNBT); // Store the sub-tag in the main compound
+        for (PlayerAttribute attr : playerAttributes.keySet()) {
+            if (attr.getType() == Float.class) {
+                savedNBT.setFloat(attr.asCamelCase(), (float) playerAttributes.get(attr));
+            } else if (attr.getType() == Boolean.class) {
+                savedNBT.setBoolean(attr.asCamelCase(), (boolean) playerAttributes.get(attr));
+            }
+        }
+
+        compound.setTag("extendedPlayerData", savedNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        if (compound.hasKey("PlayerData", 10)) {
-            NBTTagCompound savedNBT = compound.getCompoundTag("PlayerData");
+        if (compound.hasKey("extendedPlayerData", 10)) {
+            NBTTagCompound savedNBT = compound.getCompoundTag("extendedPlayerData");
             this.virtualFurnace = new VirtualFurnace();
             this.virtualFurnace.readFromNBT(savedNBT); // Load the furnace's state from the sub-tag
-            this.verticalFlightSpeed = savedNBT.getFloat("VerticalFlightSpeed");
-            this.horizontalFlightSpeed = savedNBT.getFloat("HorizontalFlightSpeed");
-            this.canFly = savedNBT.getBoolean("CanFly");
-            this.lastSeenFlying = savedNBT.getBoolean("LastSeenFlying");
+
+            for (PlayerAttribute attr : playerAttributes.keySet()) {
+                if (savedNBT.hasKey(attr.asCamelCase(), DataType.Instance.valueOf(attr.getType().getTypeName()))) {
+                    if (attr.getType() == Float.class) {
+                        playerAttributes.put(attr, savedNBT.getFloat(attr.asCamelCase()));
+                    } else if (attr.getType() == Boolean.class) {
+                        playerAttributes.put(attr, savedNBT.getBoolean(attr.asCamelCase()));
+                    }
+                }
+            }
         }
     }
 
@@ -93,6 +112,19 @@ public class ExtendedScriptPlayerProperties implements IExtendedEntityProperties
             this.virtualFurnace.setField(1, 0); // currentItemBurnTime
             this.virtualFurnace.setField(2, 0); // furnaceCookTime
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T get(PlayerAttribute attr) {
+        return (T) playerAttributes.get(attr);
+    }
+
+    // Generic setter
+    public <T> void set(PlayerAttribute attr, T value) {
+        if (!attr.getType().isInstance(value)) {
+            throw new IllegalArgumentException("Invalid type for " + attr + ". Expected " + attr.getType());
+        }
+        playerAttributes.put(attr, value);
     }
 
     public boolean getCanFly() {

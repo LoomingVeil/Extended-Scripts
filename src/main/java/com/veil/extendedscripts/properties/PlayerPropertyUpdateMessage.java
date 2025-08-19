@@ -9,8 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.Sys;
 
 public class PlayerPropertyUpdateMessage implements IMessage {
-    private float verticalFlightSpeed = 1;
-    private float horizontalFlightSpeed = 1;
+//    private float verticalFlightSpeed = 1;
+//    private float horizontalFlightSpeed = 1;
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
 
@@ -18,24 +18,24 @@ public class PlayerPropertyUpdateMessage implements IMessage {
     public PlayerPropertyUpdateMessage() {} // Required default constructor
 
     public PlayerPropertyUpdateMessage(ExtendedScriptPlayerProperties props) {
-        this.verticalFlightSpeed = props.getVerticalFlightSpeed();
-        this.horizontalFlightSpeed = props.getHorizontalFlightSpeed();
+//        this.verticalFlightSpeed = props.getVerticalFlightSpeed();
+//        this.horizontalFlightSpeed = props.getHorizontalFlightSpeed();
         this.canFly = props.getCanFly();
         this.lastSeenFlying = props.getLastSeenFlying();
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.verticalFlightSpeed = buf.readFloat();
-        this.horizontalFlightSpeed = buf.readFloat();
+//        this.verticalFlightSpeed = buf.readFloat();
+//        this.horizontalFlightSpeed = buf.readFloat();
         this.canFly = buf.readBoolean();
         this.lastSeenFlying = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeFloat(this.verticalFlightSpeed);
-        buf.writeFloat(this.horizontalFlightSpeed);
+//        buf.writeFloat(this.verticalFlightSpeed);
+//        buf.writeFloat(this.horizontalFlightSpeed);
         buf.writeBoolean(this.canFly);
         buf.writeBoolean(this.lastSeenFlying);
     }
@@ -52,8 +52,8 @@ public class PlayerPropertyUpdateMessage implements IMessage {
                     if (player != null) {
                         ExtendedScriptPlayerProperties props = ExtendedScriptPlayerProperties.get(player);
                         if (props != null) {
-                            props.setVerticalFlightSpeed(message.verticalFlightSpeed);
-                            props.setHorizontalFlightSpeed(message.horizontalFlightSpeed);
+//                            props.setVerticalFlightSpeed(message.verticalFlightSpeed);
+//                            props.setHorizontalFlightSpeed(message.horizontalFlightSpeed);
                             props.setCanFly(message.canFly);
                             props.setLastSeenFlying(message.lastSeenFlying);
                             // System.out.println("Client received player EEP sync");

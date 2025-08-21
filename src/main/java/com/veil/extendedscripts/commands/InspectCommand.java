@@ -1,7 +1,9 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.commands;
 
+import com.veil.extendedscripts.ChatUtils;
+import com.veil.extendedscripts.ExtendedScripts;
+import com.veil.extendedscripts.WorldClippers;
 import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -12,21 +14,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.INbt;
-import noppes.npcs.api.item.IItemStack;
-import scala.Int;
-import tv.twitch.chat.Chat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class InspectItemCommand extends CommandBase {
+public class InspectCommand extends CommandBase {
     private static final String UNKNOWN_COLOR = EnumChatFormatting.RED.toString();
     private static final String BYTE_COLOR = EnumChatFormatting.GRAY.toString();
     private static final String SHORT_COLOR = EnumChatFormatting.YELLOW.toString();

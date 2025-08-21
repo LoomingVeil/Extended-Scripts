@@ -4,6 +4,7 @@ import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.properties.ExtendedScriptEntityProperties;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
@@ -32,96 +33,152 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
      * Sets the gravity of the entity. Ex 0.1 for 10% gravity, 10 for 1000% gravity
      */
     public void setGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.GRAVITY, value);
+        }
     }
 
     @Unique
     public float getGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.GRAVITY);
+        }
     }
 
     @Unique
     public void setUpwardGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.UPWARD_GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.UPWARD_GRAVITY, value);
+        }
     }
 
     @Unique
     public float getUpwardGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.UPWARD_GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.UPWARD_GRAVITY);
+        }
     }
 
     @Unique
     public void setDownwardGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.DOWNWARD_GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.DOWNWARD_GRAVITY, value);
+        }
     }
 
     @Unique
     public float getDownwardGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.DOWNWARD_GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.DOWNWARD_GRAVITY);
+        }
     }
 
     @Unique
     public void setUnderwaterGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.UNDERWATER_GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.UNDERWATER_GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.UNDERWATER_GRAVITY, value);
+        };
     }
 
     @Unique
     public float getUnderwaterGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.UNDERWATER_GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.UNDERWATER_GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.UNDERWATER_GRAVITY);
+        }
     }
 
     @Unique
     public void setUnderwaterUpwardGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.UNDERWATER_UPWARD_GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.UNDERWATER_UPWARD_GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.UNDERWATER_UPWARD_GRAVITY, value);
+        }
     }
 
     @Unique
     public float getUnderwaterUpwardGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.UNDERWATER_UPWARD_GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.UNDERWATER_UPWARD_GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.UNDERWATER_UPWARD_GRAVITY);
+        }
     }
 
     @Unique
     public void setUnderwaterDownwardGravity(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY, value);
+        }
     }
 
     @Unique
     public float getUnderwaterDownwardGravity() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.MAX_FALL_DISTANCE);
+        }
     }
 
     @Unique
     public void setMaxFallDistance(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.MAX_FALL_DISTANCE, value);
+        if (entity instanceof EntityPlayer) {
+            ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase(), value);
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            props.set(EntityAttribute.MAX_FALL_DISTANCE, value);
+        }
     }
 
     @Unique
     public float getMaxFallDistance() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.MAX_FALL_DISTANCE);
+        if (entity instanceof EntityPlayer) {
+            return ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).getCoreAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase());
+        } else {
+            ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
+            return props.get(EntityAttribute.MAX_FALL_DISTANCE);
+        }
     }
 
     @Unique
-    public void setCanMove(boolean value) {
+    private void setCanMove(boolean value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
         props.set(EntityAttribute.CAN_MOVE, value);
     }
 
     @Unique
-    public boolean getCanMove() {
+    private boolean getCanMove() {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
         return props.get(EntityAttribute.CAN_MOVE);
     }

@@ -11,6 +11,8 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IWorld;
@@ -18,9 +20,7 @@ import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IPlayer;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
@@ -131,6 +131,29 @@ public class ExtendedAPI {
         return hex.toUpperCase();
     }
 
+    public String[] getAllServerPlayerNames() {
+        IPlayer[] players = AbstractNpcAPI.Instance().getAllServerPlayers();
+        List<String> names = new ArrayList<>();
+
+        // Get all online players from the server instance
+        for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+            if (obj instanceof EntityPlayerMP) {
+                EntityPlayerMP player = (EntityPlayerMP) obj;
+                names.add(player.getDisplayName());
+            }
+        }
+
+        return names.toArray(new String[0]);
+    }
+
+    /**
+     * Player attributes are typically changed anytime you change what item you are holding.
+     * They are also updated when core attributes are updated via command/script.
+     */
+    public void updatePlayerAttributes(EntityPlayer player) {
+        AttributeController.getTracker(player).recalcAttributes(player);
+    }
+
     /**
      * Registers a custom attribute that can both be applied via script or /kam attribute. Attributes are registered per world.
      * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
@@ -185,6 +208,10 @@ public class ExtendedAPI {
         return result;
     }
 
+    public boolean attributeExists(String key) {
+        return Arrays.asList(getAttributeKeyList()).contains(key);
+    }
+
     /**
      * This is just for unloading registered attributes between worlds, not for removing it entirely.
      */
@@ -193,6 +220,7 @@ public class ExtendedAPI {
 
         ((IExtendedAttributeController) AttributeController.Instance).unregisterAttribute(key);
     }
+
 
     public String[] getAttributeKeyList() {
         AttributeDefinition[] registeredAttributes = AttributeController.getAllAttributes().toArray(new AttributeDefinition[0]);

@@ -2,11 +2,12 @@ package com.veil.extendedscripts.mixins;
 
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.ExtendedScripts;
-import net.minecraft.entity.player.EntityPlayer;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryEnderChest;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -56,32 +57,66 @@ public class MixinPlayerExtension {
     }
 
     @Unique
+    /**
+     * @deprecated Use {@link #getCoreAttribute(String)}
+     */
     public float getFlightSpeed() {
-        return player.capabilities.getFlySpeed() * 20;
+        return getCoreAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase());
     }
 
     @Unique
     /**
+     * @deprecated Use {@link #setAttribute(String, float)}
      * Sets the player's horizontal fly speed. Default is 1. See {@link #setVerticalFlightSpeed(float)} for vertical flight speed.
      */
     public void setFlightSpeed(float value) {
-        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
-
-        props.setHorizontalFlightSpeed(value);
+        setAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), value);
     }
 
     @Unique
+    /**
+     * @deprecated Use {@link #getCoreAttribute(String)}
+     */
     public float getVerticalFlightSpeed() {
-        ExtendedScriptPlayerProperties props = ExtendedScriptPlayerProperties.get(player);
-
-        return props.getVerticalFlightSpeed();
+        return getCoreAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase());
     }
 
     @Unique
+    /**
+     * @deprecated Use {@link #setAttribute(String, float)}
+     */
     public void setVerticalFlightSpeed(float value) {
-        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
+        setAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), value);
+    }
 
-        props.setVerticalFlightSpeed(value);
+    @Unique
+    /**
+     * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
+     */
+    public void setAttribute(String key, float value) {
+        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
+        props.setCoreAttribute(key, value);
+    }
+
+    @Unique
+    /**
+     * Gets core attributes. These attributes are separate from equipment
+     */
+    public float getCoreAttribute(String key) {
+        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
+        return props.getCoreAttribute(key);
+    }
+
+    @Unique
+    /**
+     * Gets the attribute core as an item that can be given to the player
+     */
+    public IItemStack getAttributeCore() {
+        return AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
+    }
+
+    public void resetCoreAttributes() {
+        ExtendedScripts.getPlayerProperties(player).setAttributeCore(null);
     }
 
     @Unique

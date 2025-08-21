@@ -1,5 +1,7 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.commands.VeilCommand;
+import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
@@ -71,8 +73,8 @@ public class CommonProxy {
     }
 
     public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new InspectItemCommand());
-        event.registerServerCommand(new ExtendedScriptsUtilitiesCommand());
+        event.registerServerCommand(new InspectCommand());
+        event.registerServerCommand(new VeilCommand());
 
         // Remove any attributes that have already been registered this game instance
         Map<String, AttributeDefinition> oldAttributes = ExtendedAPI.getLastWorldsAttributes();

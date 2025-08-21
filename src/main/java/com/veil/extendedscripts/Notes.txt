@@ -14,7 +14,7 @@ Things I want to add:
  - Continue searching for more Enums to implement (Nbt data types)
  - Figure out if setAnimation(7) doing nothing is intentional
  - See if we can make right-clicking be a previous option button
- - Add functions realted to ids, getting next available ids and check if they're used.
+ - Add functions related to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
  - Make a keepInventory for single players
  - Hide the +4 damage on the World Clippers
@@ -23,8 +23,9 @@ Things I want to add:
  - Add custom projectiles
  - Add some try statements so that the mod doesn't crash without CustomNpc+
  - Make a command for viewing and managing stored data
- - Add bounciness
+ - Add bounciness, multi-jump, and damage reflection
  - Fix negative gravity not working on entities with 0 y motion
+ - Make attribute incompatibilities
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death
@@ -36,3 +37,9 @@ Things that might just be impossible:
  - Include Shift Click equipping for scripted item armor
  - Check if texture exists
  - See if we can change how ctrl + backspace works in the code editor
+
+To do before next update:
+ - Add a few more attribute functions for the player
+ - Fix formatting for inspect command
+ - Add /inspect tphere
+ - Add new functions to interfaces

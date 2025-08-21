@@ -7,6 +7,7 @@ import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import kamkeel.npcs.controllers.AttributeController;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -167,7 +168,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        System.out.println("Attempting to sync player properties.");
+        // System.out.println("Attempting to sync player properties.");
 
         ExtendedScriptEntityProperties.get(event.player).syncToPlayer();
         ExtendedScriptPlayerProperties playerProperties = ExtendedScriptPlayerProperties.get(event.player);
@@ -180,6 +181,8 @@ public class CommonEventHandler {
 
 
         playerProperties.syncToPlayer();
+
+        AttributeController.getTracker(event.player).recalcAttributes(event.player);
     }
 
     @SubscribeEvent
@@ -275,6 +278,8 @@ public class CommonEventHandler {
                     event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
                 } else if (event.entity.motionY < 0) {
                     event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (downwardGravity + 1));
+                } else if ((upwardGravity + 1) < 0) { // Over -100% gravity and you start falling up.
+                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
                 }
             } else {
                 gravity = properties.get(EntityAttribute.GRAVITY);
@@ -292,6 +297,8 @@ public class CommonEventHandler {
                     event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * upwardGravity);
                 } else if (event.entity.motionY < 0) {
                     event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * downwardGravity);
+                } else if (upwardGravity < 0) { // Negative gravity and the entity falls upward
+                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * upwardGravity);
                 }
             }
         } else if (!isFlying && !onGround) {

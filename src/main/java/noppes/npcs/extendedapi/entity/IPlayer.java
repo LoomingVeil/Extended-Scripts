@@ -1,10 +1,13 @@
 package noppes.npcs.extendedapi.entity;
 
+import com.veil.extendedscripts.ExtendedScripts;
+import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.InventoryEnderChest;
 import noppes.npcs.api.IContainer;
 import noppes.npcs.api.INbt;
 import noppes.npcs.api.item.IItemStack;
+import org.spongepowered.asm.mixin.Unique;
 
 public interface IPlayer {
     /**
@@ -24,16 +27,43 @@ public interface IPlayer {
 
     void forceFlyState(boolean value);
 
+    /**
+     * @deprecated Use {@link #getCoreAttribute(String)}
+     */
     float getFlightSpeed();
 
     /**
-     * Sets the player's horizontal fly speed. Default is 1. See {@link #setVerticalFlightSpeed(float)} for vertical flight speed.
+     * @deprecated Use {@link #setAttribute(String, float)}
+     * Sets the player's horizontal fly speed multiplier. Default is 0. See {@link #setVerticalFlightSpeed(float)} for vertical flight speed.
      */
     void setFlightSpeed(float value);
 
+    /**
+     * @deprecated Use {@link #getCoreAttribute(String)}
+     */
     float getVerticalFlightSpeed();
 
+    /**
+     * @deprecated Use {@link #setAttribute(String, float)}
+     */
     void setVerticalFlightSpeed(float value);
+
+    /**
+     * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
+     */
+    void setAttribute(String key, float value);
+
+    /**
+     * Gets core attributes. These attributes are separate from equipment attributes.
+     */
+    float getCoreAttribute(String key);
+
+    public void resetCoreAttributes();
+
+    /**
+     * Gets the attribute core as an item that can be given to the player.
+     */
+    IItemStack getAttributeCore();
 
     /**
      * Only for those who know what they're doing
@@ -100,7 +130,7 @@ public interface IPlayer {
 
     /**
      * Returns the specified player's playerdata in NBT form. If you are looking for playerdata related to
-     * customNpcs+ then use {@link #getData()}
+     * customNpcs+ then use {@link noppes.npcs.api.entity.IPlayer#getData()}
      */
     INbt getPlayerData();
 

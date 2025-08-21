@@ -28,10 +28,11 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
 
     private ArrayList<String> itemKeys = new ArrayList<>();
 
-    @Unique
     /**
-     * Sets the gravity of the entity. Ex 0.1 for 10% gravity, 10 for 1000% gravity
+     * Sets the gravity of the entity (not players). Ex 0.1 for 10% gravity, 10 for 1000% gravity
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
      */
+    @Unique
     public void setGravity(float value) {
         if (entity instanceof EntityPlayer) {
             ExtendedScripts.getPlayerProperties(((EntityPlayer) entity)).setCoreAttribute(EntityAttribute.GRAVITY.asSnakeCase(), value);
@@ -51,6 +52,9 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setUpwardGravity(float value) {
         if (entity instanceof EntityPlayer) {
@@ -71,6 +75,9 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setDownwardGravity(float value) {
         if (entity instanceof EntityPlayer) {
@@ -91,6 +98,9 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setUnderwaterGravity(float value) {
         if (entity instanceof EntityPlayer) {
@@ -111,6 +121,9 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setUnderwaterUpwardGravity(float value) {
         if (entity instanceof EntityPlayer) {
@@ -131,6 +144,9 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setUnderwaterDownwardGravity(float value) {
         if (entity instanceof EntityPlayer) {
@@ -151,6 +167,10 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         }
     }
 
+    /**
+     * Sets the max fall distance before an entity (not players) takes fall damage. Default is 3.
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setMaxFallDistance(float value) {
         if (entity instanceof EntityPlayer) {
@@ -183,22 +203,15 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
         return props.get(EntityAttribute.CAN_MOVE);
     }
 
+    /**
+     * Modify how high the entity (not players) goes when it jumps. Default is 1.
+     * The effect is equivalent to having the jump boost effect of level (value - 1)
+     * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
+     */
     @Unique
     public void setJumpBoost(float value) {
         ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
         props.set(EntityAttribute.JUMP_POWER_VERTICAL, value);
-    }
-
-    @Unique
-    public float getJumpBoost() {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        return props.get(EntityAttribute.JUMP_POWER_VERTICAL);
-    }
-
-    @Unique
-    public void setJumpBreadth(float value) {
-        ExtendedScriptEntityProperties props = ExtendedScripts.getEntityProperties(entity);
-        props.set(EntityAttribute.JUMP_POWER_HORIZONTAL, value);
     }
 
     @Unique

@@ -34,14 +34,16 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        CustomNpcEventHandler.init();
+
         ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "scripted_item");
         if (ExtendedScripts.scriptedItem == null) {
             System.err.println("Could not find scripted item!");
+            return;
         }
 
         FMLCommonHandler.instance().bus().register(new ScriptedObjectEventHandler());
         MinecraftForge.EVENT_BUS.register(new ScriptedObjectEventHandler());
-        CustomNpcEventHandler.init();
     }
 
     public void postInit(FMLPostInitializationEvent event) {

@@ -51,8 +51,8 @@ public abstract class AbstractNpcAPI {
     public abstract void setTempData(String key, Object value);
 
     /**
-     * @param key The key thats going to be tested against the temp data
-     * @return Whether or not temp data containes the key
+     * @param key The key that's going to be tested against the temp data
+     * @return Whether temp data containes the key
      */
     public abstract boolean hasTempData(String key);
 
@@ -156,7 +156,6 @@ public abstract class AbstractNpcAPI {
     public abstract ICustomNpc<?> createNPC(IWorld var1);
 
     /**
-     *
      * Spawns a new NPC in the world at the given coordinates and returns an ICustomNpc object of it.
      */
     public abstract ICustomNpc<?> spawnNPC(IWorld var1, int var2, int var3, int var4);
@@ -194,6 +193,7 @@ public abstract class AbstractNpcAPI {
     /**
      * Forms a box with corners as the input IPos parameters, and returns all
      * points inside the box as a list of IPos vectors.
+     * For more shapes see {@link com.veil.extendedscripts.extendedapi.IShapeMaker}
      *
      * @param from The starting IPos vector, first corner of the box.
      * @param to The ending IPos vector, opposite corner of the box.

@@ -1,5 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
 
+/**
+ * This object stores npc job types available to all scripting handlers through the "JobType" keyword.
+ */
 public interface IJobType {
     int NONE = 0;
     int BARD = 1;

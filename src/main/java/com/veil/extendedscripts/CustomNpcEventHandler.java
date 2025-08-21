@@ -1,12 +1,7 @@
 package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.properties.PlayerAttribute;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.tracker.AttributeRecalcEvent;
-import kamkeel.npcs.controllers.data.attribute.tracker.PlayerAttributeTracker;
-import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Handles events related to CustomNpcs

@@ -399,6 +399,7 @@ public interface ICustomNpc<T extends EntityCreature> extends IEntityLiving<T>, 
 
     /**
      * Sets the NPC's role by its ID.
+     * You can use {@link com.veil.extendedscripts.extendedapi.constants.IRoleType} for readability.
      *
      * @param role the role ID.
      */
@@ -413,6 +414,7 @@ public interface ICustomNpc<T extends EntityCreature> extends IEntityLiving<T>, 
 
     /**
      * Sets the NPC's job by its ID.
+     * You can use {@link com.veil.extendedscripts.extendedapi.constants.IJobType} for readability.
      *
      * @param job the job ID.
      */

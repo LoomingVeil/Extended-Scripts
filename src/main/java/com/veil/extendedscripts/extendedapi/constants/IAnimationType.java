@@ -1,4 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
+
+/**
+ * This object stores animation types available to all scripting handlers through the "AnimationType" keyword.
+ */
 public interface IAnimationType {
     int NONE = 0;
     int SITTING = 1;

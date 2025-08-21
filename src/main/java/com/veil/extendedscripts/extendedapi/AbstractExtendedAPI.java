@@ -1,8 +1,10 @@
 package com.veil.extendedscripts.extendedapi;
 
 import com.veil.extendedscripts.extendedapi.constants.*;
+import kamkeel.npcs.controllers.AttributeController;
+import net.minecraft.entity.player.EntityPlayer;
 import noppes.npcs.api.IWorld;
-import noppes.npcs.extendedapi.entity.IEntity;
+import noppes.npcs.api.entity.IEntity;
 
 /**
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
@@ -10,7 +12,7 @@ import noppes.npcs.extendedapi.entity.IEntity;
 public interface AbstractExtendedAPI {
     IShapeMaker getShapeMaker();
 
-    IKeys getKeysCodes();
+    IKeys getKeyCodes();
 
     IAnimationType getAnimationTypes();
 
@@ -22,7 +24,7 @@ public interface AbstractExtendedAPI {
 
     IAttributeValueType getAttributeValueTypes();
 
-    IAttributeSection getArributeSections();
+    IAttributeSection getAttributeSections();
 
     IColorCodes getColorCodes();
 
@@ -48,6 +50,15 @@ public interface AbstractExtendedAPI {
 
     String npcColorToHex(int npcColor);
 
+    String[] getAllServerPlayerNames();
+
+    /**
+     * Player attributes are typically changed anytime you change what item you are holding.
+     * They are also updated when core attributes are updated via command/script.
+     * Call this function if you need to manually update a player's attributes.
+     */
+    void updatePlayerAttributes(EntityPlayer player);
+
     /**
      * Registers a custom attribute that can both be applied via script or /kam attribute. Attributes are registered per world.
      * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
@@ -62,6 +73,8 @@ public interface AbstractExtendedAPI {
      * Unregisters a custom attribute. Unregistering an attribute also removes it from all items.
      */
     boolean unregisterAttribute(String key);
+
+    boolean attributeExists(String key);
 
     /**
      * Gets a list of all the custom attributes' keys currently registered in your world.

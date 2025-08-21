@@ -1,4 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
+
+/**
+ * This object stores attribute sections available to all scripting handlers through the "AttributeSection" keyword.
+ */
 public interface IAttributeSection {
     int BASE = 0;
     int MODIFIER = 1;

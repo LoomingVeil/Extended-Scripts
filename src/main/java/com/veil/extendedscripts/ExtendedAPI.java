@@ -1,6 +1,9 @@
 package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
+import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
+import com.veil.extendedscripts.extendedapi.IShapeMaker;
+import com.veil.extendedscripts.extendedapi.constants.*;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
@@ -25,7 +28,7 @@ import java.util.*;
 /**
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
  */
-public class ExtendedAPI {
+public class ExtendedAPI implements AbstractExtendedAPI {
     public static final ExtendedAPI Instance = new ExtendedAPI();
     private static Map<String, AttributeDefinition> lastWorldsAttributes = new HashMap<>();
 
@@ -33,8 +36,8 @@ public class ExtendedAPI {
         return lastWorldsAttributes;
     }
 
-    public ShapeMaker getShapeMaker() {
-        return ShapeMaker.Instance;
+    public IShapeMaker getShapeMaker() {
+        return (IShapeMaker) ShapeMaker.Instance;
     }
 
     private boolean doesTextureExist(String path) {
@@ -47,36 +50,36 @@ public class ExtendedAPI {
         }
     }
 
-    public Keys getKeyCodes() {
-        return Keys.Instance;
+    public IKeys getKeyCodes() {
+        return (IKeys) Keys.Instance;
     }
 
-    public AnimationType getAnimationTypes() {
-        return AnimationType.Instance;
+    public IAnimationType getAnimationTypes() {
+        return (IAnimationType) AnimationType.Instance;
     }
 
-    public EntityType getEntityTypes() {
-        return EntityType.Instance;
+    public IEntityType getEntityTypes() {
+        return (IEntityType) EntityType.Instance;
     }
 
-    public JobType getJobTypes() {
-        return JobType.Instance;
+    public IJobType getJobTypes() {
+        return (IJobType) JobType.Instance;
     }
 
-    public RoleType getRoleTypes() {
-        return RoleType.Instance;
+    public IRoleType getRoleTypes() {
+        return (IRoleType) RoleType.Instance;
     }
 
-    public ExtendedAttributeValueType getAttributeValueTypes() {
-        return ExtendedAttributeValueType.Instance;
+    public IAttributeValueType getAttributeValueTypes() {
+        return (IAttributeValueType) ExtendedAttributeValueType.Instance;
     }
 
-    public ExtendedAttributeSection getAttributeSections() {
-        return ExtendedAttributeSection.Instance;
+    public IAttributeSection getAttributeSections() {
+        return (IAttributeSection) ExtendedAttributeSection.Instance;
     }
 
-    public ColorCodes getColorCodes() {
-        return ColorCodes.Instance;
+    public IColorCodes getColorCodes() {
+        return (IColorCodes) ColorCodes.Instance;
     }
 
 
@@ -132,7 +135,6 @@ public class ExtendedAPI {
     }
 
     public String[] getAllServerPlayerNames() {
-        IPlayer[] players = AbstractNpcAPI.Instance().getAllServerPlayers();
         List<String> names = new ArrayList<>();
 
         // Get all online players from the server instance
@@ -149,6 +151,7 @@ public class ExtendedAPI {
     /**
      * Player attributes are typically changed anytime you change what item you are holding.
      * They are also updated when core attributes are updated via command/script.
+     * Call this function if you need to manually update a player's attributes.
      */
     public void updatePlayerAttributes(EntityPlayer player) {
         AttributeController.getTracker(player).recalcAttributes(player);

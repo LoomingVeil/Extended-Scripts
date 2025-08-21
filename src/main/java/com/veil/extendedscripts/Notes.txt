@@ -11,7 +11,7 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type)
  - Figure out if setAnimation(7) doing nothing is intentional
  - See if we can make right-clicking be a previous option button
  - Add functions related to ids, getting next available ids and check if they're used.
@@ -26,6 +26,7 @@ Things I want to add:
  - Add bounciness, multi-jump, and damage reflection
  - Fix negative gravity not working on entities with 0 y motion
  - Make attribute incompatibilities
+ - Go around and fix the dangling javadoc comment warnings for my sanity.
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death
@@ -40,6 +41,5 @@ Things that might just be impossible:
 
 To do before next update:
  - Add a few more attribute functions for the player
- - Fix formatting for inspect command
  - Add /inspect tphere
  - Add new functions to interfaces

@@ -3,6 +3,7 @@ package com.veil.extendedscripts.commands;
 import com.veil.extendedscripts.ChatUtils;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.WorldClippers;
+import com.veil.extendedscripts.constants.ColorCodes;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
@@ -33,6 +34,12 @@ public class InspectCommand extends CommandBase {
     private static final String FLOAT_COLOR = EnumChatFormatting.GREEN.toString();
     private static final String DOUBLE_COLOR = EnumChatFormatting.BLUE.toString();
     private static final String STRING_COLOR = EnumChatFormatting.DARK_GREEN.toString();
+    private final static String gray = "§"+ ColorCodes.Instance.GRAY;
+    private final static String dark_gray = "§"+ColorCodes.Instance.DARK_GRAY;
+    private final static String red = "§"+ColorCodes.Instance.RED;
+    private final static String yellow = "§"+ColorCodes.Instance.YELLOW;
+    private final static String dark_red = "§"+ColorCodes.Instance.DARK_RED;
+    private final static String modPrefix = "§"+ColorCodes.Instance.GOLD+"["+yellow+"ExtendedScripts"+"§"+ColorCodes.Instance.GOLD+"] ";
 
     private static final List<String> SECONDARY_ARGS = new ArrayList<>();
 
@@ -73,20 +80,56 @@ public class InspectCommand extends CommandBase {
             return;
         }
 
+        if (args.length == 0) {
+            showCommandUsage(sender);
+            return;
+        }
+
         if (heldItem == null) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding an item to use this command!"));
             return;
         }
 
-        if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("hand")) {
-                inspectItem(player.getHeldItem(), sender);
-            }  else if (args[0].equalsIgnoreCase("target")) {
-                if (heldItem.getItem() != ExtendedScripts.worldClippers) {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
-                    return;
-                }
+        if (args[0].equalsIgnoreCase("hand")) {
+            inspectItem(player.getHeldItem(), sender);
+        }  else if (args[0].equalsIgnoreCase("target")) {
+            if (heldItem.getItem() != ExtendedScripts.worldClippers) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
+                return;
+            }
 
+            if (!WorldClippers.hasInspectTag(heldItem)) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "No target selected! Right click a block or entity."));
+                return;
+            }
+            NBTTagCompound inspectTag = WorldClippers.getInspectTag(heldItem);
+
+            WorldServer targetWorld = MinecraftServer.getServer().worldServerForDimension(inspectTag.getInteger("TargetDimension"));
+            if (targetWorld == null) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Could not find world! Perhaps it is unloaded."));
+                return;
+            }
+
+            if (inspectTag.getByte("TargetType") == 1) { // Block
+                inspectBlock(inspectTag, targetWorld, sender);
+            } else if (inspectTag.getByte("TargetType") == 2) { // Entity
+                inspectEntity(inspectTag, targetWorld, sender);
+            }
+        } else if (args[0].equalsIgnoreCase("keys")) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(BYTE_COLOR + "Byte Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(SHORT_COLOR + "Short Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(INTEGER_COLOR + "Integer Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(LONG_COLOR + "Long Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(FLOAT_COLOR + "Float Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(DOUBLE_COLOR + "Double Color"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(STRING_COLOR + "String Color"));
+        } else if (args[0].equalsIgnoreCase("tp")) {
+            if (heldItem.getItem() != ExtendedScripts.worldClippers) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
+                return;
+            }
+
+            if (args.length == 1 || args.length == 4 || args.length == 5) {
                 if (!WorldClippers.hasInspectTag(heldItem)) {
                     sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "No target selected! Right click a block or entity."));
                     return;
@@ -98,139 +141,104 @@ public class InspectCommand extends CommandBase {
                     sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Could not find world! Perhaps it is unloaded."));
                     return;
                 }
+                if (args.length == 1) {
+                    if (inspectTag.getByte("TargetType") == 1) { // Block
+                        int x = inspectTag.getInteger("TargetX");
+                        int y = inspectTag.getInteger("TargetY");
+                        int z = inspectTag.getInteger("TargetZ");
+                        Block block = targetWorld.getBlock(x, y, z);
 
-                if (inspectTag.getByte("TargetType") == 1) { // Block
-                    inspectBlock(inspectTag, targetWorld, sender);
-                } else if (inspectTag.getByte("TargetType") == 2) { // Entity
-                    inspectEntity(inspectTag, targetWorld, sender);
-                }
-            } else if (args[0].equalsIgnoreCase("keys")) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(BYTE_COLOR + "Byte Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(SHORT_COLOR + "Short Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(INTEGER_COLOR + "Integer Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(LONG_COLOR + "Long Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(FLOAT_COLOR + "Float Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(DOUBLE_COLOR + "Double Color"));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(STRING_COLOR + "String Color"));
-            } else if (args[0].equalsIgnoreCase("tp")) {
-                if (heldItem.getItem() != ExtendedScripts.worldClippers) {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
-                    return;
-                }
-
-                if (args.length == 1 || args.length == 4 || args.length == 5) {
-                    if (!WorldClippers.hasInspectTag(heldItem)) {
-                        sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "No target selected! Right click a block or entity."));
-                        return;
-                    }
-                    NBTTagCompound inspectTag = WorldClippers.getInspectTag(heldItem);
-
-                    WorldServer targetWorld = MinecraftServer.getServer().worldServerForDimension(inspectTag.getInteger("TargetDimension"));
-                    if (targetWorld == null) {
-                        sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Could not find world! Perhaps it is unloaded."));
-                        return;
-                    }
-                    if (args.length == 1) {
-                        if (inspectTag.getByte("TargetType") == 1) { // Block
-                            int x = inspectTag.getInteger("TargetX");
-                            int y = inspectTag.getInteger("TargetY");
-                            int z = inspectTag.getInteger("TargetZ");
-                            Block block = targetWorld.getBlock(x, y, z);
-
-                            if (block == null) {
-                                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
-                                return;
-                            }
-
-                            player.setPositionAndUpdate(x + 0.5, y, z + 0.5);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported to target!"));
-                        } else if (inspectTag.getByte("TargetType") == 2) { // Entity
-                            Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
-                            player.setPositionAndUpdate(foundEntity.posX, foundEntity.posY, foundEntity.posZ);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported to target!"));
-                        }
-                    }
-                    if (args.length == 4) {
-                        if (inspectTag.getByte("TargetType") == 1) { // Block
-                            int x = inspectTag.getInteger("TargetX");
-                            int y = inspectTag.getInteger("TargetY");
-                            int z = inspectTag.getInteger("TargetZ");
-                            Block block = targetWorld.getBlock(x, y, z);
-
-                            if (block == null) {
-                                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
-                                return;
-                            }
-
-                            double[] dest = getCoordinatesFromArgument(
-                                new String[] {args[1], args[2], args[3]},
-                                new double[] {x + 0.5, y, z + 0.5},
-                                sender
-                            );
-
-                            player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
-                        } else if (inspectTag.getByte("TargetType") == 2) { // Entity
-                            Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
-
-                            double[] dest = getCoordinatesFromArgument(
-                                new String[] {args[1], args[2], args[3]},
-                                new double[] {foundEntity.posX, foundEntity.posY, foundEntity.posZ},
-                                sender
-                            );
-
-                            player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
-                        }
-                    } else if (args.length == 5) {
-                        if (heldItem.getItem() != ExtendedScripts.worldClippers) {
-                            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
+                        if (block == null) {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
                             return;
                         }
 
-                        if (inspectTag.getByte("TargetType") == 1) { // Block
-                            int x = inspectTag.getInteger("TargetX");
-                            int y = inspectTag.getInteger("TargetY");
-                            int z = inspectTag.getInteger("TargetZ");
-                            Block block = targetWorld.getBlock(x, y, z);
-
-                            if (block == null) {
-                                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
-                                return;
-                            }
-
-                            double[] dest = getCoordinatesFromArgument(
-                                new String[] {args[1], args[2], args[3], args[4]},
-                                new double[] {x + 0.5, y, z + 0.5},
-                                sender
-                            );
-
-                            player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
-                            player.travelToDimension((int)dest[3]);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
-                        } else if (inspectTag.getByte("TargetType") == 2) { // Entity
-                            Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
-
-                            double[] dest = getCoordinatesFromArgument(
-                                new String[] {args[1], args[2], args[3], args[4]},
-                                new double[] {foundEntity.posX, foundEntity.posY, foundEntity.posZ},
-                                sender
-                            );
-
-                            player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
-                            player.travelToDimension((int)dest[3]);
-                            sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
-                        }
+                        player.setPositionAndUpdate(x + 0.5, y, z + 0.5);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported to target!"));
+                    } else if (inspectTag.getByte("TargetType") == 2) { // Entity
+                        Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
+                        player.setPositionAndUpdate(foundEntity.posX, foundEntity.posY, foundEntity.posZ);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported to target!"));
                     }
-                } else {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Error: Invalid number of arguments"));
-                    showCommandUsage(sender);
+                }
+                if (args.length == 4) {
+                    if (inspectTag.getByte("TargetType") == 1) { // Block
+                        int x = inspectTag.getInteger("TargetX");
+                        int y = inspectTag.getInteger("TargetY");
+                        int z = inspectTag.getInteger("TargetZ");
+                        Block block = targetWorld.getBlock(x, y, z);
+
+                        if (block == null) {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
+                            return;
+                        }
+
+                        double[] dest = getCoordinatesFromArgument(
+                            new String[] {args[1], args[2], args[3]},
+                            new double[] {x + 0.5, y, z + 0.5},
+                            sender
+                        );
+
+                        player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
+                    } else if (inspectTag.getByte("TargetType") == 2) { // Entity
+                        Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
+
+                        double[] dest = getCoordinatesFromArgument(
+                            new String[] {args[1], args[2], args[3]},
+                            new double[] {foundEntity.posX, foundEntity.posY, foundEntity.posZ},
+                            sender
+                        );
+
+                        player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
+                    }
+                } else if (args.length == 5) {
+                    if (heldItem.getItem() != ExtendedScripts.worldClippers) {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
+                        return;
+                    }
+
+                    if (inspectTag.getByte("TargetType") == 1) { // Block
+                        int x = inspectTag.getInteger("TargetX");
+                        int y = inspectTag.getInteger("TargetY");
+                        int z = inspectTag.getInteger("TargetZ");
+                        Block block = targetWorld.getBlock(x, y, z);
+
+                        if (block == null) {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
+                            return;
+                        }
+
+                        double[] dest = getCoordinatesFromArgument(
+                            new String[] {args[1], args[2], args[3], args[4]},
+                            new double[] {x + 0.5, y, z + 0.5},
+                            sender
+                        );
+
+                        player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
+                        player.travelToDimension((int)dest[3]);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
+                    } else if (inspectTag.getByte("TargetType") == 2) { // Entity
+                        Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
+
+                        double[] dest = getCoordinatesFromArgument(
+                            new String[] {args[1], args[2], args[3], args[4]},
+                            new double[] {foundEntity.posX, foundEntity.posY, foundEntity.posZ},
+                            sender
+                        );
+
+                        player.setPositionAndUpdate(dest[0], dest[1], dest[2]);
+                        player.travelToDimension((int)dest[3]);
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("§aTeleported relative to target!"));
+                    }
                 }
             } else {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Error: Invalid arguments"));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid number of arguments!"));
                 showCommandUsage(sender);
             }
         } else {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid arguments!"));
             showCommandUsage(sender);
         }
     }
@@ -295,7 +303,7 @@ public class InspectCommand extends CommandBase {
         try {
             targetUUID = UUID.fromString(UUIDString); // Parse the UUID string
         } catch (IllegalArgumentException e) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Error: Invalid UUID format stored: " + UUIDString));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid UUID format stored: " + UUIDString));
             return null;
         }
 
@@ -311,7 +319,7 @@ public class InspectCommand extends CommandBase {
         }
 
         if (foundEntity == null) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Could not find entity! Entity may have been unloaded or killed."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Could not find entity! Entity may have been unloaded or killed."));
             return null;
         }
 
@@ -331,7 +339,7 @@ public class InspectCommand extends CommandBase {
         Block block = targetWorld.getBlock(x, y, z);
 
         if (block == null) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Block could not be found!"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Block could not be found!"));
             return;
         }
 
@@ -357,17 +365,13 @@ public class InspectCommand extends CommandBase {
     }
 
     public void showCommandUsage(ICommandSender sender) {
-        sender.addChatMessage(ChatUtils.fillChatWithColor("Command Usage: "));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("1. /inspect hand"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("  - Inspects item in hand"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("2. /inspect target"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("  - Inspects an item bound to a pair of World Clippers"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("3. /inspect keys"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("  - Lists what color corresponds to each datatype"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("4. /inspect tp <x> <y> <z> <dim>"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("  - Teleports you to the target. Destination arguments are optional. '~' Can be used for relative (to the target) coordinates"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("5. /inspect tphere <x> <y> <z> <dim>"));
-        sender.addChatMessage(ChatUtils.fillChatWithColor("  - Teleports the target to you. Destination arguments are optional. '~' Can be used for relative (to the player) coordinates"));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(dark_gray+"------- "+ EnumChatFormatting.GREEN+" Inspect Command "+dark_gray+"-------"));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect hand"+dark_gray+": "+gray+"Inspects the item in your hand."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect target"+dark_gray+": "+gray+"Inspects an item bound to a pair of World Clippers."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tp <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports you to the target. Destination arguments are optional. '~' Can be used for relative (to the target) coordinates."));
+        // sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tphere <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports the target to you. Destination arguments are optional. '~' Can be used for relative (to the player) coordinates."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect keys"+dark_gray+": "+gray+"Lists what color corresponds to each data type."));
+
         // sender.addChatMessage(ChatUtils.fillChatWithColor("After the 1st parameter, parameters can be used to navigate Nbt. Take note they are case sensitive."));
         // sender.addChatMessage(ChatUtils.fillChatWithColor("Ex: /inspect hand display Name"));
         // sender.addChatMessage(ChatUtils.fillChatWithColor("Above will show just the custom name property of an item that has been renamed in an anvil."));

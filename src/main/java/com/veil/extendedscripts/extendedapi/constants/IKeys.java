@@ -1,5 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
 
+/**
+ * This object stores key ids available to all scripting handlers through the "Key" keyword.
+ */
 public interface IKeys {
     int K_NONE            = 0;
     int K_ESCAPE          = 1;

@@ -34,8 +34,6 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        CustomNpcEventHandler.init();
-
         ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "scripted_item");
         if (ExtendedScripts.scriptedItem == null) {
             System.err.println("Could not find scripted item!");
@@ -47,6 +45,8 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+        // AttributeEventHandler.init();
+
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
         API.addGlobalObject("extAPI", ExtendedAPI.Instance);
         API.addGlobalObject("AnimationType", AnimationType.Instance);

@@ -17,7 +17,7 @@ import net.minecraft.world.storage.MapStorage;
 
 import java.io.File;
 
-@Mod(modid = ExtendedScripts.MODID, version = Tags.VERSION, name = "Veil's Extended Scripts", acceptedMinecraftVersions = "[1.7.10]")
+@Mod(modid = ExtendedScripts.MODID, version = Tags.VERSION, name = "Veil's Extended Scripts", acceptedMinecraftVersions = "[1.7.10]", dependencies = "required-after:customnpcs")
 public class ExtendedScripts {
     public static final String MODID = "extendedscripts";
     public static final String VERSION = "1.0";

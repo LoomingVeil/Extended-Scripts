@@ -38,8 +38,3 @@ Things that might just be impossible:
  - Include Shift Click equipping for scripted item armor
  - Check if texture exists
  - See if we can change how ctrl + backspace works in the code editor
-
-To do before next update:
- - Add a few more attribute functions for the player
- - Add /inspect tphere
- - Add new functions to interfaces

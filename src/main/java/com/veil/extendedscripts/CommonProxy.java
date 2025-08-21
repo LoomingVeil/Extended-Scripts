@@ -45,7 +45,7 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        // AttributeEventHandler.init();
+        AttributeEventHandler.init();
 
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
         API.addGlobalObject("extAPI", ExtendedAPI.Instance);

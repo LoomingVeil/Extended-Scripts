@@ -4,6 +4,7 @@
   "refmap": "mixins.extendedscripts.refmap.json",
   "mixins": [
     "MixinAttributeControllerExtension",
+    "MixinPlayerAttributeTracker",
     "MixinPlayerExtension",
     "MixinEntityExtension",
     "MixinScriptedItemExtension",
@@ -12,8 +13,7 @@
     "MixinBlockExtension",
     "MixinWorldExtension",
     "MixinNpcExtension",
-    "MixinGuiScriptPlayers",
-    "MixinPlayerAttributeTracker"
+    "MixinGuiScriptPlayers"
   ],
   "client": [],
   "server": [],

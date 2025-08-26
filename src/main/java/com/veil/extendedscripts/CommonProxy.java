@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
@@ -34,6 +35,10 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        int id = EntityRegistry.findGlobalUniqueEntityId();
+        EntityRegistry.registerGlobalEntityID(EntityCustomProjectile.class, "CustomProjectile", id);
+        EntityRegistry.registerModEntity(EntityCustomProjectile.class, "CustomProjectile", id, ExtendedScripts.instance, 128, 10, true);
+
         ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "scripted_item");
         if (ExtendedScripts.scriptedItem == null) {
             System.err.println("Could not find scripted item!");
@@ -58,6 +63,7 @@ public class CommonProxy {
         API.addGlobalObject("Key", Keys.Instance);
         API.addGlobalObject("RoleType", JobType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
+        API.addGlobalObject("Particle", ParticleType.Instance);
         // AbstractNpcAPI.Instance().events().register(new HotbarSlotChangedEvent()); // Unnecessary
         AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);

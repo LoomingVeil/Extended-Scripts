@@ -1,7 +1,9 @@
 package com.veil.extendedscripts;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
@@ -14,6 +16,8 @@ public class ClientProxy extends CommonProxy {
 
         FMLCommonHandler.instance().bus().register(new CommonEventHandler());
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityCustomProjectile.class, new CustomProjectileRender(new ResourceLocation("textures/entity/arrow.png")));
     }
 
 }

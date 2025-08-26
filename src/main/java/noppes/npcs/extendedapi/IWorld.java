@@ -2,6 +2,7 @@ package noppes.npcs.extendedapi;
 
 import noppes.npcs.api.IBlock;
 import noppes.npcs.api.IPos;
+import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
 
 public interface IWorld {
@@ -14,5 +15,5 @@ public interface IWorld {
     /**
      * Spawns an item on the ground in the world
      */
-    void spawnItem(IItemStack item, IPos pos);
+    IEntity spawnItem(IItemStack item, IPos pos);
 }

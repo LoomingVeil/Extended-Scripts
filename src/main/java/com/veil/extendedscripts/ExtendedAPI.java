@@ -4,6 +4,7 @@ import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
 import com.veil.extendedscripts.extendedapi.IShapeMaker;
 import com.veil.extendedscripts.extendedapi.constants.*;
+import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
@@ -20,6 +21,8 @@ import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.entity.IEntityLiving;
+import noppes.npcs.api.entity.IEntityLivingBase;
 import noppes.npcs.api.entity.IPlayer;
 
 import java.io.IOException;
@@ -99,6 +102,16 @@ public class ExtendedAPI implements AbstractExtendedAPI {
     public IEntity createIEntity(String entityName, IWorld world) {
         Entity entity = EntityList.createEntityByName(entityName, world.getMCWorld());
         return AbstractNpcAPI.Instance().getIEntity(entity);
+    }
+
+    public ICustomProjectile createCustomProjectile(String texture, IEntityLivingBase shooter) {
+        EntityCustomProjectile projectile = new EntityCustomProjectile(shooter.getWorld().getMCWorld(), shooter.getMCEntity());
+        projectile.getRenderProperties().setTexture(texture);
+        return projectile;
+    }
+
+    public ICustomProjectile createCustomProjectile(IEntityLivingBase shooter) {
+        return new EntityCustomProjectile(shooter.getWorld().getMCWorld(), shooter.getMCEntity());
     }
 
     /**

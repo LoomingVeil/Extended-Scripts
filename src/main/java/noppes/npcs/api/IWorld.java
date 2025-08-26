@@ -278,9 +278,9 @@ public interface IWorld {
     boolean isRaining();
 
     /**
-     * @param bo Set if it's raining
+     * @param isRaining Set if it's raining
      */
-    void setRaining(boolean bo);
+    void setRaining(boolean isRaining);
 
     /**
      * @param x The x position
@@ -292,7 +292,9 @@ public interface IWorld {
 
     /**
      * Sends a packet from the server to the client everytime its called. Probably should not use this too much.
-     * @param particle Particle name. Particle name list: http://minecraft.wiki/w/Particles
+     * Since ExtendedScripts is installed, you can use Particle.NAME ex Particle.FIRE.
+     * Special Cases: Particle.BUBBLE only works underwater.
+     * @param particle Particle name. Particle name list: https://minecraft.wiki/w/Particles_(Java_Edition)
      * @param x The x position
      * @param y The y position
      * @param z The z position

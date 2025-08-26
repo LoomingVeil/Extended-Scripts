@@ -21,12 +21,16 @@ Things I want to add:
  - Fix the issue where loaded scripts improperly show §
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
  - Add custom projectiles
- - Add some try statements so that the mod doesn't crash without CustomNpc+
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, and damage reflection
  - Fix negative gravity not working on entities with 0 y motion
  - Make attribute incompatibilities
  - Go around and fix the dangling javadoc comment warnings for my sanity.
+ - Add summoning followers/pets
+ - Add battle helpers
+ - Add keybind for opening script menu
+ - Global stuff?
+ - Make it so that scripted items can have custom eating sounds and custom eating particles
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death

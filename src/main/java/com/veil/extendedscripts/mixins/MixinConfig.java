@@ -11,7 +11,7 @@ public class MixinConfig implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
         // Called when this config is first loaded
-        System.out.println("MyMixinPlugin loaded for: " + mixinPackage);
+        // System.out.println("MyMixinPlugin loaded for: " + mixinPackage);
     }
 
     @Override

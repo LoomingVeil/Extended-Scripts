@@ -69,7 +69,7 @@ public interface ICustomProjectile {
 
     void setKnockbackStrength(int knockbackStrength);
 
-    Entity getShooter();
+    IEntity getOwner();
 
     EntityCustomProjectile getMCEntity();
 }

@@ -1,16 +1,19 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.extendedapi.event.IHotbarSlotChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.scripted.NpcAPI;
 import noppes.npcs.scripted.event.player.PlayerEvent;
 
-public class HotbarSlotChangedEvent extends PlayerEvent {
+public class HotbarSlotChangedEvent extends PlayerEvent implements IHotbarSlotChangedEvent {
     public final int oldSlot;
     public final int newSlot;
-    public final ItemStack oldStack;
-    public final ItemStack newStack;
+    public final IItemStack oldStack;
+    public final IItemStack newStack;
 
     public HotbarSlotChangedEvent() {
         super(null);
@@ -24,8 +27,8 @@ public class HotbarSlotChangedEvent extends PlayerEvent {
         super(player);
         this.oldSlot = oldSlot;
         this.newSlot = newSlot;
-        this.oldStack = oldStack;
-        this.newStack = newStack;
+        this.oldStack = NpcAPI.Instance().getIItemStack(oldStack);
+        this.newStack = NpcAPI.Instance().getIItemStack(newStack);
     }
 
     public String getHookName() {
@@ -40,11 +43,11 @@ public class HotbarSlotChangedEvent extends PlayerEvent {
         return newSlot;
     }
 
-    public ItemStack getOldStack() {
+    public IItemStack getOldStack() {
         return oldStack;
     }
 
-    public ItemStack getNewStack() {
+    public IItemStack getNewStack() {
         return newStack;
     }
 }

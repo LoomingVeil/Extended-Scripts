@@ -15,10 +15,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.controllers.ScriptController;
+import noppes.npcs.controllers.data.PlayerDataScript;
 
 import java.util.List;
 
@@ -296,10 +300,20 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                         this.playSound(hitSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
                         if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
-                            System.out.println("Count: "+numPenetrated+" Max: "+penetrationCount);
                             if (numPenetrated >= penetrationCount) {
+                                CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, true);
+
+                                PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                                handler.callScript(impactEvent.getHookName(), impactEvent);
+                                AbstractNpcAPI.Instance().events().post(impactEvent);
                                 setDead();
                             }
+
+                            CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, false);
+
+                            PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                            handler.callScript(impactEvent.getHookName(), impactEvent);
+                            AbstractNpcAPI.Instance().events().post(impactEvent);
 
                             this.numPenetrated += 1;
                         }
@@ -322,6 +336,14 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                     }
                 } else {
                     // When the projectile hits a block
+                    if (!doesShatterOnImpact() && !inGround && !worldObj.isRemote) { // Ensures the event only fires once
+                        CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos(this.x, this.y, this.z), false);
+
+                        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                        handler.callScript(impactEvent.getHookName(), impactEvent);
+                        AbstractNpcAPI.Instance().events().post(impactEvent);
+                    }
+
                     this.x = movingobjectposition.blockX;
                     this.y = movingobjectposition.blockY;
                     this.z = movingobjectposition.blockZ;
@@ -343,6 +365,11 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                     }
 
                     if (this.doesShatterOnImpact()) {
+                        CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos(this.x, this.y, this.z), true);
+
+                        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                        handler.callScript(impactEvent.getHookName(), impactEvent);
+                        AbstractNpcAPI.Instance().events().post(impactEvent);
                         this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                         this.setDead();
                     }
@@ -585,8 +612,12 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
         return this;
     }
 
+    public IEntity getOwner() {
+        return AbstractNpcAPI.Instance().getIEntity(shootingEntity);
+    }
+
     public Entity getShooter() {
-        return getShooter();
+        return shootingEntity;
     }
 
     @Override

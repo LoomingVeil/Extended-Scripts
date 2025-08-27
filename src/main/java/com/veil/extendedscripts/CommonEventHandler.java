@@ -143,7 +143,6 @@ public class CommonEventHandler {
             }
 
             float waterSwimBoost = ExtendedAPI.getAttribute(player, PlayerAttribute.SWIM_BOOST_WATER) * 0.01F;
-            System.out.println("Swim boost is "+waterSwimBoost);
             if (player.moveForward > 0.001 && !player.capabilities.isFlying && player.isInWater()) {
                 player.motionX += -Math.sin(Math.toRadians(player.rotationYaw)) * (waterSwimBoost) * speedMultiplier;
                 player.motionZ +=  Math.cos(Math.toRadians(player.rotationYaw)) * (waterSwimBoost) * speedMultiplier;

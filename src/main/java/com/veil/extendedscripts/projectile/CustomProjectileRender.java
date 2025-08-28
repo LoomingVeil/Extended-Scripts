@@ -1,4 +1,4 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.projectile;
 
 import com.veil.extendedscripts.constants.CustomProjectileRenderType;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,7 +17,7 @@ public class CustomProjectileRender extends Render {
     public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
         EntityCustomProjectile projectile = (EntityCustomProjectile) entity;
         if (projectile.getRenderProperties().getRenderType() == CustomProjectileRenderType.Instance.SIMPLE) {
-            CustomProjectileRenderProperties renderProperties = projectile.getRenderProperties();
+            CustomProjectileRenderProperties renderProperties = (CustomProjectileRenderProperties) projectile.getRenderProperties();
             this.bindEntityTexture(entity);
             GL11.glPushMatrix();
             GL11.glTranslatef((float)x, (float)y, (float)z);
@@ -39,12 +39,14 @@ public class CustomProjectileRender extends Render {
             GL11.glTranslatef(renderProperties.getForwardOffset(), 0.0F, 0.0F);
             GL11.glNormal3f(scale, 0.0F, 0.0F);
 
+            float rotationOffset = renderProperties.getRotatingRotation();
+
             int numPlanes = renderProperties.getNumSimpleRenderPlanes();
             for (int i = 0; i < 2 * numPlanes; i++) {
                 GL11.glRotatef((180F * i) + 180F / numPlanes, 1.0F, 0.0F, 0.0F);
 
                 // Front face
-                GL11.glRotatef(renderProperties.getRotationOffset(), 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(rotationOffset, 0.0F, 0.0F, 1.0F);
                 GL11.glNormal3f(0.0F, 0.0F, scale);
                 tessellator.startDrawingQuads();
                 tessellator.addVertexWithUV(-8.0D, -8D, 0.0D, 0.0D, 0.0D); // Top-Left UV
@@ -52,10 +54,10 @@ public class CustomProjectileRender extends Render {
                 tessellator.addVertexWithUV( 8.0D,  8D, 0.0D, 1.0D, 1.0D); // Bottom-Right UV
                 tessellator.addVertexWithUV(-8.0D,  8D, 0.0D, 0.0D, 1.0D); // Bottom-Left UV
                 tessellator.draw();
-                GL11.glRotatef(-renderProperties.getRotationOffset(), 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(-rotationOffset, 0.0F, 0.0F, 1.0F);
 
                 // Back face (mirrored UVs so it looks correct when flipped)
-                GL11.glRotatef(renderProperties.getRotationOffset(), 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(rotationOffset, 0.0F, 0.0F, 1.0F);
                 GL11.glNormal3f(0.0F, 0.0F, scale);
                 tessellator.startDrawingQuads();
                 tessellator.addVertexWithUV(-8.0D,  8D, 0.0D, 0.0D, 1.0D); // Bottom-Left mirrored
@@ -63,7 +65,7 @@ public class CustomProjectileRender extends Render {
                 tessellator.addVertexWithUV( 8.0D, -8D, 0.0D, 1.0D, 0.0D); // Top-Right mirrored
                 tessellator.addVertexWithUV(-8.0D, -8D, 0.0D, 0.0D, 0.0D); // Top-Left mirrored
                 tessellator.draw();
-                GL11.glRotatef(-renderProperties.getRotationOffset(), 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(-rotationOffset, 0.0F, 0.0F, 1.0F);
             }
 
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);

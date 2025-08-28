@@ -1,6 +1,5 @@
 package com.veil.extendedscripts.mixins;
 
-import com.veil.extendedscripts.EntityCustomProjectile;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -10,7 +9,6 @@ import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IBlock;
 import noppes.npcs.api.IPos;
 import noppes.npcs.api.entity.IEntity;
-import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.scripted.ScriptWorld;
 import org.spongepowered.asm.mixin.Mixin;
@@ -87,5 +85,4 @@ public class MixinWorldExtension {
 
         world.spawnEntityInWorld(projectile.getMCEntity());
     }
-
 }

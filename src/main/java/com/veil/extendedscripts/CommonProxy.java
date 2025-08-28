@@ -5,6 +5,7 @@ import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
+import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

@@ -1,10 +1,9 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.projectile;
 
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
-import net.minecraft.block.Block;
+import com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import noppes.npcs.api.IBlock;
 import noppes.npcs.api.IPos;
 import noppes.npcs.api.IWorld;
@@ -14,8 +13,9 @@ import noppes.npcs.scripted.NpcAPI;
 import noppes.npcs.scripted.ScriptBlockPos;
 import noppes.npcs.scripted.event.player.PlayerEvent;
 
-public class CustomProjectileImpactEvent extends PlayerEvent {
+public class CustomProjectileImpactEvent extends PlayerEvent implements ICustomProjectileImpactEvent {
     public ICustomProjectile projectile;
+    public int projectileID = 0;
     public IEntity target;
     public IBlock block;
     public boolean shattered;
@@ -31,6 +31,7 @@ public class CustomProjectileImpactEvent extends PlayerEvent {
     public CustomProjectileImpactEvent(IPlayer player, ICustomProjectile projectile, Entity target, BlockPos pos, boolean shattered) {
         super(player);
         this.projectile = projectile;
+        this.projectileID = projectile.getID();
         if (target != null) {
             this.target = NpcAPI.Instance().getIEntity(target);
         }
@@ -48,6 +49,10 @@ public class CustomProjectileImpactEvent extends PlayerEvent {
 
     public ICustomProjectile getProjectile() {
         return projectile;
+    }
+
+    public int getID() {
+        return projectileID;
     }
 
     public IEntity getTarget() {

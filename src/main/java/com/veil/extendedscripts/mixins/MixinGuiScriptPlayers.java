@@ -1,6 +1,7 @@
 package com.veil.extendedscripts.mixins;
 
-import com.veil.extendedscripts.CustomProjectileImpactEvent;
+import com.veil.extendedscripts.projectile.CustomProjectileImpactEvent;
+import com.veil.extendedscripts.projectile.CustomProjectileTickEvent;
 import com.veil.extendedscripts.HotbarSlotChangedEvent;
 import noppes.npcs.client.gui.script.GuiScriptInterface;
 import noppes.npcs.client.gui.script.GuiScriptPlayers;
@@ -17,6 +18,7 @@ public abstract class MixinGuiScriptPlayers extends GuiScriptInterface {
     private void onConstructorComplete(CallbackInfo info) {
         this.hookList.add(new HotbarSlotChangedEvent().getHookName());
         this.hookList.add(new CustomProjectileImpactEvent().getHookName());
+        this.hookList.add(new CustomProjectileTickEvent().getHookName());
     }
 }
 

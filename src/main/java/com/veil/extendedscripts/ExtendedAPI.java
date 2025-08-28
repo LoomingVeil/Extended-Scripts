@@ -6,6 +6,7 @@ import com.veil.extendedscripts.extendedapi.IShapeMaker;
 import com.veil.extendedscripts.extendedapi.constants.*;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.properties.EntityAttribute;
+import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
@@ -21,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
-import noppes.npcs.api.entity.IEntityLiving;
 import noppes.npcs.api.entity.IEntityLivingBase;
 import noppes.npcs.api.entity.IPlayer;
 
@@ -52,39 +52,6 @@ public class ExtendedAPI implements AbstractExtendedAPI {
             return false;
         }
     }
-
-    public IKeys getKeyCodes() {
-        return (IKeys) Keys.Instance;
-    }
-
-    public IAnimationType getAnimationTypes() {
-        return (IAnimationType) AnimationType.Instance;
-    }
-
-    public IEntityType getEntityTypes() {
-        return (IEntityType) EntityType.Instance;
-    }
-
-    public IJobType getJobTypes() {
-        return (IJobType) JobType.Instance;
-    }
-
-    public IRoleType getRoleTypes() {
-        return (IRoleType) RoleType.Instance;
-    }
-
-    public IAttributeValueType getAttributeValueTypes() {
-        return (IAttributeValueType) ExtendedAttributeValueType.Instance;
-    }
-
-    public IAttributeSection getAttributeSections() {
-        return (IAttributeSection) ExtendedAttributeSection.Instance;
-    }
-
-    public IColorCodes getColorCodes() {
-        return (IColorCodes) ColorCodes.Instance;
-    }
-
 
     /**
      * Gets an array of the names of the registered entities in the game.

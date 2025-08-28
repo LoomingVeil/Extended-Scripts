@@ -19,18 +19,17 @@ public interface IShapeMaker {
 
     IPos[] getHollowBox(IPos pos1, IPos pos2);
 
-    IPos[] getEllipsoid(IPos center, int radius);
-
     IPos[] getEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ);
-
-    IPos[] getHollowEllipsoid(IPos center, int radius);
-
-    IPos[] getHollowEllipsoid(IPos center, int radius, double thickness);
-;
 
     IPos[] getHollowEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ, double thickness);
 
     IPos[] getHollowEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ);
+
+    IPos[] getSphere(IPos center, int radius);
+
+    IPos[] getHollowSphere(IPos center, int radius);
+
+    IPos[] getHollowSphere(IPos center, int radius, double thickness);
 
     IPos[] getCylinder(IPos center, int radius, int height);
 

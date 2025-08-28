@@ -1,5 +1,6 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.extendedapi.IShapeMaker;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IPos;
 
@@ -17,7 +18,7 @@ enum ShapeType {
 /**
  * Provides a variant of methods for creating shapes
  */
-public class ShapeMaker {
+public class ShapeMaker implements IShapeMaker {
     public static ShapeMaker Instance = new ShapeMaker();
 
     /**
@@ -252,22 +253,10 @@ public class ShapeMaker {
         return getHollowBox(pos1, pos2, 1);
     }
 
-    // --- Sphere / Spheroid Wrappers ---
-
-    public IPos[] getEllipsoid(IPos center, int radius) {
-        return getShape(ShapeType.ELLIPSOID, center, radius, radius, radius, false, 0);
-    }
+    // --- Ellipsoid Wrappers ---
 
     public IPos[] getEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ) {
         return getShape(ShapeType.ELLIPSOID, center, sizeX, sizeY, sizeZ, false, 0);
-    }
-
-    public IPos[] getHollowEllipsoid(IPos center, int radius, double thickness) {
-        return getShape(ShapeType.ELLIPSOID, center, radius, radius, radius, true, thickness);
-    }
-
-    public IPos[] getHollowEllipsoid(IPos center, int radius) {
-        return getHollowEllipsoid(center, radius, 1);
     }
 
     public IPos[] getHollowEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ, double thickness) {
@@ -276,6 +265,20 @@ public class ShapeMaker {
 
     public IPos[] getHollowEllipsoid(IPos center, int sizeX, int sizeY, int sizeZ) {
         return getHollowEllipsoid(center, sizeX, sizeY, sizeZ, 1);
+    }
+
+    // --- Sphere Wrappers ---
+
+    public IPos[] getSphere(IPos center, int radius) {
+        return getShape(ShapeType.ELLIPSOID, center, radius, radius, radius, false, 0);
+    }
+
+    public IPos[] getHollowSphere(IPos center, int radius, double thickness) {
+        return getShape(ShapeType.ELLIPSOID, center, radius, radius, radius, true, thickness);
+    }
+
+    public IPos[] getHollowSphere(IPos center, int radius) {
+        return getHollowSphere(center, radius, 1);
     }
 
     // --- Cylinder Wrappers ---

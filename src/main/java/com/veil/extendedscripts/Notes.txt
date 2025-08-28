@@ -20,7 +20,7 @@ Things I want to add:
  - Hide the +4 damage on the World Clippers
  - Fix the issue where loaded scripts improperly show §
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
- - Add custom projectiles
+ - Add custom projectile textures spin
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, and damage reflection
  - Fix negative gravity not working on entities with 0 y motion

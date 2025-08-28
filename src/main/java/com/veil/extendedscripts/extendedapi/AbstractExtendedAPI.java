@@ -10,24 +10,6 @@ import noppes.npcs.api.entity.IEntity;
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
  */
 public interface AbstractExtendedAPI {
-    IShapeMaker getShapeMaker();
-
-    IKeys getKeyCodes();
-
-    IAnimationType getAnimationTypes();
-
-    IEntityType getEntityTypes();
-
-    IJobType getJobTypes();
-
-    IRoleType getRoleTypes();
-
-    IAttributeValueType getAttributeValueTypes();
-
-    IAttributeSection getAttributeSections();
-
-    IColorCodes getColorCodes();
-
     /**
      * Gets an array of the names of the registered entities in the game.
      * These names can be used in functions like {@link #createIEntity(String, IWorld)}.

@@ -1,9 +1,11 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.projectile;
 
+import com.veil.extendedscripts.PacketHandler;
 import com.veil.extendedscripts.constants.CustomProjectileRenderType;
+import com.veil.extendedscripts.extendedapi.entity.ICustomProjectileRenderProperties;
 import net.minecraft.util.ResourceLocation;
 
-public class CustomProjectileRenderProperties {
+public class CustomProjectileRenderProperties implements ICustomProjectileRenderProperties {
     public CustomProjectileRenderProperties(EntityCustomProjectile projectile) {
         this.projectile = projectile;
     }
@@ -15,8 +17,16 @@ public class CustomProjectileRenderProperties {
     private int numSimpleRenderPlanes = 2;
     private float rollOffset = 45;
     private float rotationOffset = 0;
+    private float rotatingRotation = 0;
     private float forwardOffset = -4.0F;
+    private float rotationSpeed = 0;
     private float scale;
+    private boolean stopRotatingOnImpact = true;
+    private boolean onImpactSnapToInitRotation = true;
+
+    public boolean shouldUseRotatingRotation() {
+        return true;
+    }
 
     public byte getRenderType() {
         return renderType;
@@ -92,6 +102,19 @@ public class CustomProjectileRenderProperties {
         projectile.getDataWatcher().updateObject(EntityCustomProjectile.ROTATION_OFFSET_ID, rotationOffset);
     }
 
+    public float getRotatingRotation() {
+        if (projectile.worldObj.isRemote) {
+            return projectile.getDataWatcher().getWatchableObjectFloat(EntityCustomProjectile.ROTATING_ROTATION_ID);
+        }
+
+        return rotatingRotation;
+    }
+
+    public void setRotatingRotation(float rotatingRotation) {
+        this.rotatingRotation = rotatingRotation;
+        projectile.getDataWatcher().updateObject(EntityCustomProjectile.ROTATING_ROTATION_ID, rotatingRotation);
+    }
+
     public float getForwardOffset() {
         if (projectile.worldObj.isRemote) {
             return projectile.getDataWatcher().getWatchableObjectFloat(EntityCustomProjectile.FORWARD_OFFSET_ID);
@@ -105,6 +128,19 @@ public class CustomProjectileRenderProperties {
         projectile.getDataWatcher().updateObject(EntityCustomProjectile.FORWARD_OFFSET_ID, forwardOffset);
     }
 
+    public float getRotationSpeed() {
+        if (projectile.worldObj.isRemote) {
+            return projectile.getDataWatcher().getWatchableObjectFloat(EntityCustomProjectile.ROTATION_SPEED_ID);
+        }
+
+        return rotationSpeed;
+    }
+
+    public void setRotationSpeed(float rotationSpeed) {
+        this.rotationSpeed = rotationSpeed;
+        projectile.getDataWatcher().updateObject(EntityCustomProjectile.ROTATION_SPEED_ID, rotationSpeed);
+    }
+
     public float getScale() {
         if (projectile.worldObj.isRemote) {
             return projectile.getDataWatcher().getWatchableObjectFloat(EntityCustomProjectile.SCALE_ID);
@@ -116,5 +152,21 @@ public class CustomProjectileRenderProperties {
     public void setScale(float scale) {
         this.scale = scale;
         projectile.getDataWatcher().updateObject(EntityCustomProjectile.SCALE_ID, scale);
+    }
+
+    public boolean shouldStopRotatingOnImpact() {
+        return stopRotatingOnImpact;
+    }
+
+    public void setStopRotatingOnImpact(boolean stopRotatingOnImpact) {
+        this.stopRotatingOnImpact = stopRotatingOnImpact;
+    }
+
+    public boolean shouldOnImpactSnapToInitRotation() {
+        return onImpactSnapToInitRotation;
+    }
+
+    public void setOnImpactSnapToInitRotation(boolean onImpactSnapToInitRotation) {
+        this.onImpactSnapToInitRotation = onImpactSnapToInitRotation;
     }
 }

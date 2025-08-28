@@ -1,5 +1,7 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.projectile.CustomProjectileRender;
+import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

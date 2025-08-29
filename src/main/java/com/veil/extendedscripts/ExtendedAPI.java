@@ -146,7 +146,6 @@ public class ExtendedAPI implements AbstractExtendedAPI {
      * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link ExtendedAttributeSection}
      */
     public void registerAttribute(String key, String displayName, char colorCode, int attributeType, int section) {
-        System.out.println("Registering attribute with a display name of "+displayName+" and a name of "+key);
         AttributeValueType valueType = ExtendedAttributeValueType.toKamAttribute(attributeType);
         AttributeDefinition.AttributeSection sectionType = ExtendedAttributeSection.toKamSection(section);
 
@@ -157,12 +156,9 @@ public class ExtendedAPI implements AbstractExtendedAPI {
 
     public static void registerAttribute(AttributeDefinition newAttribute) {
         if (AttributeController.getAttribute(newAttribute.getKey()) == null) {
-            System.out.println("Registering "+newAttribute.getKey()+" Attribute");
             AttributeController.registerAttribute(newAttribute);
             ExtendedScripts.getExtendedWorldData().addExtendedAttribute(newAttribute);
             lastWorldsAttributes.put(newAttribute.getKey(), newAttribute);
-        } else {
-            System.out.println("Attempted to register an attribute "+newAttribute.getKey()+" that already exists!");
         }
     }
 
@@ -199,8 +195,6 @@ public class ExtendedAPI implements AbstractExtendedAPI {
      * This is just for unloading registered attributes between worlds, not for removing it entirely.
      */
     public static void unregisterAttributeFromWorld(String key) {
-        System.out.println("Unregistering "+key+" Attribute");
-
         ((IExtendedAttributeController) AttributeController.Instance).unregisterAttribute(key);
     }
 

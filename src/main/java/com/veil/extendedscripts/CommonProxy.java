@@ -8,6 +8,8 @@ import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -15,6 +17,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.versioning.ArtifactVersion;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
@@ -41,6 +45,7 @@ public class CommonProxy {
         EntityRegistry.registerModEntity(EntityCustomProjectile.class, "CustomProjectile", id, ExtendedScripts.instance, 128, 10, true);
 
         ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "scripted_item");
+        ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "npcScripter");
         if (ExtendedScripts.scriptedItem == null) {
             System.err.println("Could not find scripted item!");
             return;
@@ -58,14 +63,34 @@ public class CommonProxy {
         API.addGlobalObject("AnimationType", AnimationType.Instance);
         API.addGlobalObject("Color", ColorCodes.Instance);
         API.addGlobalObject("EntityType", EntityType.Instance);
-        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
-        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
         API.addGlobalObject("JobType", JobType.Instance);
         API.addGlobalObject("Key", Keys.Instance);
         API.addGlobalObject("RoleType", JobType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
-        // AbstractNpcAPI.Instance().events().register(new HotbarSlotChangedEvent()); // Unnecessary
+
+        if (Loader.isModLoaded("customnpcs")) {
+            ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");
+            if (container != null) {
+                ArtifactVersion loadedVersion = container.getProcessedVersion();
+                ArtifactVersion intendedVersion = new DefaultArtifactVersion("1.10.1");
+                if (loadedVersion.compareTo(intendedVersion) >= 0) {
+                    attributeInit();
+                } else {
+                    System.out.println("You are using an outdated version of CustomNpc+. For access to all features, update to at least version "+intendedVersion);
+                }
+            }
+        }
+    }
+
+    public void attributeInit() {
+        FMLCommonHandler.instance().bus().register(new AttributeEventHandler());
+        MinecraftForge.EVENT_BUS.register(new AttributeEventHandler());
+
+        AbstractNpcAPI API = AbstractNpcAPI.Instance();
+        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
+        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+
         AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase(), "Upward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
@@ -75,7 +100,6 @@ public class CommonProxy {
         AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_VERTICAL.asSnakeCase(), "Jump Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_HORIZONTAL.asSnakeCase(), "Jump Breadth", ColorCodes.Instance.DARK_GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase(), "Max Fall Distance", ColorCodes.Instance.WHITE, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
-
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), "Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
@@ -87,7 +111,6 @@ public class CommonProxy {
 
         // Remove any attributes that have already been registered this game instance
         Map<String, AttributeDefinition> oldAttributes = ExtendedAPI.getLastWorldsAttributes();
-        System.out.println("There are "+oldAttributes.size() + " attributes that need to be removed");
 
         for (String attributeKey : oldAttributes.keySet()) {
             ExtendedAPI.unregisterAttributeFromWorld(attributeKey);

@@ -8,6 +8,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import kamkeel.npcs.controllers.AttributeController;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
@@ -29,57 +30,14 @@ import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.controllers.ScriptController;
 import noppes.npcs.controllers.data.PlayerDataScript;
+import noppes.npcs.items.ItemNpcScripter;
+import noppes.npcs.items.ItemScripted;
 
 import java.util.*;
 
 public class CommonEventHandler {
     private final Map<UUID, Integer> lastHotbarSlot = new HashMap<>();
     private final float DEFAULT_JUMP_POWER = 0.42F;
-
-    @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.world.isRemote) {
-            return; // only run once, server side
-        }
-
-        World world = event.world;
-        for (Object obj : world.loadedEntityList) {
-            if (!(obj instanceof IProjectile || obj instanceof EntityItem)) continue;
-            Entity entity = (Entity) obj;
-            ExtendedScriptEntityProperties properties = ExtendedScripts.getEntityProperties(entity);
-            /*if (!properties.getCanMove()) {
-                if (event.entity instanceof EntityPlayer) {
-                    EntityPlayer genericPlayer = (EntityPlayer) event.entity;
-                }
-            }*/
-
-            boolean isSwimming = entity.isInWater();
-
-            if (!isSwimming) {
-                float vanillaGravityEffect = 0.08F; // Base vanilla gravity pull per tick
-
-                applyEntityGravity(
-                    properties,
-                    entity,
-                    vanillaGravityEffect,
-                    properties.get(EntityAttribute.GRAVITY),
-                    properties.get(EntityAttribute.DOWNWARD_GRAVITY),
-                    properties.get(EntityAttribute.UPWARD_GRAVITY)
-                );
-            } else {
-                float vanillaGravityEffect = 0.02F; // Base vanilla underwater gravity pull per tick
-
-                applyEntityGravity(
-                    properties,
-                    entity,
-                    vanillaGravityEffect,
-                    properties.get(EntityAttribute.UNDERWATER_GRAVITY),
-                    properties.get(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY),
-                    properties.get(EntityAttribute.UNDERWATER_UPWARD_GRAVITY)
-                );
-            }
-        }
-    }
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -115,41 +73,39 @@ public class CommonEventHandler {
                         lastHotbarSlot.put(playerUUID, currentSlot);
                     }
                 }
-            } else {
-                EntityPlayerSP ClientPlayer = (EntityPlayerSP) player;
-
-                boolean isFlying = ClientPlayer.capabilities.isFlying;
-                boolean isMovingUp = ClientPlayer.movementInput.jump;
-                boolean isMovingDown = ClientPlayer.movementInput.sneak;
-
-                if (isFlying) {
-                    float verticalFlightSpeed = ExtendedAPI.getAttribute(player, PlayerAttribute.FLIGHT_SPEED_VERTICAL) * 0.01F;
-                    if (verticalFlightSpeed != 0) {
-                        if (isMovingUp && !isMovingDown) {
-                            player.motionY = verticalFlightSpeed * 0.2;
-                        } else if (isMovingDown && !isMovingUp) {
-                            player.motionY = -verticalFlightSpeed * 0.2;
-                        }
-                    }
-                }
             }
-
-            float horzMoveMultiplier = ExtendedAPI.getAttribute(player, EntityAttribute.JUMP_POWER_HORIZONTAL) * 0.01F;
-            float speedMultiplier = 0.01F;
-
-            if (player.moveForward > 0.001 && !player.onGround && !player.capabilities.isFlying && !player.isInWater()) {
-                player.motionX += -Math.sin(Math.toRadians(player.rotationYaw)) * (horzMoveMultiplier) * speedMultiplier;
-                player.motionZ +=  Math.cos(Math.toRadians(player.rotationYaw)) * (horzMoveMultiplier) * speedMultiplier;
-            }
-
-            float waterSwimBoost = ExtendedAPI.getAttribute(player, PlayerAttribute.SWIM_BOOST_WATER) * 0.01F;
-            if (player.moveForward > 0.001 && !player.capabilities.isFlying && player.isInWater()) {
-                player.motionX += -Math.sin(Math.toRadians(player.rotationYaw)) * (waterSwimBoost) * speedMultiplier;
-                player.motionZ +=  Math.cos(Math.toRadians(player.rotationYaw)) * (waterSwimBoost) * speedMultiplier;
-            }
-
         }
     }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null) {
+            if (ExtendedScripts.openScriptingActionKey.isPressed()) {
+                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+                ItemStack item = player.getHeldItem();
+
+                if (item == null) {
+                    return;
+                }
+
+                if (item.getItem() instanceof ItemNpcScripter) {
+                    Minecraft.getMinecraft().thePlayer.addChatMessage(
+                        new ChatComponentText("Holding Scripter")
+                    );
+                    item.getItem().onItemRightClick(item, player.worldObj, player);
+                    return;
+                } else if (item.getItem() instanceof ItemScripted) {
+                    PacketHandler.INSTANCE.sendToServer(new ScriptItemClickPacket());
+                    return;
+                }
+
+                Minecraft.getMinecraft().thePlayer.addChatMessage(
+                    ChatUtils.fillChatWithColor("§cYou must be holding a scripted item and have the proper permissions for this!")
+                );
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent event) {
@@ -174,220 +130,7 @@ public class CommonEventHandler {
         }
 
         if (args.length == 1 && args[0].equals("attribute")) {
-            ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For adding and removing attributes, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
-        }
-    }
-
-    @SubscribeEvent
-    public void onEntityConstructing(EntityConstructing event) {
-        if (event.entity instanceof EntityPlayer && ExtendedScriptPlayerProperties.get((EntityPlayer) event.entity) == null) {
-            ExtendedScriptPlayerProperties.register((EntityPlayer) event.entity);
-            ExtendedScriptEntityProperties.register(event.entity);
-        }
-    }
-
-    // Copies extended properties from the old player entity to the new one upon death/respawn
-    @SubscribeEvent
-    public void onPlayerClone(Clone event) {
-        System.out.println("Attempting to sync player properties.");
-        ExtendedScriptPlayerProperties origPlayerProps = ExtendedScriptPlayerProperties.get(event.original);
-        ExtendedScriptPlayerProperties newPlayerProps = ExtendedScriptPlayerProperties.get(event.entityPlayer);
-        if (origPlayerProps != null && newPlayerProps != null) {
-            NBTTagCompound compound = new NBTTagCompound();
-            origPlayerProps.saveNBTData(compound);
-            newPlayerProps.loadNBTData(compound);
-        }
-
-        ExtendedScriptEntityProperties origEntityProps = ExtendedScriptEntityProperties.get(event.original);
-        ExtendedScriptEntityProperties newEntityProps = ExtendedScriptEntityProperties.get(event.entityPlayer);
-        if (origEntityProps != null && newEntityProps != null) {
-            NBTTagCompound compound = new NBTTagCompound();
-            origEntityProps.saveNBTData(compound);
-            newEntityProps.loadNBTData(compound);
-            boolean canFly = origPlayerProps.getCanFly();
-            boolean lastSeenFlying = newPlayerProps.getLastSeenFlying();
-            event.entityPlayer.capabilities.allowFlying = canFly;
-            // event.entityPlayer.capabilities.isFlying = lastSeenFlying;
-            event.entityPlayer.sendPlayerAbilities();
-        }
-    }
-
-    @SubscribeEvent
-    public void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        ExtendedScriptEntityProperties.get(event.player).syncToPlayer();
-        ExtendedScriptPlayerProperties.get(event.player).syncToPlayer();
-    }
-
-    @SubscribeEvent
-    public void onDeath(LivingDeathEvent event) {
-        if (event.entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.entity;
-            ExtendedScriptPlayerProperties.get(player).setLastSeenFlying(player.capabilities.isFlying);
-        }
-    }
-
-    @SubscribeEvent
-    public void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        ExtendedScriptEntityProperties.get(event.player).syncToPlayer();
-        ExtendedScriptPlayerProperties.get(event.player).syncToPlayer();
-    }
-
-    @SubscribeEvent
-    public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        // System.out.println("Attempting to sync player properties.");
-
-        ExtendedScriptEntityProperties.get(event.player).syncToPlayer();
-        ExtendedScriptPlayerProperties playerProperties = ExtendedScriptPlayerProperties.get(event.player);
-
-        boolean lastSeenState = playerProperties.getLastSeenFlying();
-        if (lastSeenState) {
-            // event.player.capabilities.isFlying = true;
-            // event.player.sendPlayerAbilities();
-        }
-
-
-        playerProperties.syncToPlayer();
-
-        AttributeController.getTracker(event.player).recalcAttributes(event.player);
-    }
-
-    @SubscribeEvent
-    public void onLivingFall(LivingFallEvent event) {
-        if (event.entity instanceof EntityPlayer) {
-            ExtendedScriptPlayerProperties properties = ExtendedScripts.getPlayerProperties((EntityPlayer) event.entity);
-            if (properties.getCanFly()) {
-                event.setCanceled(true);
-            }
-        }
-
-        if (event.isCanceled()) return;
-
-        if (event.entity instanceof EntityPlayer) {
-            float maxFallDistance = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.MAX_FALL_DISTANCE);
-            event.distance -= (maxFallDistance);
-        } else {
-            ExtendedScriptEntityProperties properties = ExtendedScripts.getEntityProperties(event.entity);
-            float maxFallDistance = properties.get(EntityAttribute.MAX_FALL_DISTANCE);
-            event.distance -= (maxFallDistance - 3);
-        }
-    }
-
-    @SubscribeEvent
-    public void onJump(LivingEvent.LivingJumpEvent event) {
-        if (event.entity instanceof EntityPlayer) {
-            float jumpBoost = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.JUMP_POWER_VERTICAL) * 0.01F;
-            event.entity.motionY += jumpBoost * 0.1F;
-        } else {
-            ExtendedScriptEntityProperties properties = ExtendedScripts.getEntityProperties(event.entity);
-            float jumpBoost = properties.get(EntityAttribute.JUMP_POWER_VERTICAL);
-            event.entity.motionY += (jumpBoost - 1) * 0.1F;
-        }
-    }
-
-    @SubscribeEvent
-    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        ExtendedScriptEntityProperties properties = ExtendedScripts.getEntityProperties(event.entity);
-        /*if (!properties.getCanMove()) {
-            if (event.entity instanceof EntityPlayer) {
-                EntityPlayer genericPlayer = (EntityPlayer) event.entity;
-            }
-        }*/
-
-        boolean isFlying = false;
-        boolean isSwimming = event.entity.isInWater();
-        if (event.entity instanceof EntityPlayer) {
-            isFlying = ((EntityPlayer) (event.entity)).capabilities.isFlying;
-        }
-        boolean onGround = event.entity.onGround;
-
-        float gravity, downwardGravity, upwardGravity;
-        if (!isFlying && !isSwimming) {
-            float vanillaGravityEffect = 0.08F; // Base vanilla gravity pull per tick
-
-            if (event.entity instanceof EntityPlayer) {
-                gravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.GRAVITY) * 0.01F;
-                downwardGravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.DOWNWARD_GRAVITY) * 0.01F;
-                upwardGravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.UPWARD_GRAVITY) * 0.01F;
-
-                if (Math.abs(downwardGravity) < 0.0001) {
-                    downwardGravity = gravity;
-                }
-                if (Math.abs(upwardGravity) < 0.0001) {
-                    upwardGravity = gravity;
-                }
-
-                if (event.entity.motionY > 0) {
-                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
-                } else if (event.entity.motionY < 0) {
-                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (downwardGravity + 1));
-                } else {
-                    if (upwardGravity < 0) {
-                        event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
-                    }
-                }
-            } else {
-                applyEntityGravity(
-                    properties,
-                    event.entity,
-                    vanillaGravityEffect,
-                    properties.get(EntityAttribute.GRAVITY),
-                    properties.get(EntityAttribute.DOWNWARD_GRAVITY),
-                    properties.get(EntityAttribute.UPWARD_GRAVITY)
-                );
-            }
-        } else if (!isFlying && !onGround) {
-            float vanillaGravityEffect = 0.02F; // Base vanilla underwater gravity pull per tick
-
-            if (event.entity instanceof EntityPlayer) {
-                gravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.UNDERWATER_GRAVITY) * 0.01F;
-                downwardGravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY) * 0.01F;
-                upwardGravity = ExtendedAPI.getAttribute((EntityPlayer) event.entity, EntityAttribute.UNDERWATER_UPWARD_GRAVITY) * 0.01F;
-
-                if (Math.abs(downwardGravity) < 0.0001) {
-                    downwardGravity = gravity;
-                }
-                if (Math.abs(upwardGravity) < 0.0001) {
-                    upwardGravity = gravity;
-                }
-
-                if (event.entity.motionY > 0) {
-                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
-                } else if (event.entity.motionY < 0) {
-                    event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (downwardGravity + 1));
-                } else {
-                    if (upwardGravity < 0) {
-                        event.entity.motionY += vanillaGravityEffect - (vanillaGravityEffect * (upwardGravity + 1));
-                    }
-                }
-            } else {
-                applyEntityGravity(
-                    properties,
-                    event.entity,
-                    vanillaGravityEffect,
-                    properties.get(EntityAttribute.UNDERWATER_GRAVITY),
-                    properties.get(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY),
-                    properties.get(EntityAttribute.UNDERWATER_UPWARD_GRAVITY)
-                );
-            }
-        }
-    }
-
-    private void applyEntityGravity(ExtendedScriptEntityProperties properties, Entity entity, float baseGravity, float gravity, float downwardGravity, float upwardGravity) {
-        if (Math.abs(downwardGravity + 1) < 0.0001) {
-            downwardGravity = gravity;
-        }
-        if (Math.abs(upwardGravity + 1) < 0.0001) {
-            upwardGravity = gravity;
-        }
-
-        if (entity.motionY > 0) {
-            entity.motionY += baseGravity - (baseGravity * upwardGravity);
-        } else if (entity.motionY < 0) {
-            entity.motionY += baseGravity - (baseGravity * downwardGravity);
-        } else {
-            if (upwardGravity < 0) {
-                entity.motionY += baseGravity - (baseGravity * upwardGravity);
-            }
+            ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
         }
     }
 }

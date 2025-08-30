@@ -1,31 +1,16 @@
 package com.veil.extendedscripts;
 
-import com.veil.extendedscripts.properties.EntityAttribute;
-import com.veil.extendedscripts.properties.ExtendedScriptEntityProperties;
-import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
-import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import kamkeel.npcs.controllers.AttributeController;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.event.CommandEvent;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.Clone;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.controllers.ScriptController;
@@ -33,6 +18,8 @@ import noppes.npcs.controllers.data.PlayerDataScript;
 import noppes.npcs.items.ItemNpcScripter;
 import noppes.npcs.items.ItemScripted;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class CommonEventHandler {
@@ -44,19 +31,12 @@ public class CommonEventHandler {
         if (event.phase == TickEvent.Phase.END) {
             EntityPlayer player = event.player;
 
-            if (!player.worldObj.isRemote) { // Server-side World
-                int currentSlot = player.inventory.currentItem; // Get the current hotbar slot index (0-8)
+            if (!player.worldObj.isRemote) {
+                int currentSlot = player.inventory.currentItem;
                 UUID playerUUID = player.getUniqueID();
-
-                // Get the last known slot for this player
                 Integer previousSlot = lastHotbarSlot.get(playerUUID);
 
-                // Check if the slot has actually changed since the last tick
-
                 if (previousSlot == null || previousSlot != currentSlot) {
-                    // Hotbar slot has changed!
-
-                    // Get the ItemStacks for the old and new slots (can be null if slot is empty)
                     if (previousSlot == null) {
                         lastHotbarSlot.put(playerUUID, currentSlot);
                     } else {
@@ -69,7 +49,6 @@ public class CommonEventHandler {
                         handler.callScript(hotbarEvent.getHookName(), hotbarEvent);
                         AbstractNpcAPI.Instance().events().post(hotbarEvent);
 
-                        // Update the last known slot for the next tick
                         lastHotbarSlot.put(playerUUID, currentSlot);
                     }
                 }
@@ -89,9 +68,6 @@ public class CommonEventHandler {
                 }
 
                 if (item.getItem() instanceof ItemNpcScripter) {
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(
-                        new ChatComponentText("Holding Scripter")
-                    );
                     item.getItem().onItemRightClick(item, player.worldObj, player);
                     return;
                 } else if (item.getItem() instanceof ItemScripted) {

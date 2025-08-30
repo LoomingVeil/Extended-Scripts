@@ -22,9 +22,11 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,6 +39,9 @@ public class CommonProxy {
         PacketHandler.registerMessages();
 
         GameRegistry.registerItem(ExtendedScripts.worldClippers, "world_clippers");
+
+        FMLCommonHandler.instance().bus().register(new GlobalFileCopierHandler());
+        MinecraftForge.EVENT_BUS.register(new GlobalFileCopierHandler());
     }
 
     public void init(FMLInitializationEvent event) {
@@ -83,6 +88,10 @@ public class CommonProxy {
         }
     }
 
+    /**
+     * It was originally our intention to make Extended Scripts compatible with CustomNPC 1.9.3, but after trying, it did not go very well.
+     * Still, if I find out exactly how to do it in the future, having all the attribute logic in one function is useful.
+     */
     public void attributeInit() {
         FMLCommonHandler.instance().bus().register(new AttributeEventHandler());
         MinecraftForge.EVENT_BUS.register(new AttributeEventHandler());

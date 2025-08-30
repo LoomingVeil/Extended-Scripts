@@ -44,9 +44,9 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     // public static final int HITBOX_X_ID = 30;
     // public static final int HITBOX_Y_ID = 31;
     public static final int INVULNERABLE_COLLISION_BEHAVIOR_ID = 30;
-    private int x = -1;
+    /*private int x = -1;
     private int y = -1;
-    private int z = -1;
+    private int z = -1;*/
     /**
      * Not sure what this is supposed to represent
      */
@@ -206,11 +206,11 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
             this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f) * 180.0D / Math.PI);
         }
 
-        Block block = this.worldObj.getBlock(this.x, this.y, this.z);
+        Block block = this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ);
 
         if (block.getMaterial() != Material.air) {
-            block.setBlockBoundsBasedOnState(this.worldObj, this.x, this.y, this.z);
-            AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, this.x, this.y, this.z);
+            block.setBlockBoundsBasedOnState(this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
 
             if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ))) {
                 this.inGround = true;
@@ -222,7 +222,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
         }
 
         if (this.inGround) {
-            int j = this.worldObj.getBlockMetadata(this.x, this.y, this.z);
+            int j = this.worldObj.getBlockMetadata((int) this.posX, (int) this.posY, (int) this.posZ);
 
             if (block == this.field_145790_g && j == this.inData) {
                 ++this.ticksInGround;
@@ -341,11 +341,15 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
 
                         if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
                             if (numPenetrated >= penetrationCount) {
-                                CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, true);
+                                if (!worldObj.isRemote) {
+                                    CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, true);
 
-                                PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
-                                handler.callScript(impactEvent.getHookName(), impactEvent);
-                                AbstractNpcAPI.Instance().events().post(impactEvent);
+                                    PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                                    handler.callScript(impactEvent.getHookName(), impactEvent);
+                                    AbstractNpcAPI.Instance().events().post(impactEvent);
+                                }
+                                this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+
                                 setDead();
                             }
 
@@ -376,10 +380,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                             this.prevRotationYaw += 180.0F;
                             this.ticksInAir = 0;
                         } else if (this.invulnerableCollisionBehavior == CustomProjectileInvulnerableCollisionType.Instance.SHATTER) {
-                            String shatterParticle = getShatterParticle();
-                            if (shatterParticle != null && !shatterParticle.equals("")) {
-                                this.worldObj.spawnParticle(shatterParticle, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-                            }
+                            this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 
                             setDead();
                         } // If pass through, do nothing
@@ -387,7 +388,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                 } else {
                     // When the projectile hits a block
                     if (!doesShatterOnImpact() && !inGround && !worldObj.isRemote) { // Ensures the event only fires once
-                        CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos(this.x, this.y, this.z), false);
+                        CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ), false);
 
                         PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
                         handler.callScript(impactEvent.getHookName(), impactEvent);
@@ -404,11 +405,11 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                         }
                     }
 
-                    this.x = movingobjectposition.blockX;
-                    this.y = movingobjectposition.blockY;
-                    this.z = movingobjectposition.blockZ;
-                    this.field_145790_g = this.worldObj.getBlock(this.x, this.y, this.z);
-                    this.inData = this.worldObj.getBlockMetadata(this.x, this.y, this.z);
+                    this.posX = movingobjectposition.blockX;
+                    this.posY = movingobjectposition.blockY;
+                    this.posZ = movingobjectposition.blockZ;
+                    this.field_145790_g = this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ);
+                    this.inData = this.worldObj.getBlockMetadata((int) this.posX, (int) this.posY, (int) this.posZ);
                     this.motionX = ((float) (movingobjectposition.hitVec.xCoord - this.posX));
                     this.motionY = ((float) (movingobjectposition.hitVec.yCoord - this.posY));
                     this.motionZ = ((float) (movingobjectposition.hitVec.zCoord - this.posZ));
@@ -421,12 +422,12 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                     this.arrowShake = 7;
 
                     if (this.field_145790_g.getMaterial() != Material.air) {
-                        this.field_145790_g.onEntityCollidedWithBlock(this.worldObj, this.x, this.y, this.z, this);
+                        this.field_145790_g.onEntityCollidedWithBlock(this.worldObj, (int) this.posX, (int) this.posY, (int) this.posZ, this);
                     }
 
                     if (this.doesShatterOnImpact()) {
                         if (!this.worldObj.isRemote) {
-                            CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos(this.x, this.y, this.z), true);
+                            CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ), true);
 
                             PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
                             handler.callScript(impactEvent.getHookName(), impactEvent);
@@ -439,7 +440,6 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                 }
             }
 
-            boolean hasParticleTrail;
             String particleTrail;
             if (worldObj.isRemote) {
                 particleTrail = this.dataWatcher.getWatchableObjectString(PARTICLE_TRAIL_ID);
@@ -500,7 +500,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
             this.motionZ *= drag;
 
             if (worldObj.isRemote) {
-                this.motionY -= this.dataWatcher.getWatchableObjectFloat(17);
+                this.motionY -= this.dataWatcher.getWatchableObjectFloat(GRAVITY_ID);
             } else {
                 this.motionY -= this.gravity;
             }
@@ -550,7 +550,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     public float getGravity() {
-        return gravity;
+        return dataWatcher.getWatchableObjectFloat(GRAVITY_ID);
     }
 
     public void setGravity(float gravity) {
@@ -654,12 +654,12 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     @Override
-    public double getDamage() {
+    public double getProjectileDamage() {
         return damage;
     }
 
     @Override
-    public void setDamage(double damage) {
+    public void setProjectileDamage(double damage) {
         this.damage = damage;
     }
 

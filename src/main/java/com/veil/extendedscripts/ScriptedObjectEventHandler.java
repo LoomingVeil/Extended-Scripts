@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.item.IItemCustomizable;
+import noppes.npcs.items.ItemScripted;
 
 public class ScriptedObjectEventHandler {
     @SubscribeEvent
@@ -23,7 +24,7 @@ public class ScriptedObjectEventHandler {
         EntityPlayer player = event.entityPlayer;
         ItemStack heldItem = player.getHeldItem();
 
-        if (heldItem == null || heldItem.getItem() != ExtendedScripts.scriptedItem) {
+        if (heldItem == null || !(heldItem.getItem() instanceof ItemScripted)) {
             return;
         }
 
@@ -33,7 +34,7 @@ public class ScriptedObjectEventHandler {
             return;
         }
 
-        IItemCustomizable item = (IItemCustomizable)AbstractNpcAPI.Instance().getIItemStack(heldItem);
+        IItemCustomizable item = (IItemCustomizable) AbstractNpcAPI.Instance().getIItemStack(heldItem);
         // For whatever reason CustomNpcs getArmorType() returns the number backwards
         int armorType = 3 - item.getArmorType();
 

@@ -28,8 +28,10 @@ Things I want to add:
  - Go around and fix the dangling javadoc comment warnings for my sanity.
  - Add summoning followers/pets
  - Add battle helpers
- - Global stuff?
  - Make it so that scripted items can have custom eating sounds and custom eating particles
+ - Syntax highlighting for valid event names
+ - Fix set damage for projectiles
+ - Fix shatterParticle not appearing when shatting on mobs
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death

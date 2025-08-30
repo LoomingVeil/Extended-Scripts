@@ -95,9 +95,9 @@ public interface ICustomProjectile {
 
     void setHitSound(String hitSound);
 
-    double getDamage();
+    double getProjectileDamage();
 
-    void setDamage(double damage);
+    void setProjectileDamage(double damage);
 
     int getKnockbackStrength();
 

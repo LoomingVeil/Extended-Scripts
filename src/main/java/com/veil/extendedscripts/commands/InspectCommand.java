@@ -46,6 +46,7 @@ public class InspectCommand extends CommandBase {
     static {
         SECONDARY_ARGS.add("hand");
         SECONDARY_ARGS.add("target");
+        SECONDARY_ARGS.add("self");
         SECONDARY_ARGS.add("keys");
         SECONDARY_ARGS.add("tp");
         SECONDARY_ARGS.add("tphere");
@@ -237,6 +238,12 @@ public class InspectCommand extends CommandBase {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid number of arguments!"));
                 showCommandUsage(sender);
             }
+        } else if (args[0].equalsIgnoreCase("self")) {
+            player = getPlayer(sender, sender.getCommandSenderName());
+            NBTTagCompound nbt = new NBTTagCompound();
+            player.writeToNBT(nbt);
+
+            showNbt(sender, AbstractNpcAPI.Instance().getINbt(nbt), "");
         } else {
             sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid arguments!"));
             showCommandUsage(sender);

@@ -1,7 +1,6 @@
 Things I want to add:
  - Support sub tags for /inspect
  - Add /inspect tphere
- - Add /inspect self
  - Fix issues with cones and pyramids in the shape class
  - Improved Overlay class
  - Make the rest of the GUIs (Anvil, Enchantment Table, and Brewing Stand)
@@ -20,7 +19,7 @@ Things I want to add:
  - Hide the +4 damage on the World Clippers
  - Fix the issue where loaded scripts improperly show §
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
- - Add custom projectile disable damage, make sure all attributes are saved to nbt
+ - Add custom projectile disable damage, hit endermen, make sure all attributes are saved to nbt
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, reach, and damage reflection
  - Fix negative gravity not working on entities with 0 y motion
@@ -30,7 +29,6 @@ Things I want to add:
  - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Syntax highlighting for valid event names
- - Fix set damage for projectiles
  - Fix shatterParticle not appearing when shattering on mobs
 
 Event stuff that IDK how to do yet:

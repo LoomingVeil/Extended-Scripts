@@ -31,7 +31,7 @@ Things I want to add:
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Syntax highlighting for valid event names
  - Fix set damage for projectiles
- - Fix shatterParticle not appearing when shatting on mobs
+ - Fix shatterParticle not appearing when shattering on mobs
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death

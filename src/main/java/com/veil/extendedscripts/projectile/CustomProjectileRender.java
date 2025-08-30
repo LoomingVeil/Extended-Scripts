@@ -40,6 +40,7 @@ public class CustomProjectileRender extends Render {
             GL11.glNormal3f(scale, 0.0F, 0.0F);
 
             float rotationOffset = renderProperties.getRotatingRotation();
+            if (projectile.ticksExisted == 0 || projectile.ticksExisted == 1) rotationOffset = renderProperties.getRotationOffset();
 
             int numPlanes = renderProperties.getNumSimpleRenderPlanes();
             for (int i = 0; i < 2 * numPlanes; i++) {

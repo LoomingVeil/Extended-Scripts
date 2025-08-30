@@ -4,31 +4,41 @@ import com.veil.extendedscripts.PacketHandler;
 import com.veil.extendedscripts.constants.CustomProjectileInvulnerableCollisionType;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectileRenderProperties;
+import kamkeel.npcs.addon.DBCAddon;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.network.play.server.S27PacketExplosion;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import noppes.npcs.EventHooks;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.constants.EnumParticleType;
+import noppes.npcs.constants.EnumPotionType;
 import noppes.npcs.controllers.ScriptController;
 import noppes.npcs.controllers.data.PlayerDataScript;
+import noppes.npcs.scripted.NpcAPI;
+import noppes.npcs.scripted.event.ProjectileEvent;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class EntityCustomProjectile extends EntityArrow implements ICustomProjectile {
+public class EntityCustomProjectile extends EntityThrowable implements ICustomProjectile {
     public static final int GRAVITY_ID = 17;
     public static final int PARTICLE_TRAIL_ID = 18;
     public static final int SHATTER_PARTICLE_ID = 19;
@@ -44,13 +54,15 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     // public static final int HITBOX_X_ID = 30;
     // public static final int HITBOX_Y_ID = 31;
     public static final int INVULNERABLE_COLLISION_BEHAVIOR_ID = 30;
-    /*private int x = -1;
-    private int y = -1;
-    private int z = -1;*/
+    private boolean loadedFromNbt = false;
+    private int xTile = -1;
+    private int yTile = -1;
+    private int zTile = -1;
     /**
      * Not sure what this is supposed to represent
      */
-    private Block field_145790_g;
+    private Block inTile;
+    private EntityLivingBase thrower;
     private int inData;
     public int arrowShake;
     public boolean inGround;
@@ -70,8 +82,8 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     private byte invulnerableCollisionBehavior = CustomProjectileInvulnerableCollisionType.Instance.BOUNCE;
     private int penetrationCount = 0;
     private int numPenetrated = 0;
-    private float hitboxSizeX = 0.5F;
-    private float hitboxSizeY = 0.5F;
+    private float hitboxSizeX = 1F;
+    private float hitboxSizeY = 1F;
     private float gravity;
     private float initialVelocity = 1.5F;
     private String hitSound = "random.bowhit";
@@ -85,16 +97,20 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
         setupDataWatcher();
         // System.out.println("Setting hitbox size to "+getHitboxSizeX()+", "+getHitboxSizeY());
         setSize(this.width, this.height);
-        renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+        if (!worldObj.isRemote) {
+            renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+        }
     }
 
     public EntityCustomProjectile(World world, EntityLivingBase shooter) {
-        super(world, shooter, 1);
+        super(world, shooter);
         renderProperties = new CustomProjectileRenderProperties(this);
-        this.shootingEntity = shooter;
+
         setupDataWatcher();
-        renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
-        placeInFrontOfEntity(shootingEntity, 1);
+        if (!worldObj.isRemote) {
+            renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+        }
+        placeInFrontOfEntity(getThrower(), 1);
     }
 
     private void setupDataWatcher() {
@@ -152,9 +168,9 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     public void placeInFrontOfEntity(Entity entity, float distance) {
-        double spawnX = entity.posX + shootingEntity.getLookVec().xCoord * distance;
-        double spawnY = entity.posY + shootingEntity.getEyeHeight() + shootingEntity.getLookVec().yCoord * distance;
-        double spawnZ = entity.posZ + shootingEntity.getLookVec().zCoord * distance;
+        double spawnX = entity.posX + getThrower().getLookVec().xCoord * distance;
+        double spawnY = entity.posY + getThrower().getEyeHeight() + getThrower().getLookVec().yCoord * distance;
+        double spawnZ = entity.posZ + getThrower().getLookVec().zCoord * distance;
         this.setPosition(spawnX, spawnY, spawnZ);
     }
 
@@ -181,6 +197,327 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     @Override
+    public void onUpdate() {
+        super.onEntityUpdate();
+
+        if (this.ticksExisted == 1 && !this.worldObj.isRemote) {
+            renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+        }
+
+        if (!worldObj.isRemote && this.ticksExisted % 10 == 0) {
+            CustomProjectileTickEvent tickEvent = new CustomProjectileTickEvent(null, this);
+
+            PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(tickEvent.getPlayer());
+            handler.callScript(tickEvent.getHookName(), tickEvent);
+            AbstractNpcAPI.Instance().events().post(tickEvent);
+        }
+
+        if (!worldObj.isRemote && Math.abs(renderProperties.getRotationSpeed()) > 0.001) {
+            renderProperties.setRotatingRotation(renderProperties.getRotatingRotation() + renderProperties.getRotationSpeed());
+        }
+
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
+            float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+            this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f) * 180.0D / Math.PI);
+
+        }
+
+        Block block = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
+
+        /*if ((this.isArrow() || this.sticksToWalls()) && block != null) {
+            block.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
+            AxisAlignedBB axisalignedbb = block.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
+
+            if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ))) {
+                this.inGround = true;
+            }
+        }*/
+
+        if (this.arrowShake > 0) {
+            --this.arrowShake;
+        }
+
+        if (this.inGround) {
+            int j = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+            if (block == this.inTile && j == this.inData) {
+                ++this.ticksInGround;
+
+                if (this.ticksInGround >= 1200) {
+                    this.setDead();
+                }
+            } else {
+                this.inGround = false;
+                this.motionX *= (this.rand.nextFloat() * 0.2F);
+                this.motionY *= (this.rand.nextFloat() * 0.2F);
+                this.motionZ *= (this.rand.nextFloat() * 0.2F);
+                this.ticksInGround = 0;
+                this.ticksInAir = 0;
+            }
+        } else {
+            ++this.ticksInAir;
+
+            if (this.ticksInAir >= 1200) {
+                this.setDead();
+            }
+            Vec3 vec3 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            Vec3 vec31 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            MovingObjectPosition movingobjectposition = this.worldObj.func_147447_a(vec3, vec31, false, true, false);//rayTraceBlocks_do_do
+            vec3 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+            vec31 = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+
+            if (movingobjectposition != null) {
+                vec31 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
+            }
+            if (!this.worldObj.isRemote) {
+                Entity entity = null;
+                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+                double d0 = 0.0D;
+
+                for (int k = 0; k < list.size(); ++k) {
+                    Entity entity1 = (Entity) list.get(k);
+
+                    if (entity1.canBeCollidedWith() && (!entity1.isEntityEqual(this.thrower) || this.ticksInAir >= 25)) {
+                        float f = 0.3F;
+                        AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double) f, (double) f, (double) f);
+                        MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(vec3, vec31);
+
+                        if (movingobjectposition1 != null) {
+                            double d1 = vec3.distanceTo(movingobjectposition1.hitVec);
+
+                            if (d1 < d0 || d0 == 0.0D) {
+                                entity = entity1;
+                                d0 = d1;
+                            }
+                        }
+                    }
+                }
+
+                if (entity != null) {
+                    movingobjectposition = new MovingObjectPosition(entity);
+                }
+            }
+
+            if (movingobjectposition != null) {
+                if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && this.worldObj.getBlock(movingobjectposition.blockX, movingobjectposition.blockY, movingobjectposition.blockZ) == Blocks.portal) {
+                    this.setInPortal();
+                } else {
+                    this.onImpact(movingobjectposition);
+                }
+            }
+
+            this.posX += this.motionX;
+            this.posY += this.motionY;
+            this.posZ += this.motionZ;
+            float f1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+
+            for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f1) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
+                ;
+            }
+
+            while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
+                this.prevRotationPitch += 360.0F;
+            }
+
+            while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
+                this.prevRotationYaw -= 360.0F;
+            }
+
+            while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
+                this.prevRotationYaw += 360.0F;
+            }
+
+            this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
+            this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
+            float drag = 1;
+
+            if (this.isInWater()) {
+                if (worldObj.isRemote) {
+                    for (int k = 0; k < 4; ++k) {
+                        float f4 = 0.25F;
+                        this.worldObj.spawnParticle("bubble", this.posX - this.motionX * (double) f4, this.posY - this.motionY * (double) f4, this.posZ - this.motionZ * (double) f4, this.motionX, this.motionY, this.motionZ);
+                    }
+                }
+
+                drag = 0.8F;
+            }
+
+            this.motionX *= drag;
+            this.motionY *= drag;
+            this.motionZ *= drag;
+
+            this.motionY -= (double) drag * getGravity();
+
+            if (worldObj.isRemote && !getParticleTrail().isEmpty()) {
+                String particle = getParticleTrail();
+                this.worldObj.spawnParticle(particle, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+            } else if (!worldObj.isRemote) {
+                this.worldObj.spawnParticle(getParticleTrail(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+            }
+            this.setPosition(this.posX, this.posY, this.posZ);
+            this.func_145775_I(); // doBlockCollisions
+        }
+    }
+
+    @Override
+    protected void onImpact(MovingObjectPosition movingobjectposition) {
+        if (movingobjectposition.entityHit != null) {
+            float damage = (float) this.getProjectileDamage();
+            if (damage == 0) damage = 0.001f;
+
+            if (movingobjectposition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage)) {
+                if (movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    EntityLivingBase entityliving = (EntityLivingBase) movingobjectposition.entityHit;
+
+                    if (!this.worldObj.isRemote) {
+                        entityliving.setArrowCountInEntity(entityliving.getArrowCountInEntity() + 1);
+                    }
+
+                    if (this.knockbackStrength > 0) {
+                        float f3 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+
+                        if (f3 > 0.0F) {
+                            movingobjectposition.entityHit.addVelocity(this.motionX * (double) this.knockbackStrength * 0.6000000238418579D / (double) f3, 0.1D, this.motionZ * (double) this.knockbackStrength * 0.6000000238418579D / (double) f3);
+                        }
+                    }
+
+                    if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
+                        if (numPenetrated >= penetrationCount) {
+                            if (!worldObj.isRemote) {
+                                CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, true);
+
+                                PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                                handler.callScript(impactEvent.getHookName(), impactEvent);
+                                AbstractNpcAPI.Instance().events().post(impactEvent);
+                            }
+                            this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+
+                            setDead();
+                        }
+
+                        if (!worldObj.isRemote) {
+                            if (!isDead) {
+                                CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, false);
+
+                                PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                                handler.callScript(impactEvent.getHookName(), impactEvent);
+                                AbstractNpcAPI.Instance().events().post(impactEvent);
+                            }
+
+                            if (renderProperties.shouldStopRotatingOnImpact()) {
+                                renderProperties.setRotationSpeed(0);
+                            }
+
+                            if (renderProperties.shouldOnImpactSnapToInitRotation()) {
+                                renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+                            }
+                        }
+
+                        this.numPenetrated += 1;
+                    }
+                }
+
+                /*if (true) {
+                    this.worldObj.playAuxSFX(2001, (int) movingobjectposition.entityHit.posX, (int) movingobjectposition.entityHit.posY, (int) movingobjectposition.entityHit.posZ, Item.getIdFromItem(getItem()));
+                } else {
+                    for (int i = 0; i < 8; ++i) {
+                        this.worldObj.spawnParticle("iconcrack_" + Item.getIdFromItem(getItem()), this.posX, this.posY, this.posZ, this.rand.nextGaussian() * 0.15D, this.rand.nextGaussian() * 0.2D, this.rand.nextGaussian() * 0.15D);
+                    }
+                }*/
+
+            } else { // Invulnerable collision?
+                if (this.getInvulnerableCollisionBehavior() == CustomProjectileInvulnerableCollisionType.Instance.BOUNCE) {
+                    this.motionX *= -0.10000000149011612D;
+                    this.motionY *= -0.10000000149011612D;
+                    this.motionZ *= -0.10000000149011612D;
+                    this.rotationYaw += 180.0F;
+                    this.prevRotationYaw += 180.0F;
+                    this.ticksInAir = 0;
+                } else if (this.getInvulnerableCollisionBehavior() == CustomProjectileInvulnerableCollisionType.Instance.SHATTER) {
+                    System.out.println("Shatter particle is "+getShatterParticle());
+                    this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+
+                    CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, movingobjectposition.entityHit, null, true);
+
+                    PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                    handler.callScript(impactEvent.getHookName(), impactEvent);
+                    AbstractNpcAPI.Instance().events().post(impactEvent);
+
+                    setDead();
+                } // If pass through, do nothing
+            }
+        } else {
+            if (!doesShatterOnImpact()) {
+//    			if (this.sticksToWalls()) {
+//    				float f = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+//    				float f1 = this.isArrow() ? 0.0F :this.isRotating() ? 180.0F : 225.0F;
+//                    this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI) + f1;
+//    			}
+
+                if (!worldObj.isRemote && !inGround && (!loadedFromNbt || (loadedFromNbt && ticksInAir > 3))) {
+                    System.out.println(this.ticksInAir);
+                    CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ), false);
+
+                    PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                    handler.callScript(impactEvent.getHookName(), impactEvent);
+                    AbstractNpcAPI.Instance().events().post(impactEvent);
+
+                    if (renderProperties.shouldStopRotatingOnImpact()) {
+                        renderProperties.setRotationSpeed(0);
+                    }
+
+                    if (renderProperties.shouldOnImpactSnapToInitRotation()) {
+                        renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
+                    }
+
+                }
+                this.xTile = movingobjectposition.blockX;
+                this.yTile = movingobjectposition.blockY;
+                this.zTile = movingobjectposition.blockZ;
+                this.inTile = this.worldObj.getBlock(this.xTile, this.yTile, this.zTile);
+                this.inData = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
+                this.motionX = ((float) (movingobjectposition.hitVec.xCoord - this.posX));
+                this.motionY = ((float) (movingobjectposition.hitVec.yCoord - this.posY));
+                this.motionZ = ((float) (movingobjectposition.hitVec.zCoord - this.posZ));
+                float velocityMagnitude = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+                this.posX -= this.motionX / (double) velocityMagnitude * 0.05000000074505806D;
+                this.posY -= this.motionY / (double) velocityMagnitude * 0.05000000074505806D;
+                this.posZ -= this.motionZ / (double) velocityMagnitude * 0.05000000074505806D;
+                this.inGround = true;
+                this.playSound(getHitSound(), 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+                this.arrowShake = 7;
+
+                if (this.inTile != null) { // onEntityCollidedWithBlock
+                    inTile.onEntityCollidedWithBlock(this.worldObj, this.xTile, this.yTile, this.zTile, this);
+                }
+            } else {
+                this.worldObj.spawnParticle(this.getShatterParticle(), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+
+                if (!this.worldObj.isRemote) {
+                    CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ), true);
+
+                    PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());
+                    handler.callScript(impactEvent.getHookName(), impactEvent);
+                    AbstractNpcAPI.Instance().events().post(impactEvent);
+                }
+
+                /*if (this.isBlock()) {
+                    this.worldObj.playAuxSFX(2001, MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Item.getIdFromItem(getItem()));
+                } else {
+                    for (int i = 0; i < 8; ++i) {
+                        this.worldObj.spawnParticle("iconcrack_" + Item.getIdFromItem(getItem()), this.posX, this.posY, this.posZ, this.rand.nextGaussian() * 0.15D, this.rand.nextGaussian() * 0.2D, this.rand.nextGaussian() * 0.15D);
+                    }
+                }*/
+            }
+        }
+
+        if (doesShatterOnImpact()) {
+            this.setDead();
+        }
+    }
+
+    /*@Override
     public void onUpdate() {
         super.onEntityUpdate();
 
@@ -259,7 +596,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
             for (i = 0; i < list.size(); ++i) {
                 Entity entity1 = (Entity) list.get(i);
 
-                if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
+                if (entity1.canBeCollidedWith() && (entity1 != this.getThrower() || this.ticksInAir >= 5)) {
                     gravity = 0.3F;
                     AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand((double) gravity, (double) gravity, (double) gravity);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
@@ -282,7 +619,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
             if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
 
-                if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
+                if (entityplayer.capabilities.disableDamage || this.getThrower() instanceof EntityPlayer && !((EntityPlayer) this.getThrower()).canAttackPlayer(entityplayer)) {
                     movingobjectposition = null;
                 }
             }
@@ -301,10 +638,12 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
 
                     DamageSource damagesource = null;
 
-                    if (this.shootingEntity == null) {
-                        damagesource = DamageSource.causeArrowDamage(this, this);
+                    if (this.getThrower() == null) {
+                        // damagesource = DamageSource.causeArrowDamage(this, this);
+                        damagesource = DamageSource.causeThrownDamage(this, this);
                     } else {
-                        damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
+                        // damagesource = DamageSource.causeArrowDamage(this, this.getThrower());
+                        damagesource = DamageSource.causeThrownDamage(this, getThrower());
                     }
 
                     if (this.isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman)) {
@@ -327,13 +666,13 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                                 }
                             }
 
-                            if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) {
-                                EnchantmentHelper.func_151384_a(entitylivingbase, this.shootingEntity);
-                                EnchantmentHelper.func_151385_b((EntityLivingBase) this.shootingEntity, entitylivingbase);
+                            if (this.getThrower() != null && this.getThrower() instanceof EntityLivingBase) {
+                                EnchantmentHelper.func_151384_a(entitylivingbase, this.getThrower());
+                                EnchantmentHelper.func_151385_b((EntityLivingBase) this.getThrower(), entitylivingbase);
                             }
 
-                            if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity && movingobjectposition.entityHit instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP) {
-                                ((EntityPlayerMP) this.shootingEntity).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
+                            if (this.getThrower() != null && movingobjectposition.entityHit != this.getThrower() && movingobjectposition.entityHit instanceof EntityPlayer && this.getThrower() instanceof EntityPlayerMP) {
+                                ((EntityPlayerMP) this.getThrower()).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
                             }
                         }
 
@@ -508,7 +847,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
             this.setPosition(this.posX, this.posY, this.posZ);
             this.func_145775_I();
         }
-    }
+    }*/
 
     public int getType() {
         return 7;
@@ -689,15 +1028,16 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     public IEntity getOwner() {
-        return AbstractNpcAPI.Instance().getIEntity(shootingEntity);
+        return AbstractNpcAPI.Instance().getIEntity(getThrower());
     }
 
     public void setOwner(IEntity owner) {
-        shootingEntity = owner.getMCEntity();
+        // FIX
+        owner.getMCEntity();
     }
 
     public Entity getShooter() {
-        return shootingEntity;
+        return getThrower();
     }
 
     @Override
@@ -718,6 +1058,13 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     }
 
     public NBTTagCompound writeProjectileData(NBTTagCompound baseNbt) {
+        baseNbt.setShort("xTile", (short) this.xTile);
+        baseNbt.setShort("yTile", (short) this.yTile);
+        baseNbt.setShort("zTile", (short) this.zTile);
+        baseNbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inTile));
+        baseNbt.setByte("inData", (byte) this.inData);
+        baseNbt.setByte("shake", (byte) this.throwableShake);
+        baseNbt.setBoolean("inGround", this.inGround);
         baseNbt.setString("particleTrail", this.particleTrail);
         baseNbt.setDouble("damage", this.damage);
         baseNbt.setBoolean("doesVelocityAddDamage", this.doesVelocityAddDamage);
@@ -774,6 +1121,24 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
 
+        if (nbt.hasKey("xTile")) {
+            this.xTile = nbt.getShort("xTile");
+        }
+        if (nbt.hasKey("yTile")) {
+            this.xTile = nbt.getShort("yTile");
+        }
+        if (nbt.hasKey("zTile")) {
+            this.xTile = nbt.getShort("zTile");
+        }
+        if (nbt.hasKey("inTile")) {
+            this.inTile = Block.getBlockById(nbt.getByte("inTile") & 255);
+        }
+        if (nbt.hasKey("inData")) {
+            this.inData = nbt.getByte("inData") & 255;
+        }
+        if (nbt.hasKey("inGround", 1)) {
+            this.inGround = nbt.getBoolean("inGround");
+        }
         if (nbt.hasKey("particleTrail", 8)) {
             this.particleTrail = nbt.getString("particleTrail");
         }
@@ -858,5 +1223,7 @@ public class EntityCustomProjectile extends EntityArrow implements ICustomProjec
                 this.renderProperties.setScale(renderTag.getFloat("scale"));
             }
         }
+
+        loadedFromNbt = true;
     }
 }

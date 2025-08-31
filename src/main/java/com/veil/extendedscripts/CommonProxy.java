@@ -73,6 +73,7 @@ public class CommonProxy {
         API.addGlobalObject("RoleType", JobType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
+        API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");

@@ -6,9 +6,11 @@ import noppes.npcs.api.item.IItemStack;
 
 public interface ICustomProjectile {
     /**
-     * Turns the projectile to face the given position. This is also the only way to rotate the projectile towars a block.
+     * Turns the projectile to face the given position.
      */
     void moveToward(double towardX, double towardY, double towardZ, float speed);
+
+    public void moveToward(IEntity entity, float speed);
 
     void placeInFrontOfEntity(IEntity entity, float distance);
 
@@ -87,7 +89,7 @@ public interface ICustomProjectile {
     int getPenetrationCount();
 
     /**
-     * Acts just like the crossbow piercing enchantment with the added bonus of some visual glitches.
+     * Acts just like the crossbow piercing enchantment.
      */
     void setPenetrationCount(int penetrationCount);
 

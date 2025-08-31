@@ -12,24 +12,24 @@ Things I want to add:
  - Add a function for preventing players from using commands
  - Continue searching for more Enums to implement (Nbt data types, npc collision type)
  - Figure out if setAnimation(7) doing nothing is intentional
- - See if we can make right-clicking be a previous option button
  - Add functions related to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
- - Make a keepInventory for single players
  - Hide the +4 damage on the World Clippers
- - Fix the issue where loaded scripts improperly show §
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
  - Add custom projectile disable damage, hit endermen, make sure all attributes are saved to nbt
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, reach, and damage reflection
- - Fix negative gravity not working on entities with 0 y motion
- - Make attribute incompatibilities
  - Go around and fix the dangling javadoc comment warnings for my sanity.
  - Add summoning followers/pets
  - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Syntax highlighting for valid event names
  - Fix shatterParticle not appearing when shattering on mobs
+ - Sort the /veil attribute list-player command's output
+
+Confusing CustomNPC+ gui stuff
+ - Fix the issue where loaded scripts improperly show §
+ - See if we can make right-clicking be a previous option button
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death

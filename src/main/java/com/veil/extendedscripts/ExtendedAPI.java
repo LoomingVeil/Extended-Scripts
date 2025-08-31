@@ -24,6 +24,7 @@ import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLivingBase;
 import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.api.handler.data.IAttributeDefinition;
 
 import java.io.IOException;
 import java.util.*;
@@ -210,5 +211,9 @@ public class ExtendedAPI implements AbstractExtendedAPI {
 
     public String[] getCustomAttributeKeyList() {
         return lastWorldsAttributes.keySet().toArray(new String[0]);
+    }
+
+    public IAttributeDefinition getAttributeDefinition(String key) {
+        return AttributeController.getAttribute(key);
     }
 }

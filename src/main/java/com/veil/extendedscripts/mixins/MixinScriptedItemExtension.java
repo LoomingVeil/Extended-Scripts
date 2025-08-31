@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import noppes.npcs.extendedapi.item.IItemCustomizable;
 import noppes.npcs.items.ItemCustomizable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 // Extends the scripted item itself
 @Mixin(value={ItemCustomizable.class})
-public abstract class MixinScriptedItemExtension {
+public abstract class MixinScriptedItemExtension implements IItemCustomizable {
     @Unique
     public int getHarvestLevel(ItemStack stack, String toolClass) {
         NBTTagCompound itemData = getItemDataTag(stack);

@@ -2,6 +2,7 @@ package noppes.npcs.extendedapi.entity;
 
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.InventoryEnderChest;
 import noppes.npcs.api.IContainer;
@@ -49,6 +50,14 @@ public interface IPlayer {
     void setVerticalFlightSpeed(float value);
 
     /**
+     * Enables keep inventory per player. However, your items may be lost if you close the game between dying and respawning.
+     * Use at your own risk.
+     */
+    public void setKeepInventory(boolean keepInventory);
+
+    public boolean getKeepInventory();
+
+    /**
      * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
      */
     void setAttribute(String key, float value);
@@ -64,6 +73,8 @@ public interface IPlayer {
      * Gets the attribute core as an item that can be given to the player.
      */
     IItemStack getAttributeCore();
+
+    String[] getCoreAttributeKeys();
 
     /**
      * Only for those who know what they're doing
@@ -115,7 +126,7 @@ public interface IPlayer {
      * Opens a player's ender chest for a specified player
      * @param enderChestOwner The IPlayer whose ender chest is viewed
      */
-    void openEnderChest(IPlayer enderChestOwner);
+    void openEnderChest(noppes.npcs.api.entity.IPlayer enderChestOwner);
 
     /**
      * Opens a crafting table. Any stored items are returned to the player when closed.

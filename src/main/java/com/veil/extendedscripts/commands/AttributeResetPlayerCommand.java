@@ -17,14 +17,14 @@ public class AttributeResetPlayerCommand implements IVeilSubCommand {
     public void execute(ICommandSender sender, EntityPlayer playerSender, String[] args) {
         if (args.length == 0) {
             if (playerSender == null) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"This command can only be used by a player."));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"You must specify a player!"));
                 return;
             }
 
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(playerSender);
             props.resetCoreAttributes();
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully reset attributes for "+playerSender.getDisplayName()));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+playerSender.getDisplayName()));
         } else {
             String playerName = args[0];
             EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
@@ -36,12 +36,17 @@ public class AttributeResetPlayerCommand implements IVeilSubCommand {
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
             props.resetCoreAttributes();
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully reset attributes for "+player.getDisplayName()));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+player.getDisplayName()));
         }
     }
 
     @Override
     public String[] addTabCompletionOptions(ICommandSender sender, String[] args) {
+        String[] playerNames = ExtendedAPI.Instance.getAllServerPlayerNames();
+        if (args.length == 1) {
+            return playerNames;
+        }
+
         return null;
     }
 }

@@ -1,14 +1,19 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.CommandEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import noppes.npcs.api.AbstractNpcAPI;
@@ -107,6 +112,62 @@ public class CommonEventHandler {
 
         if (args.length == 1 && args[0].equals("attribute")) {
             ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDeath(LivingDeathEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
+            boolean keepInventoryEnabled = event.entity.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory");
+
+            if ((boolean) props.get(PlayerAttribute.KEEP_INVENTORY) && !keepInventoryEnabled) {
+                event.entityLiving.capturedDrops.clear();
+
+                ItemStack[] tempInvStorage = new ItemStack[player.inventory.mainInventory.length];
+                for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+                    if (player.inventory.mainInventory[i] != null) {
+                        tempInvStorage[i] = player.inventory.mainInventory[i].copy();
+                    }
+                }
+                props.tempInvStorage = tempInvStorage;
+                props.xpLevel = player.experienceLevel;
+                props.xpTotal = player.experienceTotal;
+                props.xp = player.experience;
+                props.score = player.getScore();
+
+                player.inventory.clearInventory(null, -1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.wasDeath) {
+            ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(event.original);
+            if (!((boolean) props.get(PlayerAttribute.KEEP_INVENTORY)) || event.original.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) return;
+
+            // Assuming `props.tempInvStorage` is an ItemStack[]
+            if (props.tempInvStorage != null) {
+                // Manually copy the items from our saved array to the new player's inventory
+                for (int i = 0; i < props.tempInvStorage.length; i++) {
+                    event.entityPlayer.inventory.mainInventory[i] = props.tempInvStorage[i];
+                }
+            }
+
+            /*int count = 0;
+            ItemStack[] inv = event.entityPlayer.inventory.mainInventory;
+            for (int i = 0; i < inv.length; i++) {
+                if (inv[i] != null) {
+                    count += 1;
+                }
+            }*/
+
+            event.entityPlayer.experienceLevel = props.xpLevel;
+            event.entityPlayer.experienceTotal = props.xpTotal;
+            event.entityPlayer.experience = props.xp;
+            event.entityPlayer.setScore(props.score);
         }
     }
 }

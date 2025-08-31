@@ -38,6 +38,7 @@ public class ChatUtils {
     }
 
     public static IChatComponent fillChatWithColor(String input) {
+        // Uses CustomNPC+'s code
         return ColorUtil.assembleComponent(input);
     }
 }

@@ -8,6 +8,7 @@ import com.veil.extendedscripts.guis.VirtualFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,16 +24,20 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     private final EntityPlayer player;
     private VirtualFurnace virtualFurnace;
     private ItemStack attributeCore; // Attributes added to the core apply to the player.
-    private float verticalFlightSpeed = 1;
-    private float horizontalFlightSpeed = 1;
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
+    public ItemStack[] tempInvStorage;
+    public int xpLevel;
+    public int xpTotal;
+    public float xp;
+    public int score;
 
     public ExtendedScriptPlayerProperties(EntityPlayer player) {
         super(player);
         this.player = player;
         playerAttributes.put(PlayerAttribute.CAN_FLY, PlayerAttribute.CAN_FLY.getDefaultValue());
         playerAttributes.put(PlayerAttribute.LAST_SEEN_FLYING, PlayerAttribute.LAST_SEEN_FLYING.getDefaultValue());
+        playerAttributes.put(PlayerAttribute.KEEP_INVENTORY, PlayerAttribute.KEEP_INVENTORY.getDefaultValue());
         this.attributeCore = createNewAttributeCore();
     }
 
@@ -114,11 +119,11 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
             if (savedNBT.hasKey("coreAttributes")) {
                 this.attributeCore = ItemStack.loadItemStackFromNBT(savedNBT.getCompoundTag("coreAttributes"));
             } else {
-                this.attributeCore = createNewAttributeCore(); // fallback
+                this.attributeCore = createNewAttributeCore();
             }
 
             for (PlayerAttribute attr : playerAttributes.keySet()) {
-                if (savedNBT.hasKey(attr.asCamelCase(), DataType.Instance.valueOf(attr.getType().getTypeName()))) {
+                if (savedNBT.hasKey(attr.asCamelCase())) {
                     if (attr.getType() == Float.class) {
                         playerAttributes.put(attr, savedNBT.getFloat(attr.asCamelCase()));
                     } else if (attr.getType() == Boolean.class) {
@@ -175,6 +180,18 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
             throw new IllegalArgumentException("Invalid type for " + attr + ". Expected " + attr.getType());
         }
         playerAttributes.put(attr, value);
+        syncToPlayer();
+    }
+
+    public boolean getLastSeenFlying() {
+        return lastSeenFlying;
+    }
+
+    public void setLastSeenFlying(boolean lastSeenFlying) {
+        // System.out.println("Changing last seen flying from " + this.lastSeenFlying + " to " + lastSeenFlying);
+        if (this.lastSeenFlying == lastSeenFlying) return;
+        this.lastSeenFlying = lastSeenFlying;
+        syncToPlayer();
     }
 
     public ItemStack getAttributeCore() {
@@ -236,61 +253,5 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     public void resetCoreAttributes() {
         this.attributeCore = createNewAttributeCore();
         ExtendedAPI.Instance.updatePlayerAttributes(player);
-    }
-
-    public boolean getCanFly() {
-        return canFly;
-    }
-
-    public void setCanFly(boolean canFly) {
-        if (player.capabilities.allowFlying == canFly) {
-            return;
-        }
-        this.canFly = canFly;
-        if (!this.player.capabilities.isCreativeMode) {
-            System.out.println(this.player.capabilities.isFlying);
-            this.player.capabilities.allowFlying = canFly;
-
-            if (!this.canFly) {
-                this.player.capabilities.isFlying = false;
-            }
-            this.player.sendPlayerAbilities();
-        }
-        syncToPlayer();
-    }
-
-    public float getVerticalFlightSpeed() {
-        return verticalFlightSpeed;
-    }
-
-    public void setVerticalFlightSpeed(float verticalFlightSpeed) {
-        this.verticalFlightSpeed = verticalFlightSpeed;
-        syncToPlayer();
-    }
-
-    public float getHorizontalFlightSpeed() {
-        return horizontalFlightSpeed;
-    }
-
-    public void setHorizontalFlightSpeed(float horizontalFlightSpeed) {
-        // Value is modified by a factor of 20 for ease of use.
-        // System.out.println("Set flight speed to "+horizontalFlightSpeed);
-        this.horizontalFlightSpeed = horizontalFlightSpeed;
-        if (Math.abs(player.capabilities.getFlySpeed() - horizontalFlightSpeed / 20) > 0.0001) {
-            player.capabilities.setFlySpeed(horizontalFlightSpeed / 20);
-            player.sendPlayerAbilities();
-        }
-        syncToPlayer();
-    }
-
-    public boolean getLastSeenFlying() {
-        return lastSeenFlying;
-    }
-
-    public void setLastSeenFlying(boolean lastSeenFlying) {
-        // System.out.println("Changing last seen flying from " + this.lastSeenFlying + " to " + lastSeenFlying);
-        if (this.lastSeenFlying == lastSeenFlying) return;
-        this.lastSeenFlying = lastSeenFlying;
-        syncToPlayer();
     }
 }

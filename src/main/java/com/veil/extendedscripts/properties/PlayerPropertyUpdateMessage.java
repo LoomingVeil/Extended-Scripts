@@ -9,35 +9,31 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.Sys;
 
 public class PlayerPropertyUpdateMessage implements IMessage {
-//    private float verticalFlightSpeed = 1;
-//    private float horizontalFlightSpeed = 1;
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
+    private boolean keepInventory = false;
 
 
     public PlayerPropertyUpdateMessage() {} // Required default constructor
 
     public PlayerPropertyUpdateMessage(ExtendedScriptPlayerProperties props) {
-//        this.verticalFlightSpeed = props.getVerticalFlightSpeed();
-//        this.horizontalFlightSpeed = props.getHorizontalFlightSpeed();
-        this.canFly = props.getCanFly();
-        this.lastSeenFlying = props.getLastSeenFlying();
+        this.canFly = props.get(PlayerAttribute.CAN_FLY);
+        this.lastSeenFlying = props.get(PlayerAttribute.LAST_SEEN_FLYING);
+        this.keepInventory = props.get(PlayerAttribute.KEEP_INVENTORY);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-//        this.verticalFlightSpeed = buf.readFloat();
-//        this.horizontalFlightSpeed = buf.readFloat();
         this.canFly = buf.readBoolean();
         this.lastSeenFlying = buf.readBoolean();
+        this.keepInventory = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-//        buf.writeFloat(this.verticalFlightSpeed);
-//        buf.writeFloat(this.horizontalFlightSpeed);
         buf.writeBoolean(this.canFly);
         buf.writeBoolean(this.lastSeenFlying);
+        buf.writeBoolean(this.keepInventory);
     }
 
     // --- Message Handler ---
@@ -52,16 +48,15 @@ public class PlayerPropertyUpdateMessage implements IMessage {
                     if (player != null) {
                         ExtendedScriptPlayerProperties props = ExtendedScriptPlayerProperties.get(player);
                         if (props != null) {
-//                            props.setVerticalFlightSpeed(message.verticalFlightSpeed);
-//                            props.setHorizontalFlightSpeed(message.horizontalFlightSpeed);
-                            props.setCanFly(message.canFly);
-                            props.setLastSeenFlying(message.lastSeenFlying);
+                            props.set(PlayerAttribute.CAN_FLY, message.canFly);
+                            props.set(PlayerAttribute.LAST_SEEN_FLYING, message.lastSeenFlying);
+                            props.set(PlayerAttribute.KEEP_INVENTORY, message.keepInventory);
                             // System.out.println("Client received player EEP sync");
                         }
                     }
                 }
             });
-            return null; // No response message
+            return null;
         }
     }
 }

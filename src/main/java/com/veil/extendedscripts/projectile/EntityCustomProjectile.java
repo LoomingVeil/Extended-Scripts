@@ -26,6 +26,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import noppes.npcs.EventHooks;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.IPos;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.constants.EnumParticleType;
@@ -165,6 +166,11 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
         double horizontalDistance = MathHelper.sqrt_double(dX * dX + dZ * dZ);
         this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(dZ, dX) * 180.0D / Math.PI) - 90.0F;
         this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(dY, horizontalDistance) * 180.0D / Math.PI);
+    }
+
+    public void moveToward(IEntity entity, float speed) {
+        IPos pos = entity.getPosition();
+        moveToward(pos.getXD(), pos.getYD(), pos.getZD(), speed);
     }
 
     public void placeInFrontOfEntity(Entity entity, float distance) {
@@ -363,6 +369,7 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
     @Override
     protected void onImpact(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entityHit != null) {
+            if (this.ticksExisted <= 20 && movingobjectposition.entityHit.getEntityId() == this.getThrower().getEntityId()) return;
             float damage = (float) this.getProjectileDamage();
             if (damage == 0) damage = 0.001f;
 

@@ -138,11 +138,11 @@ public class AttributeEventHandler {
             NBTTagCompound compound = new NBTTagCompound();
             origEntityProps.saveNBTData(compound);
             newEntityProps.loadNBTData(compound);
-            boolean canFly = origPlayerProps.getCanFly();
-            boolean lastSeenFlying = newPlayerProps.getLastSeenFlying();
-            event.entityPlayer.capabilities.allowFlying = canFly;
+            // boolean canFly = origPlayerProps.getCanFly();
+            // boolean lastSeenFlying = newPlayerProps.getLastSeenFlying();
+            // event.entityPlayer.capabilities.allowFlying = canFly;
             // event.entityPlayer.capabilities.isFlying = lastSeenFlying;
-            event.entityPlayer.sendPlayerAbilities();
+            // event.entityPlayer.sendPlayerAbilities();
         }
     }
 
@@ -189,7 +189,7 @@ public class AttributeEventHandler {
     public void onLivingFall(LivingFallEvent event) {
         if (event.entity instanceof EntityPlayer) {
             ExtendedScriptPlayerProperties properties = ExtendedScripts.getPlayerProperties((EntityPlayer) event.entity);
-            if (properties.getCanFly()) {
+            if (properties.get(PlayerAttribute.CAN_FLY)) {
                 event.setCanceled(true);
             }
         }

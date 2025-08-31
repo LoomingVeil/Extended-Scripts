@@ -42,7 +42,7 @@ public class VeilCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(dark_gray+"------- "+dark_red+" Veil Commands "+dark_gray+"-------"));
-            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"attribute"+dark_gray+": "+gray+"Add and remove custom attributes"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"attribute"+dark_gray+": "+gray+"Add, remove, and manage attributes on players."));
             return;
         }
 

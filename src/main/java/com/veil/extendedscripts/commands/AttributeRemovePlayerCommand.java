@@ -22,7 +22,7 @@ public class AttributeRemovePlayerCommand implements IVeilSubCommand {
 
         if (args.length == 1) {
             if (playerSender == null) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"This command can only be used by a player."));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"You must specify a player!"));
                 return;
             }
 

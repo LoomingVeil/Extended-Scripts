@@ -32,6 +32,8 @@ public class AttributeCommand implements IVeilSubCommand {
         subCommands.put("apply-player", new AttributeApplyPlayerCommand());
         subCommands.put("remove-player", new AttributeRemovePlayerCommand());
         subCommands.put("reset-player", new AttributeResetPlayerCommand());
+        subCommands.put("list-player", new AttributeListPlayerCommand());
+        subCommands.put("list-core-player", new AttributeListCorePlayerCommand());
     }
 
     @Override
@@ -44,6 +46,8 @@ public class AttributeCommand implements IVeilSubCommand {
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"apply-player"+dark_gray+": "+gray+"Gives attributes to the player. These attributes are always active until removed."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"remove-player"+dark_gray+": "+gray+"Removes an attribute from the player. These attributes are always active until removed."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"reset-player"+dark_gray+": "+gray+"Removes all attributes from the player. These attributes are always active until removed."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"list-player"+dark_gray+": "+gray+"Lists all currently applied attributes."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"list-core-player"+dark_gray+": "+gray+"Lists all core attributes."));
             return;
         }
 

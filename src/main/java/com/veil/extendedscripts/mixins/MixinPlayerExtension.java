@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value={ScriptPlayer.class})
-public class MixinPlayerExtension {
+public class MixinPlayerExtension implements noppes.npcs.extendedapi.entity.IPlayer {
     @Shadow
     public EntityPlayerMP player;
 
@@ -48,7 +48,7 @@ public class MixinPlayerExtension {
     @Unique
     public void setCanFly(boolean value) {
         ExtendedScriptPlayerProperties properties = ExtendedScripts.getPlayerProperties(player);
-        properties.setCanFly(value);
+        properties.set(PlayerAttribute.CAN_FLY, value);
     }
 
     public void forceFlyState(boolean value) {
@@ -90,6 +90,20 @@ public class MixinPlayerExtension {
     }
 
     /**
+     * Enables keep inventory per player. However, your items may be lost if you close the game between dying and respawning.
+     * Use at your own risk.
+     */
+    @Unique
+    public void setKeepInventory(boolean keepInventory) {
+        ExtendedScripts.getPlayerProperties(player).set(PlayerAttribute.KEEP_INVENTORY, keepInventory);
+    }
+
+    @Unique
+    public boolean getKeepInventory() {
+        return ExtendedScripts.getPlayerProperties(player).get(PlayerAttribute.KEEP_INVENTORY);
+    }
+
+    /**
      * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
      */
     @Unique
@@ -118,6 +132,12 @@ public class MixinPlayerExtension {
     @Unique
     public IItemStack getAttributeCore() {
         return AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
+    }
+
+    @Unique
+    public String[] getCoreAttributeKeys() {
+        IItemStack attributeCore = getAttributeCore();
+        return attributeCore.getCustomAttributeKeys();
     }
 
     /**

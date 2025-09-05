@@ -15,15 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.INbt;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class InspectCommand extends CommandBase {
     private static final String UNKNOWN_COLOR = EnumChatFormatting.RED.toString();
@@ -39,7 +38,10 @@ public class InspectCommand extends CommandBase {
     private final static String red = "§"+ColorCodes.Instance.RED;
     private final static String yellow = "§"+ColorCodes.Instance.YELLOW;
     private final static String dark_red = "§"+ColorCodes.Instance.DARK_RED;
+    private final static String white = "§"+ColorCodes.Instance.WHITE;
     private final static String modPrefix = "§"+ColorCodes.Instance.GOLD+"["+yellow+"ExtendedScripts"+"§"+ColorCodes.Instance.GOLD+"] ";
+    private final static int maxStringLength = 100;
+    private final static Map<Integer, String> colors = new HashMap<>();
 
     private static final List<String> SECONDARY_ARGS = new ArrayList<>();
 
@@ -50,6 +52,14 @@ public class InspectCommand extends CommandBase {
         SECONDARY_ARGS.add("keys");
         SECONDARY_ARGS.add("tp");
         SECONDARY_ARGS.add("tphere");
+
+        colors.put(1, BYTE_COLOR);
+        colors.put(2, SHORT_COLOR);
+        colors.put(3, INTEGER_COLOR);
+        colors.put(4, LONG_COLOR);
+        colors.put(5, FLOAT_COLOR);
+        colors.put(6, DOUBLE_COLOR);
+        colors.put(8, STRING_COLOR);
     }
 
     @Override
@@ -92,7 +102,7 @@ public class InspectCommand extends CommandBase {
         }
 
         if (args[0].equalsIgnoreCase("hand")) {
-            inspectItem(player.getHeldItem(), sender);
+            inspectItem(player.getHeldItem(), sender, Arrays.copyOfRange(args, 1, args.length));
         }  else if (args[0].equalsIgnoreCase("target")) {
             if (heldItem.getItem() != ExtendedScripts.worldClippers) {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding a pair of World Clippers to use this command!"));
@@ -112,9 +122,9 @@ public class InspectCommand extends CommandBase {
             }
 
             if (inspectTag.getByte("TargetType") == 1) { // Block
-                inspectBlock(inspectTag, targetWorld, sender);
+                inspectBlock(inspectTag, targetWorld, sender, Arrays.copyOfRange(args, 2, args.length));
             } else if (inspectTag.getByte("TargetType") == 2) { // Entity
-                inspectEntity(inspectTag, targetWorld, sender);
+                inspectEntity(inspectTag, targetWorld, sender, Arrays.copyOfRange(args, 1, args.length));
             }
         } else if (args[0].equalsIgnoreCase("keys")) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(BYTE_COLOR + "Byte Color"));
@@ -288,22 +298,6 @@ public class InspectCommand extends CommandBase {
         return ret;
     }
 
-    public void inspectEntity(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender) {
-        Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
-
-        if (foundEntity == null) {
-            return;
-        }
-
-        NBTTagCompound entityNBT = new NBTTagCompound();
-        foundEntity.writeToNBT(entityNBT);
-        INbt npcsNbt = AbstractNpcAPI.Instance().getINbt(entityNBT);
-
-
-        if (hasNbt(npcsNbt)) sender.addChatMessage(ChatUtils.fillChatWithColor("Nbt for " + EntityList.getEntityString(foundEntity)));
-        showNbt(sender, npcsNbt, "");
-    }
-
     public Entity getEntityFromInspectTag(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender) {
         String UUIDString = inspectTag.getString("TargetUUID");
         UUID targetUUID;
@@ -333,13 +327,35 @@ public class InspectCommand extends CommandBase {
         return foundEntity;
     }
 
-    public void inspectItem(ItemStack item, ICommandSender sender) {
-        INbt itemNbt = AbstractNpcAPI.Instance().getIItemStack(item).getNbt();
-        if (hasNbt(itemNbt)) sender.addChatMessage(ChatUtils.fillChatWithColor("Nbt for " + GameData.getItemRegistry().getNameForObject(item.getItem())));
-        showNbt(sender, itemNbt, "");
+    public void inspectEntity(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender, String[] args) {
+        Entity foundEntity = getEntityFromInspectTag(inspectTag, targetWorld, sender);
+
+        if (foundEntity == null) {
+            return;
+        }
+
+        NBTTagCompound entityNBT = new NBTTagCompound();
+        foundEntity.writeToNBT(entityNBT);
+        INbt npcNbt = AbstractNpcAPI.Instance().getINbt(entityNBT);
+
+        if (args.length > 0 && args[0].equals("KEYS")) {
+            handleShowingNbt(npcNbt, sender, Arrays.copyOfRange(args, 1, args.length), EntityList.getEntityString(foundEntity), true);
+        } else {
+            handleShowingNbt(npcNbt, sender, args, EntityList.getEntityString(foundEntity), false);
+        }
     }
 
-    public void inspectBlock(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender) {
+    public void inspectItem(ItemStack item, ICommandSender sender, String[] args) {
+        INbt itemNbt = AbstractNpcAPI.Instance().getIItemStack(item).getNbt();
+        String display = GameData.getItemRegistry().getNameForObject(item.getItem());
+        if (args.length > 0 && args[0].equals("KEYS")) {
+            handleShowingNbt(itemNbt, sender, Arrays.copyOfRange(args, 1, args.length), display, true);
+        } else {
+            handleShowingNbt(itemNbt, sender, args, display, false);
+        }
+    }
+
+    public void inspectBlock(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender, String[] args) {
         int x = inspectTag.getInteger("TargetX");
         int y = inspectTag.getInteger("TargetY");
         int z = inspectTag.getInteger("TargetZ");
@@ -358,9 +374,139 @@ public class InspectCommand extends CommandBase {
 
         NBTTagCompound blockNBT = new NBTTagCompound();
         tileEntity.writeToNBT(blockNBT);
+        INbt npcNbt = AbstractNpcAPI.Instance().getINbt(blockNBT);
 
-        if (hasNbt(AbstractNpcAPI.Instance().getINbt(blockNBT))) sender.addChatMessage(ChatUtils.fillChatWithColor("Nbt for " + GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z))));
-        showNbt(sender, AbstractNpcAPI.Instance().getINbt(blockNBT), "");
+        if (args.length > 0 && args[0].equals("KEYS")) {
+            handleShowingNbt(npcNbt, sender, Arrays.copyOfRange(args, 1, args.length), GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), true);
+        } else {
+            handleShowingNbt(npcNbt, sender, args, GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), false);
+        }
+    }
+
+    public void handleShowingNbt(INbt baseNbt, ICommandSender sender, String[] args, String display, boolean onlyShowKeys) {
+        if (baseNbt == null || baseNbt.getKeys().length == 0) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "This item has no NBT."));
+            return;
+        }
+
+        // System.out.println("args: " + Arrays.asList(args) + " onlyShowKeys: "+onlyShowKeys);
+
+        // If no arguments are provided, show the entire NBT tree.
+        if (args.length == 0) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + display + ":"));
+            if (onlyShowKeys) {
+                showKeys(sender, baseNbt);
+            } else {
+                showNbt(sender, baseNbt, "");
+            }
+            return;
+        }
+
+        // Traverse down the tree to the parent of the final tag.
+        INbt currentNbt = baseNbt;
+        for (int i = 0; i < args.length - 1; i++) {
+            String key = args[i];
+            if (!currentNbt.has(key) || currentNbt.getType(key) != 10) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Error: Invalid NBT path. Tag '" + yellow + key + red +"' is not a valid compound tag."));
+                return;
+            }
+            currentNbt = currentNbt.getCompound(key);
+        }
+
+        // Get the final tag to display from the last argument.
+        String finalKey = args[args.length - 1];
+        if (!currentNbt.has(finalKey)) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Error: Invalid NBT path. Final tag '" + yellow + finalKey + red + "' not found."));
+            return;
+        }
+
+        if (onlyShowKeys) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow + String.join(".", args) + white + ":"));
+            if (currentNbt.getType(finalKey) == 10) {
+                INbt targetNbt = currentNbt.getCompound(finalKey);
+                showKeys(sender, targetNbt);
+            } else {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Tag '" + yellow + finalKey + red + "' is a value and has no keys to display."));
+            }
+        } else {
+            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + yellow + String.join(".", args) + white + ":"));
+            displayTagValue(sender, currentNbt, finalKey, "");
+        }
+    }
+
+    public void showKeys(ICommandSender sender, INbt parentNbt) {
+        for (String key : parentNbt.getKeys()) {
+            int type = parentNbt.getType(key);
+            String valueStr = "";
+
+            if (type > 0 && type <= 8) {
+                valueStr = colors.getOrDefault(type, UNKNOWN_COLOR) + key;
+            } else if (type == 9) {
+                int listType = parentNbt.getListType(key);
+                Object[] values = parentNbt.getList(key, listType);
+                valueStr = key + ": (List of " + values.length + ")";
+            } else if (type == 10) {
+                valueStr = key;
+            } else {
+                valueStr = UNKNOWN_COLOR + key;
+            }
+
+            sender.addChatMessage(ChatUtils.fillChatWithColor(valueStr));
+        }
+    }
+
+    public void displayTagValue(ICommandSender sender, INbt parentNbt, String key, String indent) {
+        int type = parentNbt.getType(key);
+
+        if (type == 10) { // Compound Tag
+            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + key + ":"));
+            showNbt(sender, parentNbt.getCompound(key), indent + "  ");
+        } else if (type == 9) { // List Tag
+            int listType = parentNbt.getListType(key);
+            Object[] values = parentNbt.getList(key, listType);
+            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + key + " (List of " + values.length + "):"));
+            for (int j = 0; j < values.length; j++) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + "  Index " + j + ":"));
+                if (values[j] instanceof INbt) {
+                    showNbt(sender, (INbt)values[j], indent + "    ");
+                } else {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(indent + colors.getOrDefault(listType, UNKNOWN_COLOR) + "    " + values[j]));
+                }
+            }
+        } else {
+            String valueStr = "";
+            if (type == 1) valueStr = BYTE_COLOR + parentNbt.getByte(key);
+            else if (type == 2) valueStr = SHORT_COLOR + parentNbt.getShort(key);
+            else if (type == 3) valueStr = INTEGER_COLOR + parentNbt.getInteger(key);
+            else if (type == 4) valueStr = LONG_COLOR + parentNbt.getLong(key);
+            else if (type == 5) valueStr = FLOAT_COLOR + parentNbt.getFloat(key);
+            else if (type == 6) valueStr = DOUBLE_COLOR + parentNbt.getDouble(key);
+            else if (type == 7) valueStr = UNKNOWN_COLOR + "[Byte Array]";
+            else if (type == 8) {
+                String value = parentNbt.getString(key);
+                int length = value.length();
+                if (length > maxStringLength) value = value.substring(0, maxStringLength - 1) + "... " + white + " [Length "+length+"]";
+                valueStr = STRING_COLOR + value;
+            } else {
+                valueStr = UNKNOWN_COLOR + "Unknown Type (" + type + ")";
+            }
+            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + key + ": " + valueStr));
+        }
+    }
+
+    public void showNbt(ICommandSender sender, INbt nbt, String indent) {
+        String[] keys = nbt.getKeys();
+        if (indent.length() == 0 && keys.length == 0) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "This item has no NBT."));
+            return;
+        }
+        for (String key : keys) {
+            displayTagValue(sender, nbt, key, indent);
+        }
+    }
+
+    public boolean hasNbt(INbt nbt) {
+        return !(nbt.getKeys().length == 0);
     }
 
     @Override
@@ -379,137 +525,8 @@ public class InspectCommand extends CommandBase {
         // sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tphere <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports the target to you. Destination arguments are optional. '~' Can be used for relative (to the player) coordinates."));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect keys"+dark_gray+": "+gray+"Lists what color corresponds to each data type."));
 
-        // sender.addChatMessage(ChatUtils.fillChatWithColor("After the 1st parameter, parameters can be used to navigate Nbt. Take note they are case sensitive."));
-        // sender.addChatMessage(ChatUtils.fillChatWithColor("Ex: /inspect hand display Name"));
-        // sender.addChatMessage(ChatUtils.fillChatWithColor("Above will show just the custom name property of an item that has been renamed in an anvil."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor("After the 1st parameter, parameters can be used to navigate Nbt. Take note they are case sensitive."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor("Ex: /inspect hand display Name"));
+        sender.addChatMessage(ChatUtils.fillChatWithColor("Above will show just the custom name property of an item that has been renamed in an anvil."));
     }
-
-    public boolean hasNbt(INbt nbt) {
-        return !(nbt.getKeys().length == 0);
-    }
-
-    /*public Object navigateNbt(INbt nbt, String[] keys) {
-        int type = nbt.getType(keys[0]);
-        if (type == 1) { // Byte / Boolean
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getByte(keys[0]);
-            }
-        } else if (type == 2) { // Short
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getShort(keys[0]);
-            }
-        } else if (type == 3) { // Integer
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getByte(keys[0]);
-            }
-        } else if (type == 4) { // Long
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getLong(keys[0]);
-            }
-        } else if (type == 5) { // Float
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getFloat(keys[0]);
-            }
-        } else if (type == 6) { // Double
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getDouble(keys[0]);
-            }
-        } else if (type == 7) {
-
-        } else if (type == 8) { // String
-            if (keys.length > 1) {
-                return "ERR: " + (keys.length - 1) + " left";
-            } else if (!nbt.has(keys[0])) {
-                return "ERR " + keys[0] + " not found";
-            } else {
-                return nbt.getString(keys[0]);
-            }
-        } else if (type == 9) { // Compound tag
-            Object[] values = nbt.getList(keys[0], nbt.getListType(keys[0]));
-            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + " with " + values.length + " values:"));
-            for (int j = 0; j < values.length; j++) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + "  Index " + j + ":"));
-                if (values[j].getClass().getName().toString().equals("noppes.npcs.scripted.ScriptNbt")) {
-                    showNbt(sender, (INbt)values[j], indent + "    ");
-                } else {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(indent + "    " + values[j]));
-                }
-            }
-        } else if (type == 10) { // Compound
-            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ":"));
-            showNbt(sender, nbt.getCompound(keys[i]), indent + "  ");
-        } else {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ":" + UNKNOWN_COLOR + " unknown type §8" + type));
-        }
-
-    }*/
-
-    public void showNbt(ICommandSender sender, INbt nbt, String indent) {
-        String[] keys = nbt.getKeys();
-        if (indent.length() == 0 && keys.length == 0) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Nothing to see here. This item has no NBT."));
-            return;
-        }
-        for (int i = 0; i < keys.length; i++) {
-            int type = nbt.getType(keys[i]);
-            if (type == 1) { // Byte / Boolean
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + BYTE_COLOR + nbt.getByte(keys[i])));
-            } else if (type == 2) { // Short
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + SHORT_COLOR + nbt.getShort(keys[i])));
-            } else if (type == 3) { // Integer
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + INTEGER_COLOR + nbt.getInteger(keys[i])));
-            } else if (type == 4) { // Long
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + LONG_COLOR + nbt.getLong(keys[i])));
-            } else if (type == 5) { // Float
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + FLOAT_COLOR + nbt.getFloat(keys[i])));
-            } else if (type == 6) { // Double
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + DOUBLE_COLOR + nbt.getDouble(keys[i])));
-            } else if (type == 7) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + UNKNOWN_COLOR + "Idek what a byte array is"));
-            } else if (type == 8) { // String
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ": " + STRING_COLOR + nbt.getString(keys[i])));
-            } else if (type == 9) { // Compound tag
-                Object[] values = nbt.getList(keys[i], nbt.getListType(keys[i]));
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + " with " + values.length + " values:"));
-                for (int j = 0; j < values.length; j++) {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(indent + "  Index " + j + ":"));
-                    if (values[j].getClass().getName().toString().equals("noppes.npcs.scripted.ScriptNbt")) {
-                        showNbt(sender, (INbt)values[j], indent + "    ");
-                    } else {
-                        sender.addChatMessage(ChatUtils.fillChatWithColor(indent + "    " + values[j]));
-                    }
-                }
-            } else if (type == 10) { // Compound
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ":"));
-                showNbt(sender, nbt.getCompound(keys[i]), indent + "  ");
-            } else {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(indent + keys[i] + ":" + UNKNOWN_COLOR + " unknown type §8" + type));
-            }
-        }
-    }
-
 }

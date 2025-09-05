@@ -13,21 +13,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import noppes.npcs.api.AbstractNpcAPI;
-import noppes.npcs.api.IContainer;
-import noppes.npcs.api.INbt;
-import noppes.npcs.api.IScreenSize;
+import noppes.npcs.api.*;
+import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.constants.EnumRoleType;
+import noppes.npcs.controllers.data.PlayerData;
+import noppes.npcs.entity.EntityNPCInterface;
 import noppes.npcs.scripted.entity.ScriptPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value={ScriptPlayer.class})
-public class MixinPlayerExtension implements noppes.npcs.extendedapi.entity.IPlayer {
+public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.entity.IPlayer {
     @Shadow
     public EntityPlayerMP player;
+
+    @Shadow
+    public abstract PlayerData getData();
 
     /**
      * @return Whether the player is currently flying

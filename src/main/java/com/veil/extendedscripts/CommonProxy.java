@@ -70,7 +70,7 @@ public class CommonProxy {
         API.addGlobalObject("EntityType", EntityType.Instance);
         API.addGlobalObject("Job", JobType.Instance);
         API.addGlobalObject("Key", Keys.Instance);
-        API.addGlobalObject("Role", JobType.Instance);
+        API.addGlobalObject("Role", RoleType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);

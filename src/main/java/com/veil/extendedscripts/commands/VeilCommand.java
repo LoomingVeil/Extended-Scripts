@@ -21,6 +21,7 @@ public class VeilCommand extends CommandBase {
 
     public VeilCommand() {
         subCommands.put("attribute", new AttributeCommand());
+        subCommands.put("clear-chat", new ClearChatCommand());
     }
 
     @Override
@@ -43,6 +44,7 @@ public class VeilCommand extends CommandBase {
         if (args.length == 0) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(dark_gray+"------- "+dark_red+" Veil Commands "+dark_gray+"-------"));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"attribute"+dark_gray+": "+gray+"Add, remove, and manage attributes on players."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"clear-chat"+dark_gray+": "+gray+"Clear your chat of any messes you've made."));
             return;
         }
 

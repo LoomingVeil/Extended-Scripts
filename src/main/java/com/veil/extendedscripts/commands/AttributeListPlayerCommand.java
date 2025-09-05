@@ -6,6 +6,7 @@ import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
+import kamkeel.npcs.controllers.data.attribute.PlayerAttribute;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -13,6 +14,8 @@ import net.minecraft.util.EnumChatFormatting;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.ICustomAttribute;
+
+import java.util.*;
 
 public class AttributeListPlayerCommand implements IVeilSubCommand {
     @Override
@@ -73,6 +76,7 @@ public class AttributeListPlayerCommand implements IVeilSubCommand {
     private void showAttributes(ICommandSender sender, EntityPlayer playerToView, int page) {
         IPlayer player = AbstractNpcAPI.Instance().getPlayer(playerToView.getDisplayName());
         ICustomAttribute[] attrs = player.getAttributes().getAttributes();
+        Arrays.sort(attrs, (attr1, attr2) -> attr1.getAttribute().getKey().compareToIgnoreCase(attr2.getAttribute().getKey()));
 
         int numPages = (int) Math.ceil(attrs.length / 10.0);
 

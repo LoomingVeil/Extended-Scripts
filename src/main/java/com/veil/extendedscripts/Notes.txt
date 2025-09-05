@@ -1,5 +1,4 @@
 Things I want to add:
- - Support sub tags for /inspect
  - Add /inspect tphere
  - Fix issues with cones and pyramids in the shape class
  - Improved Overlay class
@@ -13,16 +12,14 @@ Things I want to add:
  - Continue searching for more Enums to implement (Nbt data types, npc collision type, block side)
  - Figure out if setAnimation(7) doing nothing is intentional
  - Add functions related to ids, getting next available ids and check if they're used.
- - Make custom particles possible if they aren't already.
  - Hide the +4 damage on the World Clippers
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
- - Add custom projectile disable damage, hit endermen, make sure all attributes are saved to nbt
+ - Add custom projectile disable damage, hit endermen, can hurt owner, make sure all attributes are saved to nbt
+ - Fix shatterParticle not appearing when shattering on mobs
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, reach, and damage reflection
- - Add summoning followers/pets
  - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
- - Fix shatterParticle not appearing when shattering on mobs
  - Sort the /veil attribute list-player command's output
  - Barrier blocks
  - Attribute recalculate event

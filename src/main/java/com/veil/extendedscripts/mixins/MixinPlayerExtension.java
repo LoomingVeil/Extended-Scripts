@@ -1,5 +1,7 @@
 package com.veil.extendedscripts.mixins;
 
+import com.veil.extendedscripts.PacketHandler;
+import com.veil.extendedscripts.UpdateScreenSizePacket;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.PlayerAttribute;
@@ -14,6 +16,7 @@ import net.minecraft.world.World;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IContainer;
 import noppes.npcs.api.INbt;
+import noppes.npcs.api.IScreenSize;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.scripted.entity.ScriptPlayer;
@@ -322,8 +325,18 @@ public class MixinPlayerExtension implements noppes.npcs.extendedapi.entity.IPla
         return -1;
     }
 
+    @Unique
     public boolean isOperator() {
         return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
     }
 
+    /**
+     * Due to CustomNPC+'s code, sometimes {@link IScreenSize#getHeight()} and {@link IScreenSize#getWidth()} will
+     * return -1 until the screen size is changed. Extended Scripts tries to fix this issue, but if it is ever not
+     * enough, this method can force an update.
+     */
+    @Unique
+    public void resyncScreenSize() {
+        PacketHandler.INSTANCE.sendTo(new UpdateScreenSizePacket(), player);
+    }
 }

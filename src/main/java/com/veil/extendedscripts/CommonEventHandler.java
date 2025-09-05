@@ -2,6 +2,7 @@ package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.properties.PlayerAttribute;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
@@ -169,5 +170,10 @@ public class CommonEventHandler {
             event.entityPlayer.experience = props.xp;
             event.entityPlayer.setScore(props.score);
         }
+    }
+
+    @SubscribeEvent
+    public void onLogin(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
+        ((noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getPlayer(event.player.getDisplayName())).resyncScreenSize();
     }
 }

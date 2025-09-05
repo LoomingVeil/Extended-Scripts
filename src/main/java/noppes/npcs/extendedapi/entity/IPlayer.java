@@ -7,6 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.InventoryEnderChest;
 import noppes.npcs.api.IContainer;
 import noppes.npcs.api.INbt;
+import noppes.npcs.api.IScreenSize;
 import noppes.npcs.api.item.IItemStack;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -148,4 +149,11 @@ public interface IPlayer {
     int getSelectedHotbarSlot();
 
     boolean isOperator();
+
+    /**
+     * Due to CustomNPC+'s code, sometimes {@link IScreenSize#getHeight()} and {@link IScreenSize#getWidth()} will
+     * return -1 until the screen size is changed. Extended Scripts tries to fix this issue, but if it is ever not
+     * enough, this method can force an update.
+     */
+    void resyncScreenSize();
 }

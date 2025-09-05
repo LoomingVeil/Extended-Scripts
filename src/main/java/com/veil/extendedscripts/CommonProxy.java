@@ -68,12 +68,15 @@ public class CommonProxy {
         API.addGlobalObject("AnimationType", AnimationType.Instance);
         API.addGlobalObject("Color", ColorCodes.Instance);
         API.addGlobalObject("EntityType", EntityType.Instance);
-        API.addGlobalObject("JobType", JobType.Instance);
+        API.addGlobalObject("Job", JobType.Instance);
         API.addGlobalObject("Key", Keys.Instance);
-        API.addGlobalObject("RoleType", JobType.Instance);
+        API.addGlobalObject("Role", JobType.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);
+        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
+        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+        API.addGlobalObject("BlockSide", BlockSide.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");

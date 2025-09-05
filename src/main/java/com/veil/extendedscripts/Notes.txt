@@ -10,7 +10,7 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types, npc collision type)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type, block side)
  - Figure out if setAnimation(7) doing nothing is intentional
  - Add functions related to ids, getting next available ids and check if they're used.
  - Make custom particles possible if they aren't already.
@@ -19,17 +19,19 @@ Things I want to add:
  - Add custom projectile disable damage, hit endermen, make sure all attributes are saved to nbt
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, reach, and damage reflection
- - Go around and fix the dangling javadoc comment warnings for my sanity.
  - Add summoning followers/pets
  - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
- - Syntax highlighting for valid event names
  - Fix shatterParticle not appearing when shattering on mobs
  - Sort the /veil attribute list-player command's output
+ - Barrier blocks
+ - Attribute recalculate event
+ - Scripted Item Block Placing
 
 Confusing CustomNPC+ gui stuff
  - Fix the issue where loaded scripts improperly show §
  - See if we can make right-clicking be a previous option button
+ - Syntax highlighting for valid event names
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death

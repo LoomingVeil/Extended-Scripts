@@ -21,7 +21,6 @@ public class CustomProjectileMessage implements IMessage {
     public CustomProjectileMessage() {}
 
     public CustomProjectileMessage(Entity entity, String shatterParticle, boolean stopRotatingOnImpact, boolean onImpactSnapToInitRotation) {
-        System.out.println("Making new packet: "+entity.getEntityId());
         this.entityId = entity.getEntityId();
         this.shatterParticle = shatterParticle;
         this.stopRotatingOnImpact = stopRotatingOnImpact;
@@ -71,12 +70,11 @@ public class CustomProjectileMessage implements IMessage {
                         ICustomProjectileRenderProperties renderProperties = projectile.getRenderProperties();
                         renderProperties.setStopRotatingOnImpact(message.stopRotatingOnImpact);
                         renderProperties.setOnImpactSnapToInitRotation(message.onImpactSnapToInitRotation);
-                        System.out.println("Packet sent!");
                         return;
                     }
 
                     if (entity == null) {
-                        System.out.println("Entity doesn't exist??? Id was "+message.entityId);
+                        // System.out.println("Entity doesn't exist??? Id was "+message.entityId);
                     }
                 }
             });

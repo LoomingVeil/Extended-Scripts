@@ -2,7 +2,7 @@ package com.veil.extendedscripts.commands;
 
 import com.veil.extendedscripts.ChatUtils;
 import com.veil.extendedscripts.ExtendedScripts;
-import com.veil.extendedscripts.WorldClippers;
+import com.veil.extendedscripts.item.WorldClippers;
 import com.veil.extendedscripts.constants.ColorCodes;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;

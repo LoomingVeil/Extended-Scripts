@@ -1,5 +1,6 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.item.IScriptedItemVariant;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -8,7 +9,6 @@ import kamkeel.npcs.network.packets.data.ChatAlertPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
 import noppes.npcs.CustomNpcsPermissions;
 import noppes.npcs.NoppesUtilServer;
 import noppes.npcs.config.ConfigScript;
@@ -41,14 +41,14 @@ public class ScriptItemClickPacket implements IMessage {
                 return null;
             }
 
-            if (!(item.getItem() instanceof ItemScripted)) {
-                return null;
-            }
-
-            if (!ConfigScript.canScript(player, CustomNpcsPermissions.TOOL_SCRIPTED_ITEM)) {
-                ChatAlertPacket.sendChatAlert(player, "availability.permission");
-            } else {
-                NoppesUtilServer.sendOpenGui(player, EnumGuiType.ScriptItem, null, 0, 0, 0);
+            if (item.getItem() instanceof ItemScripted) {
+                if (!ConfigScript.canScript(player, CustomNpcsPermissions.TOOL_SCRIPTED_ITEM)) {
+                    ChatAlertPacket.sendChatAlert(player, "availability.permission");
+                } else {
+                    NoppesUtilServer.sendOpenGui(player, EnumGuiType.ScriptItem, null, 0, 0, 0);
+                }
+            } else if (item.getItem() instanceof IScriptedItemVariant) {
+                ((IScriptedItemVariant) item.getItem()).openScriptGui(player.worldObj, player, true);
             }
 
             return null;

@@ -9,7 +9,7 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types, npc collision type, block side)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type, Item type, Armor slot)
  - Figure out if setAnimation(7) doing nothing is intentional
  - Add functions related to ids, getting next available ids and check if they're used.
  - Hide the +4 damage on the World Clippers
@@ -24,6 +24,10 @@ Things I want to add:
  - Barrier blocks
  - Attribute recalculate event
  - Scripted Item Block Placing
+ - Add the Extended Scripts API tab to scripting
+ - Attribute copy and paste functions
+ - Fix \ not working for IScriptedItemVariants
+ - Fix attack event
 
 Confusing CustomNPC+ gui stuff
  - Fix the issue where loaded scripts improperly show §

@@ -1,5 +1,6 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.item;
 
+import com.veil.extendedscripts.ExtendedScripts;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,10 +36,19 @@ public class WorldClippers extends ItemSword {
     public WorldClippers() {
         super(ToolMaterial.WOOD);
         this.setUnlocalizedName("world_clippers");
-        this.setTextureName("extendedscripts:world_clippers");
+        this.setTextureName("minecraft:shears");
         this.setCreativeTab(CustomItems.tab);
         this.setMaxStackSize(1);
         this.setFull3D();
+    }
+
+    public boolean hasColor(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getColorFromItemStack(ItemStack stack, int unused) {
+        return ExtendedScripts.SIGNATURE_COLOR;
     }
 
     @Override

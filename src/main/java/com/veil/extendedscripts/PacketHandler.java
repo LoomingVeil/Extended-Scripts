@@ -35,6 +35,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(PlayerPropertyUpdateMessage.PlayerPropertyUpdateMessageHandler.class, PlayerPropertyUpdateMessage.class, nextID(), Side.CLIENT);
         INSTANCE.registerMessage(CustomProjectileMessage.CustomProjectileMessageHandler.class, CustomProjectileMessage.class, nextID(), Side.CLIENT);
         INSTANCE.registerMessage(UpdateScreenSizePacket.UpdateScreenSizePacketHandler.class, UpdateScreenSizePacket.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(GuiOpenPacket.GuiOpenPacketHandler.class, GuiOpenPacket.class, nextID(), Side.CLIENT);
         INSTANCE.registerMessage(ScriptItemClickPacket.Handler.class, ScriptItemClickPacket.class, nextID(), Side.SERVER);
     }
 

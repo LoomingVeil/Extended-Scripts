@@ -4,6 +4,7 @@ import com.veil.extendedscripts.commands.VeilCommand;
 import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
+import com.veil.extendedscripts.item.ArmorScripted;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
@@ -22,11 +23,12 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.entity.EntityNPCInterface;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,9 +41,15 @@ public class CommonProxy {
         PacketHandler.registerMessages();
 
         GameRegistry.registerItem(ExtendedScripts.worldClippers, "world_clippers");
+        Item newItem = new ArmorScripted(1)
+            .setUnlocalizedName("scripted_armor");
+        GameRegistry.registerItem(newItem, "scripted_armor");
 
         FMLCommonHandler.instance().bus().register(new GlobalFileCopierHandler());
         MinecraftForge.EVENT_BUS.register(new GlobalFileCopierHandler());
+
+        FMLCommonHandler.instance().bus().register(new ExtendedScriptItemEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ExtendedScriptItemEventHandler());
     }
 
     public void init(FMLInitializationEvent event) {
@@ -77,6 +85,7 @@ public class CommonProxy {
         API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
         API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
         API.addGlobalObject("BlockSide", BlockSide.Instance);
+        API.addGlobalObject("ArmorType", ArmorType.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");
@@ -151,7 +160,9 @@ public class CommonProxy {
             ExtendedAPI.registerAttribute(attribute);
             count += 1;
         }
-        System.out.println("Added "+count+" Attributes and Attributed to Add is of length "+attributesToAdd.size());
     }
 
+    public void openGui(EntityNPCInterface npc, int gui, int x, int y, int z) { }
+
+    // public static void registerItem(Item item) { }
 }

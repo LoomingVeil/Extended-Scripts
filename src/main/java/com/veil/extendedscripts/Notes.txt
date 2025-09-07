@@ -24,6 +24,9 @@ Things I want to add:
  - Barrier blocks
  - Attribute recalculate event
  - Scripted Item Block Placing
+ - Add the Extended Scripts API tab to scripting
+ - Attribute copy and paste functions
+ - Fix attack event
 
 Confusing CustomNPC+ gui stuff
  - Fix the issue where loaded scripts improperly show §

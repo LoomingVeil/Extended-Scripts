@@ -13,7 +13,7 @@
     "MixinBlockExtension",
     "MixinWorldExtension",
     "MixinNpcExtension",
-    "MixinGuiScriptPlayers",
+    "MixinGuiScriptPlayer"
   ],
   "client": [],
   "server": [],

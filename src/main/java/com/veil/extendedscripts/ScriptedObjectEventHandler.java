@@ -1,5 +1,6 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.constants.ArmorType;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -35,26 +36,48 @@ public class ScriptedObjectEventHandler {
         }
 
         IItemCustomizable item = (IItemCustomizable) AbstractNpcAPI.Instance().getIItemStack(heldItem);
-        // For whatever reason CustomNpcs getArmorType() returns the number backwards
-        int armorType = 3 - item.getArmorType();
+        // For whatever reason the numbers are backwards in some places
+        int armorIndex = 3 - item.getArmorType();
 
-        if (armorType < 0 || armorType >= player.inventory.armorInventory.length || player.inventory.armorInventory[armorType] != null) {
-            return;
+        if (item.getArmorType() == ArmorType.Instance.ALL) {
+            ItemStack[] armor = player.inventory.armorInventory;
+            for (int i = armor.length - 1; i >= 0; i--) {
+                if (player.inventory.armorInventory[i] == null) {
+                    player.inventory.armorInventory[i] = heldItem.copy();
+                    player.inventory.armorInventory[i].stackSize = 1;
+
+                    if (!inCreativeMode) {
+                        player.getHeldItem().stackSize -= 1;
+                    }
+
+                    event.setCanceled(true);
+
+                    if (player instanceof EntityPlayerMP) {
+                        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+                        playerMP.sendContainerToPlayer(playerMP.inventoryContainer);
+                    }
+                    break;
+                }
+            }
+
+        } else if (item.getArmorType() != ArmorType.Instance.NONE) {
+            if (armorIndex < 0 || armorIndex >= player.inventory.armorInventory.length || player.inventory.armorInventory[armorIndex] != null) {
+                return;
+            }
+
+            player.inventory.armorInventory[armorIndex] = heldItem.copy();
+            player.inventory.armorInventory[armorIndex].stackSize = 1;
+
+            if (!inCreativeMode) {
+                player.getHeldItem().stackSize -= 1;
+            }
+
+            event.setCanceled(true);
+
+            if (player instanceof EntityPlayerMP) {
+                EntityPlayerMP playerMP = (EntityPlayerMP) player;
+                playerMP.sendContainerToPlayer(playerMP.inventoryContainer);
+            }
         }
-
-        player.inventory.armorInventory[armorType] = heldItem.copy();
-        player.inventory.armorInventory[armorType].stackSize = 1;
-
-        if (!inCreativeMode) {
-            player.getHeldItem().stackSize -= 1;
-        }
-
-        event.setCanceled(true);
-
-        if (player instanceof EntityPlayerMP) {
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            playerMP.sendContainerToPlayer(playerMP.inventoryContainer);
-        }
-
     }
 }

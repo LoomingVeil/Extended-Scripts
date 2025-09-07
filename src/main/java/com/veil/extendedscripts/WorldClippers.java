@@ -35,10 +35,15 @@ public class WorldClippers extends ItemSword {
     public WorldClippers() {
         super(ToolMaterial.WOOD);
         this.setUnlocalizedName("world_clippers");
-        this.setTextureName("extendedscripts:world_clippers");
+        this.setTextureName("minecraft:shears");
         this.setCreativeTab(CustomItems.tab);
         this.setMaxStackSize(1);
         this.setFull3D();
+    }
+
+    @Override
+    public int getColorFromItemStack(ItemStack stack, int unused) {
+        return 0x8B4513;
     }
 
     @Override

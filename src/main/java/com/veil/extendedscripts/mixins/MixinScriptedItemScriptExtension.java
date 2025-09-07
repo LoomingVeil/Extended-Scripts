@@ -2,17 +2,12 @@ package com.veil.extendedscripts.mixins;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import noppes.npcs.api.AbstractNpcAPI;
-import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.scripted.item.ScriptCustomItem;
-import noppes.npcs.scripted.item.ScriptCustomizableItem;
-import noppes.npcs.scripted.item.ScriptItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 // Extends the scripting for scripted items
-@Mixin(value={ScriptCustomizableItem.class})
+@Mixin(value={ScriptCustomItem.class})
 public class MixinScriptedItemScriptExtension {
     public ScriptCustomItem IItemStackItem = ((ScriptCustomItem)(Object)this);
     public ItemStack item = IItemStackItem.getMCItemStack();

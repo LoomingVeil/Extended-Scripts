@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperties implements IExtendedEntityProperties {
     // Unique identifier for these properties
@@ -26,6 +27,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     private ItemStack attributeCore; // Attributes added to the core apply to the player.
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
+    public Map<String, Float> attributeClipboard;
     public ItemStack[] tempInvStorage;
     public int xpLevel;
     public int xpTotal;

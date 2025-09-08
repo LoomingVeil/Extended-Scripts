@@ -10,7 +10,7 @@ Things I want to add:
  - Add a function for preventing players from using commands
  - Continue searching for more Enums to implement (Nbt data types, npc collision type)
  - Expand upon ItemTypes for more types (Potion, Tool, Food)
- - Figure out if setAnimation(7) doing nothing is intentional
+ - Fix setAnimation(7)
  - Add functions related to ids, getting next available ids and check if they're used.
  - Hide the +4 damage on the World Clippers
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
@@ -23,7 +23,6 @@ Things I want to add:
  - Barrier blocks
  - Scripted Item Block Placing
  - Add the Extended Scripts API tab to scripting
- - Attribute copy and paste commands
  - Fix attack event
 
 Confusing CustomNPC+ gui stuff

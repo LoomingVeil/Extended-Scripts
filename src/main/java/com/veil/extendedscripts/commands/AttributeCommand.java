@@ -34,6 +34,8 @@ public class AttributeCommand implements IVeilSubCommand {
         subCommands.put("reset-player", new AttributeResetPlayerCommand());
         subCommands.put("list-player", new AttributeListPlayerCommand());
         subCommands.put("list-core-player", new AttributeListCorePlayerCommand());
+        subCommands.put("copy", new AttributeCopyCommand());
+        subCommands.put("paste", new AttributePasteCommand());
     }
 
     @Override
@@ -48,6 +50,8 @@ public class AttributeCommand implements IVeilSubCommand {
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"reset-player"+dark_gray+": "+gray+"Removes all attributes from the player. These attributes are always active until removed."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"list-player"+dark_gray+": "+gray+"Lists all currently applied attributes."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"list-core-player"+dark_gray+": "+gray+"Lists all core attributes."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"copy"+dark_gray+": "+gray+"Copy attributes from an item into temp data."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"paste"+dark_gray+": "+gray+"Paste saved attributes to an item. Use TAB completion to see paste modes."));
             return;
         }
 

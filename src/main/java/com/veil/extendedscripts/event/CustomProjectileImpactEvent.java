@@ -1,7 +1,8 @@
-package com.veil.extendedscripts.projectile;
+package com.veil.extendedscripts.event;
 
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent;
+import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import noppes.npcs.api.IBlock;

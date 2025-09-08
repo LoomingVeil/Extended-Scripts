@@ -1,4 +1,4 @@
-package com.veil.extendedscripts;
+package com.veil.extendedscripts.event;
 
 import com.veil.extendedscripts.extendedapi.event.IHotbarSlotChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event;

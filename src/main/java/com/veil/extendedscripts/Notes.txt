@@ -1,5 +1,4 @@
 Things I want to add:
- - Add /inspect tphere
  - Fix issues with cones and pyramids in the shape class
  - Improved Overlay class
  - Make the rest of the GUIs (Anvil, Enchantment Table, and Brewing Stand)
@@ -9,7 +8,8 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types, npc collision type, block side)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type)
+ - Expand upon ItemTypes for more types (Potion, Tool, Food)
  - Figure out if setAnimation(7) doing nothing is intentional
  - Add functions related to ids, getting next available ids and check if they're used.
  - Hide the +4 damage on the World Clippers
@@ -20,12 +20,10 @@ Things I want to add:
  - Add bounciness, multi-jump, reach, and damage reflection
  - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
- - Sort the /veil attribute list-player command's output
  - Barrier blocks
- - Attribute recalculate event
  - Scripted Item Block Placing
  - Add the Extended Scripts API tab to scripting
- - Attribute copy and paste functions
+ - Attribute copy and paste commands
  - Fix attack event
 
 Confusing CustomNPC+ gui stuff

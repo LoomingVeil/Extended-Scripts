@@ -37,7 +37,7 @@ import java.util.*;
  */
 public class ExtendedAPI implements AbstractExtendedAPI {
     public static final ExtendedAPI Instance = new ExtendedAPI();
-    private static Map<String, AttributeDefinition> lastWorldsAttributes = new HashMap<>();
+    private static final Map<String, AttributeDefinition> lastWorldsAttributes = new HashMap<>();
 
     public static Map<String, AttributeDefinition> getLastWorldsAttributes() {
         return lastWorldsAttributes;

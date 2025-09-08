@@ -1,22 +1,19 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.event.HotbarSlotChangedEvent;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.properties.PlayerAttribute;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.controllers.ScriptController;
@@ -24,8 +21,6 @@ import noppes.npcs.controllers.data.PlayerDataScript;
 import noppes.npcs.items.ItemNpcScripter;
 import noppes.npcs.items.ItemScripted;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class CommonEventHandler {

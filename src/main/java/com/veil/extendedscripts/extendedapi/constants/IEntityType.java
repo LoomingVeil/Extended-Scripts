@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
 
 /**
- * All {@link noppes.npcs.api.entity.IEntity} have a getType(). You can compare that result with this class's fields
- * to determine what kind of entity it is. {@link noppes.npcs.api.entity.IEntity#getSurroundingEntities(int, int)}
+ * All {@link noppes.npcs.api.entity.IEntity} implement getType(). You can compare that result with this class's fields
+ * to determine what kind of entity it is or use it in certain functions {@link noppes.npcs.api.entity.IEntity#getSurroundingEntities(int, int)}
  * This object is available to all scripting handlers through the "EntityType" keyword.
  */
 public interface IEntityType {

@@ -2,41 +2,30 @@ package com.veil.extendedscripts.projectile;
 
 import com.veil.extendedscripts.PacketHandler;
 import com.veil.extendedscripts.constants.CustomProjectileInvulnerableCollisionType;
+import com.veil.extendedscripts.event.CustomProjectileImpactEvent;
+import com.veil.extendedscripts.event.CustomProjectileTickEvent;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectileRenderProperties;
-import kamkeel.npcs.addon.DBCAddon;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S27PacketExplosion;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import noppes.npcs.EventHooks;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IPos;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
-import noppes.npcs.constants.EnumParticleType;
-import noppes.npcs.constants.EnumPotionType;
 import noppes.npcs.controllers.ScriptController;
 import noppes.npcs.controllers.data.PlayerDataScript;
-import noppes.npcs.scripted.NpcAPI;
-import noppes.npcs.scripted.event.ProjectileEvent;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class EntityCustomProjectile extends EntityThrowable implements ICustomProjectile {

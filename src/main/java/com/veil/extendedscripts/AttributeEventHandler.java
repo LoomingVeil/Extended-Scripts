@@ -1,5 +1,6 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.event.AttributeRecalculateEvent;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.properties.ExtendedScriptEntityProperties;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
@@ -21,6 +22,10 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.controllers.ScriptController;
+import noppes.npcs.controllers.data.PlayerDataScript;
 
 public class AttributeEventHandler {
     public static void init() {
@@ -334,5 +339,11 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
             player.capabilities.setFlySpeed(flightSpeed + 0.05F);
             player.sendPlayerAbilities();
         }
+
+        AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player));
+
+        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
+        handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
+        AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
     }
 }

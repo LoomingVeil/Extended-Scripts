@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.projectile;
+package com.veil.extendedscripts.event;
 
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent;

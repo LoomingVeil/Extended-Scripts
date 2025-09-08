@@ -1,5 +1,8 @@
 package com.veil.extendedscripts.extendedapi.constants;
 
+/**
+ * This object stores armor types available to all scripting handlers through the "ArmorSlot" keyword.
+ */
 public interface IArmorType {
     int NONE = -2;
     int ALL = -1;

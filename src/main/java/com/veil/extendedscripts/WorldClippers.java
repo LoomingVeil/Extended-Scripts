@@ -43,7 +43,8 @@ public class WorldClippers extends ItemSword {
 
     @Override
     public int getColorFromItemStack(ItemStack stack, int unused) {
-        return 0x8B4513;
+        // return 0x8B4513;
+        return ExtendedScripts.SIGNATURE_COLOR;
     }
 
     @Override

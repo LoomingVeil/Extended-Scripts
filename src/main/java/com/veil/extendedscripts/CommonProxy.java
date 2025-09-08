@@ -77,6 +77,7 @@ public class CommonProxy {
         API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
         API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
         API.addGlobalObject("BlockSide", BlockSide.Instance);
+        API.addGlobalObject("ArmorSlot", ArmorType.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");
@@ -116,6 +117,7 @@ public class CommonProxy {
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), "Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.ARMOR_VALUE.asSnakeCase(), "Armor Value", ColorCodes.Instance.GRAY, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

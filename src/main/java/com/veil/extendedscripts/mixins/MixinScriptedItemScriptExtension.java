@@ -2,22 +2,23 @@ package com.veil.extendedscripts.mixins;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import noppes.npcs.extendedapi.item.IItemCustomizable;
 import noppes.npcs.scripted.item.ScriptCustomItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 // Extends the scripting for scripted items
 @Mixin(value={ScriptCustomItem.class})
-public class MixinScriptedItemScriptExtension {
+public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     public ScriptCustomItem IItemStackItem = ((ScriptCustomItem)(Object)this);
     public ItemStack item = IItemStackItem.getMCItemStack();
 
-    @Unique
     /**
      * Sets the harvest level for a toolClass
      * @param toolClass vanilla tool classes include pickaxe, axe, shove, and hoe (hoe may only be in newer versions). Other mods may add their own toolClasses.
      * @param level -1: Nothing; Same as mining with a stick, 0: wood/gold tools, 1: stone tools, 2: iron tools, 3: diamond tools
      */
+    @Unique
     public void setHarvestLevel(String toolClass, int level) {
         NBTTagCompound itemData = getItemDataTag((ItemStack) item);
         if (!itemData.hasKey("harvestLevels")) {

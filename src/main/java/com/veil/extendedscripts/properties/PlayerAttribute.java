@@ -8,6 +8,7 @@ public enum PlayerAttribute {
     FLIGHT_SPEED_VERTICAL(Float.class, 1F),
     SWIM_BOOST_WATER(Float.class, 1F),
     SWIM_BOOST_LAVA(Float.class, 1F),
+    ARMOR_VALUE(Float.class, 1F),
     CAN_FLY(Boolean.class, false),
     LAST_SEEN_FLYING(Boolean.class, false),
     KEEP_INVENTORY(Boolean.class, false);

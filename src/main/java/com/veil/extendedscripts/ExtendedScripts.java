@@ -22,6 +22,7 @@ import java.io.File;
 public class ExtendedScripts {
     public static final String MODID = "extendedscripts";
     public static final String VERSION = "1.0";
+    public static final Integer SIGNATURE_COLOR = 0xEB1e42;
     public static final int GUI_VIRTUAL_CRAFTING_TABLE = 0;
     public static final int GUI_VIRTUAL_FURNACE = 1;
     public static final int GUI_PERSISTENT_VIRTUAL_FURNACE = 2;

@@ -8,6 +8,7 @@ public class PotionEffect implements IPotionEffect {
     private int ID;
     private int duration;
     private int amplifier;
+    private String icon;
 
     public PotionEffect(net.minecraft.potion.PotionEffect mcEffect) {
         this.name = mcEffect.getEffectName();

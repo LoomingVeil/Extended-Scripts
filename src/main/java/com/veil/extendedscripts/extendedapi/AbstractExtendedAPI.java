@@ -72,6 +72,12 @@ public interface AbstractExtendedAPI {
 
     IAttributeDefinition getAttributeDefinition(String key);
 
+    /**
+     * Creates an object which can be added to {@link com.veil.extendedscripts.extendedapi.item.IItemPotion} objects.
+     * @param duration duration in ticks.
+     * @param amplifier 0 indexed so 0 is level I, 1 is level II, ect.
+     * @throws Exception when an invalid id is inputted.
+     */
     IPotionEffect getIPotionEffect(int id, int duration, int amplifier) throws Exception;
 
     IPotionEffect getIPotionEffect(int id) throws Exception;

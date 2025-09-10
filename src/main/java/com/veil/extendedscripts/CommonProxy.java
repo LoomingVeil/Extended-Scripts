@@ -150,12 +150,9 @@ public class CommonProxy {
             }
         }
 
-        int count = 0;
         for (AttributeDefinition attribute : attributesToAdd) {
             ExtendedAPI.registerAttribute(attribute);
-            count += 1;
         }
-        System.out.println("Added "+count+" Attributes and Attributed to Add is of length "+attributesToAdd.size());
     }
 
 }

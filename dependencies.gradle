@@ -44,4 +44,5 @@ dependencies {
     // implementation files('libs')
     // implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly name: "CustomNpc-Plus-1.10.1"
+    compileOnly name: "[1.7.10]StatusEffectHUD-client-1.27"
 }

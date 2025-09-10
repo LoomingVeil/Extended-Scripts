@@ -1,5 +1,150 @@
 package com.veil.extendedscripts.mixins;
 
-public class MixinInventoryEffectRenderer {
+import com.veil.extendedscripts.CustomEffectBridge;
+import com.veil.extendedscripts.ExtendedScripts;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.InventoryEffectRenderer;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.Container;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
+import noppes.npcs.client.ClientCacheHandler;
+import noppes.npcs.client.renderer.ImageData;
+import noppes.npcs.controllers.data.CustomEffect;
+import noppes.npcs.scripted.NpcAPI;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+@Mixin(value={InventoryEffectRenderer.class})
+public abstract class MixinInventoryEffectRenderer extends GuiContainer {
+    private static int tabPage = 1;
+    private int maxPages = 1;
+    private GuiButton prevButton;
+    private GuiButton nextButton;
+    private Map<Integer, ResourceLocation> cachedCustomEffectIcons;
+
+    @Shadow
+    private boolean field_147045_u;
+
+    public MixinInventoryEffectRenderer(Container p_i1072_1_) {
+        super(p_i1072_1_);
+    }
+
+    /**
+     * @author Veil
+     * @reason This could not be done
+     */
+    @Overwrite
+    public void initGui() {
+        super.initGui();
+        cachedCustomEffectIcons = new HashMap<>();
+
+        if (!ExtendedScripts.getEffectsList(this.mc.thePlayer).isEmpty()) {
+            this.guiLeft = 160 + (this.width - this.xSize - 200) / 2;
+            this.field_147045_u = true;
+        }
+    }
+
+
+    /**
+     * @author Veil
+     * @reason This could not be done with other types of Mixins
+     */
+    @Overwrite
+    private void func_147044_g() {
+        int startLeft = this.guiLeft - 124;
+        int startTop = this.guiTop;
+        boolean flag = true;
+        Collection activeEffects = ExtendedScripts.getEffectsList(this.mc.thePlayer);
+
+        if (!activeEffects.isEmpty()) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            int pixelsBetweenEffects = 33;
+
+            if (activeEffects.size() > 5) {
+                prevButton = new GuiButton(201, startLeft, startTop - 20, 20, 20, "<");
+                nextButton = new GuiButton(202, startLeft + 100, startTop - 20, 20, 20, ">");
+                buttonList.add(prevButton);
+                buttonList.add(nextButton);
+
+                maxPages = (int) Math.ceil(activeEffects.size() / 5.0F);
+                String page = String.format("%d / %d", tabPage, maxPages);
+                // fontRendererObj.drawString(page, startLeft + (xSize / 2) - (width / 2), startTop - 20, -1);
+                fontRendererObj.drawString(page, startLeft + 50, startTop - 10, -1);
+            } else {
+                buttonList.remove(prevButton);
+                buttonList.remove(nextButton);
+            }
+
+            for (Iterator iterator = activeEffects.iterator(); iterator.hasNext(); startTop += pixelsBetweenEffects) {
+                CustomEffectBridge potionEffect = (CustomEffectBridge)iterator.next();
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                this.mc.getTextureManager().bindTexture(field_147001_a);
+                this.drawTexturedModalRect(startLeft, startTop, 0, 166, 140, 32); // Draw background
+
+                if (!potionEffect.isCustom()) {
+                    Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+
+                    if (potion.hasStatusIcon()) {
+                        int iconIndex = potion.getStatusIconIndex();
+                        this.drawTexturedModalRect(startLeft + 6, startTop + 7, iconIndex % 8 * 18, 198 + iconIndex / 8 * 18, 18, 18);
+                    }
+
+                    potion.renderInventoryEffect(startLeft, startTop, potionEffect, mc);
+                    if (!potion.shouldRenderInvText(potionEffect)) continue;
+                } else {
+                    drawCustomIcon(potionEffect.getCustomEffect(), startLeft + 6, startTop + 7, 16);
+                }
+
+                String s1 = I18n.format(potionEffect.getEffectName());
+
+                if (potionEffect.getAmplifier() == 1) {
+                    s1 = s1 + " " + I18n.format("enchantment.level.2");
+                }
+                else if (potionEffect.getAmplifier() == 2) {
+                    s1 = s1 + " " + I18n.format("enchantment.level.3");
+                }
+                else if (potionEffect.getAmplifier() == 3) {
+                    s1 = s1 + " " + I18n.format("enchantment.level.4");
+                }
+
+                this.fontRendererObj.drawStringWithShadow(s1, startLeft + 10 + 18, startTop + 6, 16777215);
+                String s = Potion.getDurationString(potionEffect);
+                this.fontRendererObj.drawStringWithShadow(s, startLeft + 10 + 18, startTop + 6 + 10, 8355711);
+            }
+        } else {
+            buttonList.remove(prevButton);
+            buttonList.remove(nextButton);
+        }
+    }
+
+    /**
+     * This code is extracted from CustomNPC+'s GuiEffectBar class
+     */
+    private void drawCustomIcon(CustomEffect effect, int drawX, int drawY, int iconRenderSize) {
+        ImageData imageData = ClientCacheHandler.getImageData(effect.getIcon());
+
+        if (imageData != null && imageData.imageLoaded()) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            imageData.bindTexture();
+            int iconU = effect.iconX;
+            int iconV = effect.iconY;
+            int iconWidth = effect.getWidth();
+            int iconHeight = effect.getHeight();
+            int texWidth = imageData.getTotalWidth();
+
+            // Use iconYOffset to vertically center the icon
+            func_152125_a(drawX, drawY, iconU, iconV, iconWidth, iconHeight, iconRenderSize, iconRenderSize, texWidth, texWidth);
+        }
+    }
 }

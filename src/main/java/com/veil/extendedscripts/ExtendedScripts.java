@@ -12,11 +12,18 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
+import noppes.npcs.controllers.CustomEffectController;
+import noppes.npcs.controllers.data.CustomEffect;
+import noppes.npcs.controllers.data.EffectKey;
+import noppes.npcs.controllers.data.PlayerEffect;
 
 import java.io.File;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Mod(modid = ExtendedScripts.MODID, version = Tags.VERSION, name = "Veil's Extended Scripts", acceptedMinecraftVersions = "[1.7.10]", dependencies = "required-after:customnpcs@[1.10.1,)")
 public class ExtendedScripts {
@@ -123,6 +130,24 @@ public class ExtendedScripts {
         }
 
         return modDirectory;
+    }
+
+    public static List<CustomEffectBridge> getEffectsList(EntityPlayer player) {
+        List<CustomEffectBridge> effects = new ArrayList<>();
+
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            effects.add(new CustomEffectBridge(effect.getPotionID(), effect.getDuration(), effect.getAmplifier()));
+        }
+
+        ConcurrentHashMap<EffectKey, PlayerEffect> customEffects = CustomEffectController.getInstance().getPlayerEffects(player);
+        HashMap<Integer, CustomEffect> registeredCustomEffects = CustomEffectController.getInstance().getCustomEffects();
+
+        for (EffectKey key : customEffects.keySet()) {
+            PlayerEffect effect = customEffects.get(key);
+            effects.add(new CustomEffectBridge(effect, registeredCustomEffects.get(key.getId())));
+        }
+
+        return effects;
     }
 }
 

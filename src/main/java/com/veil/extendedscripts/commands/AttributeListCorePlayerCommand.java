@@ -14,6 +14,8 @@ import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.ICustomAttribute;
 
+import java.util.Arrays;
+
 public class AttributeListCorePlayerCommand implements IVeilSubCommand {
     @Override
     public void execute(ICommandSender sender, EntityPlayer playerSender, String[] args) {
@@ -73,6 +75,7 @@ public class AttributeListCorePlayerCommand implements IVeilSubCommand {
     private void showAttributes(ICommandSender sender, EntityPlayer playerToView, int page) {
         noppes.npcs.extendedapi.entity.IPlayer player = (noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getPlayer(playerToView.getDisplayName());
         String[] keys = player.getCoreAttributeKeys();
+        Arrays.sort(keys);
 
         int numPages = (int) Math.ceil(keys.length / 10.0);
 

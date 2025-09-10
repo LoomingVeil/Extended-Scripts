@@ -17,7 +17,8 @@
     "MixinContainerPlayer",
     "MixinInventoryPlayer",
     "MixinForgeHooks",
-    "MixinNpcAPI"
+    "MixinNpcAPI",
+    "MixinInventoryEffectRenderer"
   ],
   "client": [],
   "server": [],

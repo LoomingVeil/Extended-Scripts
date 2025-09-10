@@ -2,6 +2,7 @@ package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
+import com.veil.extendedscripts.extendedapi.IPotionEffect;
 import com.veil.extendedscripts.extendedapi.IShapeMaker;
 import com.veil.extendedscripts.extendedapi.constants.*;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
@@ -218,5 +219,13 @@ public class ExtendedAPI implements AbstractExtendedAPI {
 
     public IAttributeDefinition getAttributeDefinition(String key) {
         return AttributeController.getAttribute(key);
+    }
+
+    public IPotionEffect getIPotionEffect(int id, int duration, int amplifier) throws Exception {
+        return new PotionEffect(id, duration, amplifier);
+    }
+
+    public IPotionEffect getIPotionEffect(int id) throws Exception {
+        return new PotionEffect(id, 30 * 20, 0);
     }
 }

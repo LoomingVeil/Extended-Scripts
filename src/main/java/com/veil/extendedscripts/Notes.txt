@@ -8,8 +8,6 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Continue searching for more Enums to implement (Nbt data types, npc collision type)
- - Expand upon ItemTypes for more types (Potion, Tool, Food)
  - Fix setAnimation(7)
  - Add functions related to ids, getting next available ids and check if they're used.
  - Hide the +4 damage on the World Clippers
@@ -25,7 +23,11 @@ Things I want to add:
  - Add the Extended Scripts API tab to scripting
  - Fix attack event
 
-Confusing CustomNPC+ gui stuff
+Lists to add when we see something:
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type)
+ - Expand upon ItemTypes for more types (None for now)
+
+Confusing CustomNPC+ gui stuff:
  - Fix the issue where loaded scripts improperly show §
  - See if we can make right-clicking be a previous option button
  - Syntax highlighting for valid event names
@@ -37,6 +39,5 @@ Event stuff that IDK how to do yet:
 Things that might just be impossible:
  - Making some working version of player.stopUsingItem()
  - Reading the player's controls
- - Include Shift Click equipping for scripted item armor
  - Check if texture exists
  - See if we can change how ctrl + backspace works in the code editor

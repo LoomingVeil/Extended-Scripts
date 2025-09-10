@@ -7,7 +7,7 @@
     "MixinPlayerAttributeTracker",
     "MixinPlayerExtension",
     "MixinEntityExtension",
-    "MixinScriptedItemExtension",
+    "MixinScriptedItem",
     "MixinScriptedItemScriptExtension",
     "MixinItemExtension",
     "MixinBlockExtension",
@@ -16,7 +16,8 @@
     "MixinGuiScriptPlayer",
     "MixinContainerPlayer",
     "MixinInventoryPlayer",
-    "MixinForgeHooks"
+    "MixinForgeHooks",
+    "MixinNpcAPI"
   ],
   "client": [],
   "server": [],

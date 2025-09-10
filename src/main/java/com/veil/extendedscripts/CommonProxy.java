@@ -79,6 +79,7 @@ public class CommonProxy {
         API.addGlobalObject("BlockSide", BlockSide.Instance);
         API.addGlobalObject("ArmorSlot", ArmorType.Instance);
         API.addGlobalObject("ItemType", ItemType.Instance);
+        API.addGlobalObject("Effect", EffectID.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");

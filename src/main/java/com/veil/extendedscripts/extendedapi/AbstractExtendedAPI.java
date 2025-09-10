@@ -1,5 +1,6 @@
 package com.veil.extendedscripts.extendedapi;
 
+import com.veil.extendedscripts.PotionEffect;
 import com.veil.extendedscripts.extendedapi.constants.*;
 import kamkeel.npcs.controllers.AttributeController;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,4 +71,8 @@ public interface AbstractExtendedAPI {
     String[] getCustomAttributeKeyList();
 
     IAttributeDefinition getAttributeDefinition(String key);
+
+    IPotionEffect getIPotionEffect(int id, int duration, int amplifier) throws Exception;
+
+    IPotionEffect getIPotionEffect(int id) throws Exception;
 }

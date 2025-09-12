@@ -8,7 +8,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -34,7 +33,6 @@ public class ExtendedScripts {
     public static final int GUI_VIRTUAL_FURNACE = 1;
     public static final int GUI_PERSISTENT_VIRTUAL_FURNACE = 2;
     public static final int GUI_VIRTUAL_ANVIL = 3;
-    public static KeyBinding openScriptingActionKey;
     public static Item scripter;
     public static Item scriptedItem;
     public static final WorldClippers worldClippers = new WorldClippers();

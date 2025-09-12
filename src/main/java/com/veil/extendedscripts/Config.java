@@ -5,16 +5,31 @@ import java.io.File;
 import net.minecraftforge.common.config.Configuration;
 
 public class Config {
+    public static Configuration config;
+    public static boolean enableEffectPages;
+    public static boolean enableEffectPageModification;
 
-    public static String greeting = "Hello World";
+    public static void init(File configFile) {
+        if (config == null) {
+            config = new Configuration(configFile);
+        }
 
-    public static void synchronizeConfiguration(File configFile) {
-        Configuration configuration = new Configuration(configFile);
+        loadConfig();
+    }
 
-        greeting = configuration.getString("greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?");
+    public static void loadConfig() {
+        config.load();
 
-        if (configuration.hasChanged()) {
-            configuration.save();
+        enableEffectPageModification = config.getBoolean(
+            "enableEffectPageModification",
+            Configuration.CATEGORY_GENERAL,
+            true,
+            "You may need to disable this if you have another mod that modifies the in inventory effect screen. Disabling this will also disable showing CustomNPC+ custom effects with your potion effects"
+        );
+        enableEffectPages = config.getBoolean("enableEffectPages", Configuration.CATEGORY_GENERAL, true, "Enables pages for effects when you have more than five at once.");
+
+        if (config.hasChanged()) {
+            config.save();
         }
     }
 }

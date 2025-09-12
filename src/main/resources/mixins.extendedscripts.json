@@ -2,6 +2,7 @@
   "required": true,
   "package": "com.veil.extendedscripts.mixins",
   "refmap": "mixins.extendedscripts.refmap.json",
+  "plugin": "com.veil.extendedscripts.mixins.MixinConfig",
   "mixins": [
     "MixinAttributeControllerExtension",
     "MixinPlayerAttributeTracker",
@@ -18,7 +19,8 @@
     "MixinInventoryPlayer",
     "MixinForgeHooks",
     "MixinNpcAPI",
-    "MixinInventoryEffectRenderer"
+    "MixinInventoryEffectRenderer",
+    "MixinGuiContainerCreative"
   ],
   "client": [],
   "server": [],

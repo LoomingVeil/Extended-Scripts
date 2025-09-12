@@ -60,7 +60,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null) {
-            if (ExtendedScripts.openScriptingActionKey.isPressed()) {
+            if (ClientProxy.openScriptingActionKey.isPressed()) {
                 EntityPlayer player = Minecraft.getMinecraft().thePlayer;
                 ItemStack item = player.getHeldItem();
 

@@ -22,11 +22,9 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,6 +33,8 @@ import java.util.Set;
 public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
+        Config.init(event.getSuggestedConfigurationFile());
+
         NetworkRegistry.INSTANCE.registerGuiHandler(ExtendedScripts.instance, new VirtualGuiHandler());
         PacketHandler.registerMessages();
 

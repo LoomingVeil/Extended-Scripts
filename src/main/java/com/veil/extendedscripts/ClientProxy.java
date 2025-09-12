@@ -5,7 +5,6 @@ import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.settings.KeyBinding;
@@ -14,8 +13,8 @@ import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
 
 public class ClientProxy extends CommonProxy {
-    // Override CommonProxy methods here, if you want a different behaviour on the client (e.g. registering renders).
-    // Don't forget to call the super methods as well.
+    public static KeyBinding openScriptingActionKey;
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -30,12 +29,12 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
 
-        ExtendedScripts.openScriptingActionKey = new KeyBinding(
+        openScriptingActionKey = new KeyBinding(
             "key.openScripting",
             Keyboard.KEY_BACKSLASH,
             "key.categories.customnpc"
         );
 
-        ClientRegistry.registerKeyBinding(ExtendedScripts.openScriptingActionKey);
+        ClientRegistry.registerKeyBinding(openScriptingActionKey);
     }
 }

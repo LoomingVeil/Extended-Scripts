@@ -1,5 +1,6 @@
 package com.veil.extendedscripts.mixins;
 
+import com.veil.extendedscripts.Config;
 import org.spongepowered.asm.lib.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,10 +22,17 @@ public class MixinConfig implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        // System.out.println("Mixin "+mixinClassName+"?");
-        if (mixinClassName.equals("com.example.mixin.BadMixin")) {
-            return false; // disables it
+        System.out.println("Checking Mixin "+mixinClassName+"? "+Config.enableEffectPageModification);
+        if (!Config.enableEffectPageModification) {
+            if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinGuiContainerCreative")) {
+                System.out.println("First one disabled");
+                return false;
+            } else if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinInventoryEffectRenderer")) {
+                System.out.println("Second one disabled");
+                return false;
+            }
         }
+
         return true;
     }
 
@@ -35,7 +43,7 @@ public class MixinConfig implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        return null; // null means "use whatever is in mixins.json"
+        return null;
     }
 
     @Override

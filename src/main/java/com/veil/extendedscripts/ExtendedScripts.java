@@ -85,7 +85,6 @@ public class ExtendedScripts {
         if (props == null) {
             ExtendedScriptPlayerProperties.register(player);
             props = ExtendedScriptPlayerProperties.get(player);
-            System.out.println("Created new ExtendedScriptEntityProperties for " + player.getCommandSenderName());
             if (props == null) {
                 System.err.println("Failed to get or register ExtendedScriptEntityProperties for " + player.getCommandSenderName());
                 return null;
@@ -146,6 +145,26 @@ public class ExtendedScripts {
         }
 
         return effects;
+    }
+
+    public static String toRoman(int num) {
+        if (num < 1) {
+            return null;
+        }
+
+        int[] values = {200, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] symbols = {"CC", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < values.length; i++) {
+            while (num >= values[i]) {
+                result.append(symbols[i]);
+                num -= values[i];
+            }
+        }
+
+        return result.toString();
     }
 }
 

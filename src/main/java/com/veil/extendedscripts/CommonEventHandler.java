@@ -169,6 +169,6 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onLogin(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-        ((noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getPlayer(event.player.getDisplayName())).resyncScreenSize();
+        ((noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getIEntity(event.player)).resyncScreenSize();
     }
 }

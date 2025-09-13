@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
 
@@ -61,6 +62,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     @Unique
     public void setArmorColor(Integer armorColor) {
         this.armorColor = armorColor;
+
+        saveExtendedItemData();
     }
 
     @Unique
@@ -105,7 +108,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     }
 
     @Unique
-    private NBTTagCompound getExtendedItemDataTag() {
+    public void saveExtendedItemData() {
+        System.out.println("Saving extended data");
         NBTTagCompound tag = item.getTagCompound();
 
         if (tag == null) {
@@ -116,12 +120,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         if (!tag.hasKey("ExtendedItemData")) {
             tag.setTag("ExtendedItemData", new NBTTagCompound());
         }
-        return tag.getCompoundTag("ExtendedItemData");
-    }
-
-    @Unique
-    public void saveExtendedItemData() {
-        NBTTagCompound itemData = getExtendedItemDataTag();
+        NBTTagCompound itemData = tag.getCompoundTag("ExtendedItemData");
 
         // Harvest levels
         if (!itemData.hasKey("harvestLevels")) {
@@ -139,7 +138,13 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
 
     @Unique
     public void loadExtendedItemData() {
-        NBTTagCompound itemData = getExtendedItemDataTag();
+        NBTTagCompound tag = item.getTagCompound();
+        if (tag == null) return;
+
+        if (!tag.hasKey("ExtendedItemData")) {
+            return;
+        }
+        NBTTagCompound itemData = tag.getCompoundTag("ExtendedItemData");
 
         if (!itemData.hasKey("harvestLevels")) {
             NBTTagCompound harvestLevelData = itemData.getCompoundTag("harvestLevels");
@@ -149,7 +154,14 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         }
 
         this.armorColor = itemData.getInteger("armorColor");
-        setArmorTexture1(itemData.getString("armorTexture1"));
-        setArmorTexture2(itemData.getString("armorTexture2"));
+
+        this.armorTexture1 = itemData.getString("armorTexture1");
+        if (armorResource1 != null && !armorResource1.getResourcePath().equals(armorTexture1)) {
+            armorResource1 = new ResourceLocation(armorTexture1);
+        }
+        this.armorTexture2 = itemData.getString("armorTexture2");
+        if (armorResource2 != null && !armorResource2.getResourcePath().equals(armorTexture2)) {
+            armorResource2 = new ResourceLocation(armorTexture2);
+        }
     }
 }

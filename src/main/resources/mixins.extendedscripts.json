@@ -4,12 +4,14 @@
   "refmap": "mixins.extendedscripts.refmap.json",
   "plugin": "com.veil.extendedscripts.mixins.MixinConfig",
   "mixins": [
+    "MixinArmorProperties",
     "MixinAttributeControllerExtension",
     "MixinBlockExtension",
     "MixinContainerPlayer",
     "MixinEntityExtension",
     "MixinForgeHooks",
     "MixinGuiContainerCreative",
+    "MixinGuiScriptItem",
     "MixinGuiScriptPlayer",
     "MixinInventoryEffectRenderer",
     "MixinInventoryPlayer",
@@ -20,9 +22,12 @@
     "MixinPlayerExtension",
     "MixinScriptedItem",
     "MixinScriptedItemScriptExtension",
+    "MixinStatusEffectHUD",
     "MixinWorldExtension"
   ],
-  "client": [],
+  "client": [
+    "MixinRenderPlayer"
+  ],
   "server": [],
   "minVersion": "0.7.11"
 }

@@ -1,5 +1,8 @@
 package noppes.npcs.extendedapi.item;
 
+import net.minecraft.util.ResourceLocation;
+import org.spongepowered.asm.mixin.Unique;
+
 public interface IItemCustomizable {
     /**
      * Sets the harvest level for a toolClass
@@ -9,4 +12,21 @@ public interface IItemCustomizable {
     void setHarvestLevel(String toolClass, int level);
 
     int getHarvestLevel(String toolClass);
+
+    int getArmorColor();
+
+    void setArmorColor(Integer armorColor);
+
+    String getArmorTexture1();
+
+    void setArmorTexture1(String armorTexture1);
+
+    String getArmorTexture2();
+
+    void setArmorTexture2(String armorTexture2);
+
+    /**
+     * You can ignore this function. There are likely no cases where it would be useful.
+     */
+    ResourceLocation getArmorResource(int slot);
 }

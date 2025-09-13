@@ -24,7 +24,7 @@ Things I want to add:
  - Fix attack event
 
 Lists to add when we see something:
- - Continue searching for more Enums to implement (Nbt data types, npc collision type)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component)
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

@@ -172,6 +172,8 @@ public abstract class MixinInventoryEffectRenderer extends GuiContainer implemen
             label = label + " " + I18n.format("enchantment.level.3");
         } else if (potionEffect.getAmplifier() == 3) {
             label = label + " " + I18n.format("enchantment.level.4");
+        } else if (potionEffect.getAmplifier() > 3) {
+            label = label + " " + ExtendedScripts.toRoman(potionEffect.getAmplifier() + 1);
         }
 
         this.fontRendererObj.drawStringWithShadow(label, startLeft + 10 + 18, startTop + 6, 16777215);

@@ -12,7 +12,6 @@ public class Config {
     public static boolean enableEffectPageModification;
     public static boolean showPotionEffectLevelsAsNumbers;
     public static void init(File configFile) {
-        System.out.println("Config file loaded! "+configFile);
         if (!hasBeenLoaded) {
             if (config == null) {
                 config = new Configuration(configFile);

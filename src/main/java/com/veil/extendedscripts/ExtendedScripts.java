@@ -24,7 +24,12 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Mod(modid = ExtendedScripts.MODID, version = Tags.VERSION, name = "Veil's Extended Scripts", acceptedMinecraftVersions = "[1.7.10]", dependencies = "required-after:customnpcs@[1.10.1,)")
+@Mod(
+    modid = ExtendedScripts.MODID, version = Tags.VERSION,
+    name = "Veil's Extended Scripts",
+    acceptedMinecraftVersions = "[1.7.10]",
+    dependencies = "required-after:customnpcs@[1.10.1,);after:StatusEffectHUD;after:bspkrsCore"
+)
 public class ExtendedScripts {
     public static final String MODID = "extendedscripts";
     public static final String VERSION = "1.0";
@@ -43,7 +48,7 @@ public class ExtendedScripts {
     public static ExtendedScripts instance;
 
     @Mod.EventHandler
-    // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
+    // preInit "Run before anything else. Read your config, create blocks, items, etc., and register them with the
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);

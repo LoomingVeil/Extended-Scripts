@@ -1,1 +1,5 @@
 com.veil.extendedscripts.extendedapi
+com.veil.extendedscripts.extendedapi.constants
+com.veil.extendedscripts.extendedapi.entity
+com.veil.extendedscripts.extendedapi.event
+com.veil.extendedscripts.extendedapi.item

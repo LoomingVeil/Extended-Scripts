@@ -22,7 +22,6 @@
     "MixinPlayerExtension",
     "MixinScriptedItem",
     "MixinScriptedItemScriptExtension",
-    "MixinStatusEffectHUD",
     "MixinWorldExtension"
   ],
   "client": [

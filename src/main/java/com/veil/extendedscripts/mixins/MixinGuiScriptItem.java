@@ -1,6 +1,6 @@
 package com.veil.extendedscripts.mixins;
 
-import com.veil.extendedscripts.event.*;
+import com.veil.extendedscripts.event.ArmorDamagedEvent;
 import noppes.npcs.client.gui.script.GuiScriptInterface;
 import noppes.npcs.client.gui.script.GuiScriptItem;
 import org.spongepowered.asm.mixin.Mixin;

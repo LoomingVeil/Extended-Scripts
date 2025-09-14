@@ -19,10 +19,16 @@ public interface IItemCustomizable {
 
     String getArmorTexture1();
 
+    /**
+     * Texture for helmet, chestplate, and boots
+     */
     void setArmorTexture1(String armorTexture1);
 
     String getArmorTexture2();
 
+    /**
+     * Texture for leggings
+     */
     void setArmorTexture2(String armorTexture2);
 
     /**

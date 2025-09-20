@@ -3,6 +3,7 @@ package com.veil.extendedscripts.properties;
 import com.veil.extendedscripts.ExtendedAPI;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.PacketHandler;
+import com.veil.extendedscripts.ScreenResolution;
 import com.veil.extendedscripts.constants.DataType;
 import com.veil.extendedscripts.guis.VirtualFurnace;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.scripted.NpcAPI;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -27,6 +30,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     private ItemStack attributeCore; // Attributes added to the core apply to the player.
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
+    public ScreenResolution screenResolution = new ScreenResolution();
     public Map<String, Float> attributeClipboard;
     public ItemStack[] tempInvStorage;
     public int xpLevel;
@@ -207,7 +211,8 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
 
     public void setAttributeCore(ItemStack stack) {
         this.attributeCore = stack != null ? stack : createNewAttributeCore();
-        ExtendedAPI.Instance.updatePlayerAttributes(player);
+        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+        npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 
     public void setCoreAttribute(String key, float value) {
@@ -220,7 +225,8 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         rpgCore.setTag("Attributes", attributes);
         root.setTag("RPGCore", rpgCore);
         attributeCore.setTagCompound(root);
-        ExtendedAPI.Instance.updatePlayerAttributes(player);
+        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+        npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 
     public void removeCoreAttribute(String key) {
@@ -236,7 +242,8 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         rpgCore.setTag("Attributes", attributes);
         root.setTag("RPGCore", rpgCore);
         attributeCore.setTagCompound(root);
-        ExtendedAPI.Instance.updatePlayerAttributes(player);
+        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+        npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 
     public float getCoreAttribute(String key) {
@@ -254,6 +261,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
 
     public void resetCoreAttributes() {
         this.attributeCore = createNewAttributeCore();
-        ExtendedAPI.Instance.updatePlayerAttributes(player);
+        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+        npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 }

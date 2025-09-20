@@ -65,12 +65,13 @@ public class CommonProxy {
 
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
         API.addGlobalObject("extAPI", ExtendedAPI.Instance);
+        API.addGlobalObject("ShapeMaker", ShapeMaker.Instance);
         API.addGlobalObject("AnimationType", AnimationType.Instance);
         API.addGlobalObject("Color", ColorCodes.Instance);
         API.addGlobalObject("EntityType", EntityType.Instance);
         API.addGlobalObject("Job", JobType.Instance);
-        API.addGlobalObject("Key", Keys.Instance);
         API.addGlobalObject("Role", RoleType.Instance);
+        API.addGlobalObject("Key", Keys.Instance);
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);

@@ -1,9 +1,6 @@
 package com.veil.extendedscripts.mixins;
 
-import com.veil.extendedscripts.event.AttributeRecalculateEvent;
-import com.veil.extendedscripts.event.CustomProjectileImpactEvent;
-import com.veil.extendedscripts.event.CustomProjectileTickEvent;
-import com.veil.extendedscripts.event.HotbarSlotChangedEvent;
+import com.veil.extendedscripts.event.*;
 import noppes.npcs.client.gui.script.GuiScriptInterface;
 import noppes.npcs.client.gui.script.GuiScriptPlayers;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +18,7 @@ public abstract class MixinGuiScriptPlayer extends GuiScriptInterface {
         this.hookList.add(new CustomProjectileImpactEvent().getHookName());
         this.hookList.add(new CustomProjectileTickEvent().getHookName());
         this.hookList.add(new AttributeRecalculateEvent().getHookName());
+        this.hookList.add(new ArmorChangedEvent().getHookName());
     }
 }
 

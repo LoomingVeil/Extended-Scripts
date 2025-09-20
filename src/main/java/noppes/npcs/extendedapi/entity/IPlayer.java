@@ -1,6 +1,7 @@
 package noppes.npcs.extendedapi.entity;
 
 import com.veil.extendedscripts.ExtendedScripts;
+import com.veil.extendedscripts.extendedapi.IScreenResolution;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,6 +10,7 @@ import noppes.npcs.api.IContainer;
 import noppes.npcs.api.INbt;
 import noppes.npcs.api.IScreenSize;
 import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.extendedapi.handler.data.IPlayerAttributes;
 import org.spongepowered.asm.mixin.Unique;
 
 public interface IPlayer {
@@ -59,22 +61,31 @@ public interface IPlayer {
     public boolean getKeepInventory();
 
     /**
+     * @deprecated use {@link noppes.npcs.extendedapi.handler.data.IPlayerAttributes#setCoreAttribute(String, float)}
      * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
      */
     void setAttribute(String key, float value);
 
     /**
+     * @deprecated use {@link noppes.npcs.extendedapi.handler.data.IPlayerAttributes#getCoreAttribute(String)}
      * Gets core attributes. These attributes are separate from equipment attributes.
      */
     float getCoreAttribute(String key);
 
-    public void resetCoreAttributes();
+    /**
+     * @deprecated use {@link IPlayerAttributes#resetCoreAttributes()}
+     */
+    void resetCoreAttributes();
 
     /**
+     * @deprecated use {@link IPlayerAttributes#getAttributeCore()}
      * Gets the attribute core as an item that can be given to the player.
      */
     IItemStack getAttributeCore();
 
+    /**
+     * @deprecated use {@link IPlayerAttributes#getCoreAttributeKeys()}}
+     */
     String[] getCoreAttributeKeys();
 
     /**
@@ -156,4 +167,16 @@ public interface IPlayer {
      * enough, this method can force an update.
      */
     void resyncScreenSize();
+
+    /**
+     * Unlike {@link noppes.npcs.api.entity.IPlayer#getScreenSize()} this object returns values based on the
+     * scaled resolution from your window size and GUI scale.
+     * These values are perfect for making scalable overlays with {@link noppes.npcs.api.overlay.ICustomOverlay}.
+     */
+    IScreenResolution getScreenResolution();
+
+    /**
+     * Use this if the screen resolution is -1 to force an update.
+     */
+    void resyncScreenResolution();
 }

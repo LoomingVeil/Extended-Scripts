@@ -1,9 +1,8 @@
 package com.veil.extendedscripts.mixins;
 
-import com.veil.extendedscripts.PacketHandler;
-import com.veil.extendedscripts.UpdateScreenSizePacket;
+import com.veil.extendedscripts.*;
+import com.veil.extendedscripts.extendedapi.IScreenResolution;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
-import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -342,5 +341,22 @@ public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.en
     @Unique
     public void resyncScreenSize() {
         PacketHandler.INSTANCE.sendTo(new UpdateScreenSizePacket(), player);
+    }
+
+    /**
+     * Unlike {@link IPlayer#getScreenSize()} this object returns values based on the
+     * scaled resolution from your window size and GUI scale.
+     * These values are perfect for making scalable overlays with {@link noppes.npcs.api.overlay.ICustomOverlay}.
+     */
+    @Unique
+    public IScreenResolution getScreenResolution() {
+        return ExtendedScripts.getPlayerProperties(player).screenResolution;
+    }
+
+    /**
+     * Use this if the screen resolution is -1 to force an update.
+     */
+    public void resyncScreenResolution() {
+        PacketHandler.INSTANCE.sendTo(new UpdateScreenResolutionPacket(), player);
     }
 }

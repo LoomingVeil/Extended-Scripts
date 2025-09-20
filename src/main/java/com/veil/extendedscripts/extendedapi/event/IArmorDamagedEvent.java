@@ -15,7 +15,7 @@ public interface IArmorDamagedEvent {
     IDamageSource getDamageSource();
 
     /**
-     * Get what entity is wearing this item
+     * Get what entity is wearing this item.
      */
     IEntity getEquippedOn();
 

@@ -7,6 +7,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +22,8 @@ public class ClientProxy extends CommonProxy {
 
         FMLCommonHandler.instance().bus().register(new CommonEventHandler());
         MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+        FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+        // MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityCustomProjectile.class, new CustomProjectileRender(new ResourceLocation("textures/entity/arrow.png")));
     }

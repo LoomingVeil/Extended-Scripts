@@ -1,5 +1,6 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.event.ArmorChangedEvent;
 import com.veil.extendedscripts.event.HotbarSlotChangedEvent;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.properties.PlayerAttribute;
@@ -25,6 +26,7 @@ import java.util.*;
 
 public class CommonEventHandler {
     private final Map<UUID, Integer> lastHotbarSlot = new HashMap<>();
+    private static final Map<EntityPlayer, ItemStack[]> lastArmorState = new HashMap<>();
     private final float DEFAULT_JUMP_POWER = 0.42F;
 
     @SubscribeEvent
@@ -53,36 +55,50 @@ public class CommonEventHandler {
                         lastHotbarSlot.put(playerUUID, currentSlot);
                     }
                 }
-            }
-        }
-    }
 
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null) {
-            if (ClientProxy.openScriptingActionKey.isPressed()) {
-                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-                ItemStack item = player.getHeldItem();
+                ItemStack[] currentArmor = new ItemStack[4];
+                for (int i = 0; i < 4; i++) {
+                    currentArmor[i] = player.inventory.armorItemInSlot(3 - i);
+                }
 
-                if (item == null) {
+                ItemStack[] oldArmor = lastArmorState.get(player);
+
+                // If this is the first time we're checking this player, just save their armor.
+                if (oldArmor == null) {
+                    lastArmorState.put(player, currentArmor);
                     return;
                 }
 
-                if (item.getItem() instanceof ItemNpcScripter) {
-                    item.getItem().onItemRightClick(item, player.worldObj, player);
-                    return;
-                } else if (item.getItem() instanceof ItemScripted) {
-                    PacketHandler.INSTANCE.sendToServer(new ScriptItemClickPacket());
-                    return;
+                byte[] changeData = {-1, -1, -1, -1};
+                boolean somethingChanged = false;
+
+                for (int i = 0; i < 4; i++) {
+                    boolean itemsEqual = ItemStack.areItemStacksEqual(currentArmor[i], oldArmor[i]);
+
+                    if (!itemsEqual) {
+                        somethingChanged = true;
+                        if (currentArmor[i] != null && oldArmor[i] == null) {
+                            changeData[i] = 1;
+                        }
+
+                        else if (currentArmor[i] == null && oldArmor[i] != null) {
+                            changeData[i] = 0;
+                        }
+                    }
                 }
 
-                Minecraft.getMinecraft().thePlayer.addChatMessage(
-                    ChatUtils.fillChatWithColor("§cYou must be holding a scripted item and have the proper permissions for this!")
-                );
+                if (somethingChanged) {
+                    ArmorChangedEvent armorChangedEvent = new ArmorChangedEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player), oldArmor, currentArmor, changeData);
+
+                    PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(armorChangedEvent.getPlayer());
+                    handler.callScript(armorChangedEvent.getHookName(), armorChangedEvent);
+                    AbstractNpcAPI.Instance().events().post(armorChangedEvent);
+                }
+
+                lastArmorState.put(player, currentArmor);
             }
         }
     }
-
 
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent event) {
@@ -110,6 +126,8 @@ public class CommonEventHandler {
             ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
         }
     }
+
+
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
@@ -169,6 +187,8 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onLogin(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-        ((noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getIEntity(event.player)).resyncScreenSize();
+        noppes.npcs.extendedapi.entity.IPlayer player = (noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getIEntity(event.player);
+        player.resyncScreenSize();
+        player.resyncScreenResolution();
     }
 }

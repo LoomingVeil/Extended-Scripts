@@ -7,11 +7,11 @@ import io.netty.buffer.ByteBuf;
 import kamkeel.npcs.network.PacketClient;
 import kamkeel.npcs.network.packets.player.ScreenSizePacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.gui.ScaledResolution;
 
-public class UpdateScreenSizePacket implements IMessage {
-    public UpdateScreenSizePacket() { }
+public class UpdateScreenResolutionPacket implements IMessage {
+
+    public UpdateScreenResolutionPacket() { }
 
     @Override
     public void toBytes(ByteBuf buf) { }
@@ -19,15 +19,16 @@ public class UpdateScreenSizePacket implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) { }
 
-    public static class UpdateScreenSizePacketHandler implements IMessageHandler<UpdateScreenSizePacket, IMessage> {
+    public static class Handler implements IMessageHandler<UpdateScreenResolutionPacket, IMessage> {
         @Override
-        public IMessage onMessage(final UpdateScreenSizePacket message, final MessageContext ctx) {
+        public IMessage onMessage(final UpdateScreenResolutionPacket message, final MessageContext ctx) {
             // This method is called on the receiving side (CLIENT in this case)
             Minecraft.getMinecraft().func_152344_a(new Runnable() {
                 @Override
                 public void run() {
                     Minecraft mc = Minecraft.getMinecraft();
-                    PacketClient.sendClient(new ScreenSizePacket(mc.displayWidth, mc.displayHeight));
+                    ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+                    PacketHandler.INSTANCE.sendToServer(new ScreenResolutionPacket(resolution.getScaledWidth(), resolution.getScaledHeight(), resolution.getScaleFactor()));
                 }
             });
             return null;

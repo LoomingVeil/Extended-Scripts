@@ -130,15 +130,6 @@ public class ExtendedAPI implements AbstractExtendedAPI {
     }
 
     /**
-     * Player attributes are typically changed anytime you change what item you are holding.
-     * They are also updated when core attributes are updated via command/script.
-     * Call this function if you need to manually update a player's attributes.
-     */
-    public void updatePlayerAttributes(EntityPlayer player) {
-        AttributeController.getTracker(player).recalcAttributes(player);
-    }
-
-    /**
      * Registers a custom attribute that can both be applied via script or /kam attribute. Attributes are registered per world.
      * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
      * @param displayName This name will show up on your item.

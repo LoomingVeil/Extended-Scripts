@@ -109,7 +109,6 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
 
     @Unique
     public void saveExtendedItemData() {
-        System.out.println("Saving extended data");
         NBTTagCompound tag = item.getTagCompound();
 
         if (tag == null) {

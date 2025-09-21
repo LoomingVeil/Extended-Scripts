@@ -19,6 +19,7 @@ public abstract class MixinGuiScriptPlayer extends GuiScriptInterface {
         this.hookList.add(new CustomProjectileTickEvent().getHookName());
         this.hookList.add(new AttributeRecalculateEvent().getHookName());
         this.hookList.add(new ArmorChangedEvent().getHookName());
+        this.hookList.add(new ResolutionChangedEvent().getHookName());
     }
 }
 

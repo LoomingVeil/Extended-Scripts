@@ -1,5 +1,7 @@
 package com.veil.extendedscripts;
 
+import com.veil.extendedscripts.event.AttributeRecalculateEvent;
+import com.veil.extendedscripts.event.ResolutionChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import kamkeel.npcs.network.PacketClient;
@@ -8,6 +10,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.controllers.ScriptController;
+import noppes.npcs.controllers.data.PlayerDataScript;
 import noppes.npcs.items.ItemNpcScripter;
 import noppes.npcs.items.ItemScripted;
 
@@ -21,8 +27,17 @@ public class ClientTickHandler {
             Minecraft mc = Minecraft.getMinecraft();
             ScaledResolution scaledRes = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
             if (prevWidth != scaledRes.getScaledWidth() || prevHeight != scaledRes.getScaledHeight()) {
+                ScreenResolution oldResolution = new ScreenResolution();
+                oldResolution.setSize(prevWidth, prevHeight);
+                ResolutionChangedEvent attributeRecalcEvent = new ResolutionChangedEvent(AbstractNpcAPI.Instance().getPlayer(mc.thePlayer.getDisplayName()), oldResolution);
+
+                PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
+                handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
+                AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
+
                 prevWidth = scaledRes.getScaledWidth();
                 prevHeight = scaledRes.getScaledHeight();
+
                 PacketHandler.INSTANCE.sendToServer(new ScreenResolutionPacket(prevWidth, prevHeight, scaledRes.getScaleFactor()));
             }
 

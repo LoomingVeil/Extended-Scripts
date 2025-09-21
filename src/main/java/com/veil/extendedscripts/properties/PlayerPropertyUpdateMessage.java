@@ -51,6 +51,12 @@ public class PlayerPropertyUpdateMessage implements IMessage {
                             props.set(PlayerAttribute.CAN_FLY, message.canFly);
                             props.set(PlayerAttribute.LAST_SEEN_FLYING, message.lastSeenFlying);
                             props.set(PlayerAttribute.KEEP_INVENTORY, message.keepInventory);
+
+                            if (!player.capabilities.isCreativeMode) {
+                                player.capabilities.allowFlying = message.canFly;
+                                player.sendPlayerAbilities();
+                            }
+
                             // System.out.println("Client received player EEP sync");
                         }
                     }

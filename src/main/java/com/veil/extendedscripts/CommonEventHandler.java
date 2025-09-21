@@ -113,11 +113,6 @@ public class CommonEventHandler {
     public void onCommand(CommandEvent event) {
         String[] args = event.parameters;
 
-        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.sender;
-            ExtendedScripts.getPlayerProperties(player).syncToPlayer();
-        }
-
         if (!event.command.getCommandName().equals("kamkeel")) {
             return;
         }

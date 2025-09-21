@@ -1,6 +1,5 @@
 Things I want to add:
  - Fix issues with cones and pyramids in the shape class
- - Improved Overlay class
  - Make the rest of the GUIs (Anvil, Enchantment Table, and Brewing Stand)
  - Make it so that when opening the Furnace time has passed
  - Custom Commands
@@ -8,8 +7,6 @@ Things I want to add:
  - Fix flight when switching gamemodes
  - Function to prevent players from moving
  - Add a function for preventing players from using commands
- - Fix setAnimation(7)
- - Add functions related to ids, getting next available ids and check if they're used.
  - Hide the +4 damage on the World Clippers
  - Add attribute style: reversed: +/-<value> <attribute>, units: <attribute> <value> <unit>, change attribute value color
  - Add custom projectile disable damage, hit endermen, can hurt owner, make sure all attributes are saved to nbt
@@ -23,7 +20,7 @@ Things I want to add:
  - Add the Extended Scripts API tab to scripting
  - Fix attack event
  - For the inspect command, make the KEYS parameter -k, and add the -p parameter for page and show 10 results at a time.
- - Add a way to get the screen size
+ - Add a resolution changed event
  - Add a function for getting and setting CustomNPC texture types
  - Add attribute core item
 

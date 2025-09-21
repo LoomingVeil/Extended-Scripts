@@ -17,6 +17,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -169,6 +170,20 @@ public class AttributeEventHandler {
     public void onChangedDimension(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
         ExtendedScriptEntityProperties.get(event.player).syncToPlayer();
         ExtendedScriptPlayerProperties.get(event.player).syncToPlayer();
+
+        float flightSpeed = ExtendedAPI.getAttribute(event.player, PlayerAttribute.FLIGHT_SPEED_HORIZONTAL) * 0.01F * 0.05F;
+        event.player.capabilities.setFlySpeed(flightSpeed + 0.05F);
+        event.player.sendPlayerAbilities();
+    }
+
+    @SubscribeEvent
+    public void onCommand(CommandEvent event) {
+        String[] args = event.parameters;
+
+        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.sender;
+            ExtendedScripts.getPlayerProperties(player).syncToPlayer();
+        }
     }
 
     @SubscribeEvent

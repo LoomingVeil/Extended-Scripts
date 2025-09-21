@@ -1,5 +1,6 @@
 package com.veil.extendedscripts.mixins;
 
+import noppes.npcs.extendedapi.overlay.IOverlayLabel;
 import noppes.npcs.scripted.overlay.ScriptOverlayLabel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -7,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.HashMap;
 
 @Mixin(value = ScriptOverlayLabel.class)
-public abstract class MixinScriptOverlayLabelExtension {
+public abstract class MixinScriptOverlayLabelExtension implements IOverlayLabel {
     @Shadow
     public abstract String getText();
 
@@ -26,7 +27,7 @@ public abstract class MixinScriptOverlayLabelExtension {
         specialLetterLengths.put('\"', 3);
         specialLetterLengths.put('(', 4);
         specialLetterLengths.put(')', 4);
-        specialLetterLengths.put(' ', 5);
+        specialLetterLengths.put('@', 6);
     }
 
     /**
@@ -39,7 +40,8 @@ public abstract class MixinScriptOverlayLabelExtension {
         for (int i = 0; i < text.length(); i++) {
             length += specialLetterLengths.getOrDefault(text.charAt(i), 5);
         }
+        length += text.length() - 1;
 
-        return length -1;
+        return length;
     }
 }

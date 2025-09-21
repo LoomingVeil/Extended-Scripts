@@ -21,7 +21,6 @@ public class AttributeCore extends Item {
 
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer player) {
         if (canBeRedeemed(itemStackIn)) {
-            System.out.println("Can be redeemed");
             player.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
         }
 

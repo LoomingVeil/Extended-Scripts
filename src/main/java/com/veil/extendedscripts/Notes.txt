@@ -20,9 +20,6 @@ Things I want to add:
  - Add the Extended Scripts API tab to scripting
  - Fix attack event
  - For the inspect command, make the KEYS parameter -k, and add the -p parameter for page and show 10 results at a time.
- - Add a resolution changed event
- - Add a function for getting and setting CustomNPC texture types
- - Add attribute core item
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component)
@@ -35,7 +32,6 @@ Confusing CustomNPC+ gui stuff:
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death
- - Damage event that lets you take no damage
 
 Things that might just be impossible:
  - Making some working version of player.stopUsingItem()

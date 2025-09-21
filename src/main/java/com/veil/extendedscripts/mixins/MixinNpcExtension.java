@@ -33,4 +33,17 @@ public class MixinNpcExtension implements ICustomNpc {
         if (ret == null) return "";
         return ret;
     }
+
+    /**
+     * @param type 0: Texture, 1: Player, 2: Url, 3 Url64
+     */
+    @Unique
+    public void setSkinType(byte type) {
+        npc.display.skinType = type;
+    }
+
+    @Unique
+    public int getSkinType() {
+        return npc.display.skinType;
+    }
 }

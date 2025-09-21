@@ -38,9 +38,8 @@ public class ExtendedScripts {
     public static final int GUI_VIRTUAL_FURNACE = 1;
     public static final int GUI_PERSISTENT_VIRTUAL_FURNACE = 2;
     public static final int GUI_VIRTUAL_ANVIL = 3;
-    public static Item scripter;
-    public static Item scriptedItem;
     public static final WorldClippers worldClippers = new WorldClippers();
+    public static final AttributeCore attributeCore = new AttributeCore();
     @SidedProxy(clientSide = "com.veil.extendedscripts.ClientProxy", serverSide = "com.veil.extendedscripts.CommonProxy")
     public static CommonProxy proxy;
 

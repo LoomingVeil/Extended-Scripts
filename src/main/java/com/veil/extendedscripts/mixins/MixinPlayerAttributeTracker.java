@@ -60,6 +60,12 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
         props.setCoreAttribute(key, value);
     }
 
+    @Unique
+    public void modifyCoreAttribute(String key, float delta) {
+        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
+        props.setCoreAttribute(key, props.getCoreAttribute(key) + delta);
+    }
+
     /**
      * Gets core attributes. These attributes are separate from equipment attributes.
      */
@@ -79,7 +85,20 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
      */
     @Unique
     public IItemStack getAttributeCore() {
-        return AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
+        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
+        core.getNbt().setBoolean("canBeRedeemed", false);
+        return core;
+    }
+
+    /**
+     * Gets the attribute core as an item that can be given to the player.
+     * @param canBeRedeemed When true and right-clicking the core for 3 seconds will give you all the attributes associated with the core.
+     */
+    @Unique
+    public IItemStack getAttributeCore(boolean canBeRedeemed) {
+        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
+        core.getNbt().setBoolean("canBeRedeemed", canBeRedeemed);
+        return core;
     }
 
     @Unique

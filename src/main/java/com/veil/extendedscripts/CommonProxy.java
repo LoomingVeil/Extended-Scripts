@@ -39,6 +39,7 @@ public class CommonProxy {
         PacketHandler.registerMessages();
 
         GameRegistry.registerItem(ExtendedScripts.worldClippers, "world_clippers");
+        GameRegistry.registerItem(ExtendedScripts.attributeCore, "attribute_core");
 
         FMLCommonHandler.instance().bus().register(new GlobalFileCopierHandler());
         MinecraftForge.EVENT_BUS.register(new GlobalFileCopierHandler());
@@ -48,13 +49,6 @@ public class CommonProxy {
         int id = EntityRegistry.findGlobalUniqueEntityId();
         EntityRegistry.registerGlobalEntityID(EntityCustomProjectile.class, "CustomProjectile", id);
         EntityRegistry.registerModEntity(EntityCustomProjectile.class, "CustomProjectile", id, ExtendedScripts.instance, 128, 10, true);
-
-        ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "scripted_item");
-        ExtendedScripts.scriptedItem = GameRegistry.findItem("customnpcs", "npcScripter");
-        if (ExtendedScripts.scriptedItem == null) {
-            System.err.println("Could not find scripted item!");
-            return;
-        }
 
         FMLCommonHandler.instance().bus().register(new ScriptedObjectEventHandler());
         MinecraftForge.EVENT_BUS.register(new ScriptedObjectEventHandler());

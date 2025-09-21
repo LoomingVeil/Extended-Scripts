@@ -1,16 +1,12 @@
 package com.veil.extendedscripts.properties;
 
-import com.veil.extendedscripts.ExtendedAPI;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.PacketHandler;
 import com.veil.extendedscripts.ScreenResolution;
-import com.veil.extendedscripts.constants.DataType;
 import com.veil.extendedscripts.guis.VirtualFurnace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -48,7 +44,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     }
 
     private ItemStack createNewAttributeCore() {
-        ItemStack newCore = new ItemStack(Items.nether_star);
+        ItemStack newCore = new ItemStack(ExtendedScripts.attributeCore);
 
         if (!newCore.hasTagCompound()) {
             newCore.setTagCompound(new NBTTagCompound());
@@ -226,6 +222,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         root.setTag("RPGCore", rpgCore);
         attributeCore.setTagCompound(root);
         IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+
         npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 

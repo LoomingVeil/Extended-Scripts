@@ -7,6 +7,7 @@ import noppes.npcs.api.IBlock;
 import noppes.npcs.api.IPos;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.item.IItemStack;
+import org.spongepowered.asm.mixin.Unique;
 
 public interface IWorld {
     boolean setAllBlocks(IPos[] positions, IBlock block);
@@ -32,4 +33,12 @@ public interface IWorld {
     void fireProjectile(ICustomProjectile projectile);
 
     void fireProjectile(ICustomProjectile projectile, float velocity);
+
+    /**
+     * Use in conjunction with {@link noppes.npcs.api.IWorld#setRaining(boolean)} to make it storm.
+     * @param thundering
+     */
+    void setThundering(boolean thundering);
+
+    boolean isThundering();
 }

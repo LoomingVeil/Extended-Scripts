@@ -13,13 +13,12 @@ Things I want to add:
  - Fix shatterParticle not appearing when shattering on mobs
  - Make a command for viewing and managing stored data
  - Add bounciness, multi-jump, reach, and damage reflection
- - Add battle helpers
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
  - Add the Extended Scripts API tab to scripting
  - Fix attack event
- - For the inspect command, make the KEYS parameter -k, and add the -p parameter for page and show 10 results at a time.
+ - Fix the inspect command not allowing you to choose indexes of tag lists
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component)

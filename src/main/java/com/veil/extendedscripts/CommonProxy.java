@@ -75,6 +75,7 @@ public class CommonProxy {
         API.addGlobalObject("ArmorSlot", ArmorType.Instance);
         API.addGlobalObject("ItemType", ItemType.Instance);
         API.addGlobalObject("Effect", EffectID.Instance);
+        API.addGlobalObject("SkinType", SkinType.Instance);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");
@@ -129,11 +130,6 @@ public class CommonProxy {
         }
 
         ExtendedWorldData data = ExtendedScripts.getExtendedWorldData();
-
-        if (data.getExtendedAttributes() == null) {
-            System.out.println("Extended attributes are null. This is an error!");
-            return;
-        }
 
         Collection<AttributeDefinition> extendedAttributes = data.getExtendedAttributes();
         Collection<AttributeDefinition> currentAttributes = AttributeController.getAllAttributes();

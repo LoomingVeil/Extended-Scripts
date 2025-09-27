@@ -15,6 +15,18 @@ public interface IPlayerEvent extends ICustomNPCsEvent {
 
     IPlayer getPlayer();
 
+    /**
+     * Sets the event as cancelled. Not all events can be cancelled.
+     * Trying to cancel a non-cancellable event will throw an exception.
+     */
+    void setCancelled(boolean cancelled);
+
+    /**
+     * Sets the event as cancelled. Not all events can be cancelled.
+     * Trying to cancel a non-cancellable event will throw an exception.
+     */
+    void setCanceled(boolean cancelled);
+
     @Cancelable
     interface ChatEvent extends IPlayerEvent {
         void setMessage(String message);

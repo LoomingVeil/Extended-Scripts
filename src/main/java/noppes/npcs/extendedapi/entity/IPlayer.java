@@ -151,12 +151,6 @@ public interface IPlayer {
      */
     void openFurnace(boolean persistent);
 
-    /**
-     * Returns the specified player's playerdata in NBT form. If you are looking for playerdata related to
-     * customNpcs+ then use {@link noppes.npcs.api.entity.IPlayer#getData()}
-     */
-    INbt getPlayerData();
-
     int getSelectedHotbarSlot();
 
     boolean isOperator();

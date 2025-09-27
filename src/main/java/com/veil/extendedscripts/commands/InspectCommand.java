@@ -106,7 +106,7 @@ public class InspectCommand extends CommandBase {
             return;
         }
 
-        if (heldItem == null) {
+        if (heldItem == null && !args[0].equals("self")) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding an item to use this command!"));
             return;
         }
@@ -197,21 +197,68 @@ public class InspectCommand extends CommandBase {
         foundEntity.writeToNBT(entityNBT);
         INbt npcNbt = AbstractNpcAPI.Instance().getINbt(entityNBT);
 
-        if (args.length > 0 && args[0].equals("KEYS")) {
-            handleShowingNbt(npcNbt, sender, Arrays.copyOfRange(args, 1, args.length), EntityList.getEntityString(foundEntity), true);
-        } else {
-            handleShowingNbt(npcNbt, sender, args, EntityList.getEntityString(foundEntity), false);
+        List<String> newArgs = new ArrayList<>();
+        boolean skipNext = false;
+        boolean onlyShowKeys = false;
+        int page = 1;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-k")) onlyShowKeys = true;
+            else if (args[i].equals("-p")) {
+                if (i + 1 < args.length) {
+                    try {
+                        page = Integer.parseInt(args[i + 1]);
+                        if (page <= 0) throw new NumberFormatException();
+                        skipNext = true;
+                    } catch (NumberFormatException e) {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an integer"));
+                        return;
+                    }
+                } else {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an specified"));
+                    return;
+                }
+            } else if (!skipNext) {
+                newArgs.add(args[i]);
+            } else {
+                skipNext = false;
+            }
         }
+
+        handleShowingNbt(npcNbt, sender, newArgs.toArray(new String[0]), EntityList.getEntityString(foundEntity), onlyShowKeys, page);
     }
 
     public static void inspectItem(ItemStack item, ICommandSender sender, String[] args) {
         INbt itemNbt = AbstractNpcAPI.Instance().getIItemStack(item).getNbt();
         String display = GameData.getItemRegistry().getNameForObject(item.getItem());
-        if (args.length > 0 && args[0].equals("KEYS")) {
-            handleShowingNbt(itemNbt, sender, Arrays.copyOfRange(args, 1, args.length), display, true);
-        } else {
-            handleShowingNbt(itemNbt, sender, args, display, false);
+
+        List<String> newArgs = new ArrayList<>();
+        boolean skipNext = false;
+        boolean onlyShowKeys = false;
+        int page = 1;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-k")) onlyShowKeys = true;
+            else if (args[i].equals("-p")) {
+                if (i + 1 < args.length) {
+                    try {
+                        page = Integer.parseInt(args[i + 1]);
+                        if (page <= 0) throw new NumberFormatException();
+                        skipNext = true;
+                    } catch (NumberFormatException e) {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an integer"));
+                        return;
+                    }
+                } else {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an specified"));
+                    return;
+                }
+            } else if (!skipNext) {
+                newArgs.add(args[i]);
+            } else {
+                skipNext = false;
+            }
         }
+
+        handleShowingNbt(itemNbt, sender, newArgs.toArray(new String[0]), display, onlyShowKeys, page);
     }
 
     public static void inspectBlock(NBTTagCompound inspectTag, World targetWorld, ICommandSender sender, String[] args) {
@@ -235,14 +282,37 @@ public class InspectCommand extends CommandBase {
         tileEntity.writeToNBT(blockNBT);
         INbt npcNbt = AbstractNpcAPI.Instance().getINbt(blockNBT);
 
-        if (args.length > 0 && args[0].equals("KEYS")) {
-            handleShowingNbt(npcNbt, sender, Arrays.copyOfRange(args, 1, args.length), GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), true);
-        } else {
-            handleShowingNbt(npcNbt, sender, args, GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), false);
+        List<String> newArgs = new ArrayList<>();
+        boolean skipNext = false;
+        boolean onlyShowKeys = false;
+        int page = 1;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-k")) onlyShowKeys = true;
+            else if (args[i].equals("-p")) {
+                if (i + 1 < args.length) {
+                    try {
+                        page = Integer.parseInt(args[i + 1]);
+                        if (page <= 0) throw new NumberFormatException();
+                        skipNext = true;
+                    } catch (NumberFormatException e) {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an integer"));
+                        return;
+                    }
+                } else {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Page number must be an specified"));
+                    return;
+                }
+            } else if (!skipNext) {
+                newArgs.add(args[i]);
+            } else {
+                skipNext = false;
+            }
         }
+
+        handleShowingNbt(npcNbt, sender, newArgs.toArray(new String[0]), GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), onlyShowKeys, page);
     }
 
-    public static void handleShowingNbt(INbt baseNbt, ICommandSender sender, String[] args, String display, boolean onlyShowKeys) {
+    public static void handleShowingNbt(INbt baseNbt, ICommandSender sender, String[] args, String display, boolean onlyShowKeys, int page) {
         if (baseNbt == null || baseNbt.getKeys().length == 0) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "This item has no NBT."));
             return;
@@ -254,7 +324,7 @@ public class InspectCommand extends CommandBase {
         if (args.length == 0) {
             sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + display + ":"));
             if (onlyShowKeys) {
-                showKeys(sender, baseNbt);
+                showKeys(sender, baseNbt, page);
             } else {
                 showNbt(sender, baseNbt, "");
             }
@@ -266,7 +336,7 @@ public class InspectCommand extends CommandBase {
         for (int i = 0; i < args.length - 1; i++) {
             String key = args[i];
             if (!currentNbt.has(key) || currentNbt.getType(key) != 10) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Error: Invalid NBT path. Tag '" + yellow + key + red +"' is not a valid compound tag."));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red + "Error: Invalid NBT path. Tag '" + yellow + key + red +"' is not a valid compound tag."));
                 return;
             }
             currentNbt = currentNbt.getCompound(key);
@@ -275,15 +345,17 @@ public class InspectCommand extends CommandBase {
         // Get the final tag to display from the last argument.
         String finalKey = args[args.length - 1];
         if (!currentNbt.has(finalKey)) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Error: Invalid NBT path. Final tag '" + yellow + finalKey + red + "' not found."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red + "Error: Invalid NBT path. Final tag '" + yellow + finalKey + red + "' not found."));
             return;
         }
 
         if (onlyShowKeys) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow + String.join(".", args) + white + ":"));
             if (currentNbt.getType(finalKey) == 10) {
                 INbt targetNbt = currentNbt.getCompound(finalKey);
-                showKeys(sender, targetNbt);
+                sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow + String.join(".", args) + white + ":"));
+                showKeys(sender, targetNbt, page);
+            } else if (currentNbt.getType(finalKey) == 9) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor("Tag List navigation coming soon."));
             } else {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Tag '" + yellow + finalKey + red + "' is a value and has no keys to display."));
             }
@@ -293,8 +365,15 @@ public class InspectCommand extends CommandBase {
         }
     }
 
-    public static void showKeys(ICommandSender sender, INbt parentNbt) {
-        for (String key : parentNbt.getKeys()) {
+    public static void showKeys(ICommandSender sender, INbt parentNbt, int page) {
+        var keys = parentNbt.getKeys();
+        if (page > (keys.length / 10 + 1)) {
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"There are only "+(keys.length / 10 + 1)+" pages!"));
+            return;
+        }
+        sender.addChatMessage(ChatUtils.fillChatWithColor("Page "+page+" of "+(keys.length / 10 + 1)));
+        for (int i = (page - 1) * 10; i < Math.min(page * 10, keys.length); i++) {
+            String key = keys[i];
             int type = parentNbt.getType(key);
             String valueStr = "";
 
@@ -310,7 +389,7 @@ public class InspectCommand extends CommandBase {
                 valueStr = UNKNOWN_COLOR + key;
             }
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(valueStr));
+            sender.addChatMessage(ChatUtils.fillChatWithColor((i+1)+". "+valueStr));
         }
     }
 

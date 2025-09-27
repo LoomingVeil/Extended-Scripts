@@ -40,4 +40,9 @@ public class ScreenResolution implements IScreenResolution {
     public int getHeightPercent(double percent) {
         return (int) percent * height;
     }
+
+    @Override
+    public String toString() {
+        return getWidth() + ", "+getHeight();
+    }
 }

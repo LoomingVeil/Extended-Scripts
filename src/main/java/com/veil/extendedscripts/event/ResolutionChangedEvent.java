@@ -8,13 +8,15 @@ import noppes.npcs.scripted.event.player.PlayerEvent;
 
 public class ResolutionChangedEvent extends PlayerEvent implements IResolutionChangedEvent {
     IScreenResolution oldResolution;
+    IScreenResolution newResolution;
     public ResolutionChangedEvent() {
         super(null);
     }
 
-    public ResolutionChangedEvent(IPlayer player, ScreenResolution resolution) {
+    public ResolutionChangedEvent(IPlayer player, ScreenResolution oldResolution, ScreenResolution newResolution) {
         super(player);
-        this.oldResolution = resolution;
+        this.oldResolution = oldResolution;
+        this.newResolution = newResolution;
     }
 
     public String getHookName() {
@@ -23,5 +25,9 @@ public class ResolutionChangedEvent extends PlayerEvent implements IResolutionCh
 
     public IScreenResolution getOldResolution() {
         return oldResolution;
+    }
+
+    public IScreenResolution getNewResolution() {
+        return newResolution;
     }
 }

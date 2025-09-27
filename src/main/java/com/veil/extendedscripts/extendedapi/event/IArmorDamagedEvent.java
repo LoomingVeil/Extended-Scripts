@@ -2,11 +2,12 @@ package com.veil.extendedscripts.extendedapi.event;
 
 import noppes.npcs.api.IDamageSource;
 import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.event.IItemEvent;
 
 /**
  * Called when an equipped scripted item that has the armor_value attribute and is equipped in the armor or hand.
  */
-public interface IArmorDamagedEvent {
+public interface IArmorDamagedEvent extends IItemEvent {
     /**
      * Gets the amount of durability damage this attack would do to a normal item.
      */

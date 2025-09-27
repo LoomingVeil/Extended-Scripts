@@ -1,4 +1,6 @@
 package com.veil.extendedscripts.extendedapi.event;
 
-public interface IAttributeRecalculateEvent {
+import noppes.npcs.api.event.IPlayerEvent;
+
+public interface IAttributeRecalculateEvent extends IPlayerEvent {
 }

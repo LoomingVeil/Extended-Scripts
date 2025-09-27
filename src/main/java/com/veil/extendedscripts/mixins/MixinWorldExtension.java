@@ -121,4 +121,14 @@ public class MixinWorldExtension implements IWorld {
     public void fireProjectile(ICustomProjectile projectile, float velocity) {
         world.spawnEntityInWorld(projectile.getMCEntity());
     }
+
+    @Unique
+    public void setThundering(boolean thundering) {
+        world.getWorldInfo().setThundering(thundering);
+    }
+
+    @Unique
+    public boolean isThundering() {
+        return world.getWorldInfo().isThundering();
+    }
 }

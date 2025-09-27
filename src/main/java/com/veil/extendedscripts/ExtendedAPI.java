@@ -35,6 +35,24 @@ import java.util.*;
 public class ExtendedAPI implements AbstractExtendedAPI {
     public static final ExtendedAPI Instance = new ExtendedAPI();
     private static final Map<String, AttributeDefinition> lastWorldsAttributes = new HashMap<>();
+    private static HashMap<Character, Integer> specialLetterLengths = new HashMap<>();
+
+    static {
+        specialLetterLengths.put('I', 3);
+        specialLetterLengths.put('i', 1);
+        specialLetterLengths.put('l', 2);
+        specialLetterLengths.put('t', 3);
+        specialLetterLengths.put('.', 1);
+        specialLetterLengths.put(',', 1);
+        specialLetterLengths.put(';', 1);
+        specialLetterLengths.put(':', 1);
+        specialLetterLengths.put('\'', 1);
+        specialLetterLengths.put('!', 1);
+        specialLetterLengths.put('\"', 3);
+        specialLetterLengths.put('(', 4);
+        specialLetterLengths.put(')', 4);
+        specialLetterLengths.put('@', 6);
+    }
 
     public static Map<String, AttributeDefinition> getLastWorldsAttributes() {
         return lastWorldsAttributes;
@@ -214,5 +232,19 @@ public class ExtendedAPI implements AbstractExtendedAPI {
 
     public IPotionEffect getIPotionEffect(int id) throws Exception {
         return new PotionEffect(id, 30 * 20, 0);
+    }
+
+    /**
+     * Gets the width of the string in pixels. This can be useful for centering {@link noppes.npcs.api.gui.ILabel}'s text.
+     * Having certain non-standard special characters may produce inaccurate results.
+     */
+    public int getStringPixelWidth(String text) {
+        int length = 0;
+        for (int i = 0; i < text.length(); i++) {
+            length += specialLetterLengths.getOrDefault(text.charAt(i), 5);
+        }
+        length += text.length() - 1;
+
+        return length;
     }
 }

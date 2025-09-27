@@ -2,10 +2,13 @@ package com.veil.extendedscripts.extendedapi;
 
 import com.veil.extendedscripts.PotionEffect;
 import com.veil.extendedscripts.extendedapi.constants.*;
+import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
+import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import kamkeel.npcs.controllers.AttributeController;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.entity.IEntityLivingBase;
 import noppes.npcs.api.handler.data.IAttributeDefinition;
 
 /**
@@ -24,6 +27,14 @@ public interface AbstractExtendedAPI {
      * @return An IEntity or null if entityName is invalid
      */
     IEntity createIEntity(String entityName, IWorld world);
+
+    /**
+     * Creates an instance of an ICustomProjectile that can be spawned in the world with {@link IWorld#spawnEntityInWorld(noppes.npcs.api.entity.IEntity)}
+     * Once spawned in, the entity will move as if it had been fired from the shooter.
+     */
+    ICustomProjectile createCustomProjectile(String texture, IEntityLivingBase shooter);
+
+    ICustomProjectile createCustomProjectile(IEntityLivingBase shooter);
 
     /**
      * Converts a hex code to an integer color that can be used for ScriptedItem's setColor {@link noppes.npcs.api.item.IItemCustomizable#setColor(Integer)} method.
@@ -74,4 +85,10 @@ public interface AbstractExtendedAPI {
     IPotionEffect getIPotionEffect(int id, int duration, int amplifier) throws Exception;
 
     IPotionEffect getIPotionEffect(int id) throws Exception;
+
+    /**
+     * Gets the width of the string in pixels. This can be useful for centering {@link noppes.npcs.api.gui.ILabel}'s text.
+     * Having certain non-standard special characters may produce inaccurate results.
+     */
+    int getStringPixelWidth(String text);
 }

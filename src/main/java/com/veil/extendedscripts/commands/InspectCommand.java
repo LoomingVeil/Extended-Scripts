@@ -466,5 +466,6 @@ public class InspectCommand extends CommandBase {
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"After the 1st parameter, parameters can be used to navigate Nbt. Take note they are case sensitive."));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"Ex: /inspect hand display Name"));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"Above will show just the custom name property of an item that has been renamed in an anvil."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"To see only the keys add the -k parameter. Only 10 keys will be shown at a time. Add -p <page> to see more"));
     }
 }

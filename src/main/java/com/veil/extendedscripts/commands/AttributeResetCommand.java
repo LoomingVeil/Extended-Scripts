@@ -24,7 +24,7 @@ public class AttributeResetCommand implements IVeilSubCommand {
             sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"You are not holding an item."));
             return;
         }
-        IPlayer player = AbstractNpcAPI.Instance().getPlayer(playerSender.getDisplayName());
+        IPlayer player = AbstractNpcAPI.Instance().getPlayer(playerSender.getCommandSenderName());
         IItemStack heldItem = player.getHeldItem();
 
         heldItem.getNbt().remove("RPGCore");

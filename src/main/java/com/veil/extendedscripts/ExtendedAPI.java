@@ -140,7 +140,7 @@ public class ExtendedAPI implements AbstractExtendedAPI {
         for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
             if (obj instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) obj;
-                names.add(player.getDisplayName());
+                names.add(player.getCommandSenderName());
             }
         }
 
@@ -173,12 +173,22 @@ public class ExtendedAPI implements AbstractExtendedAPI {
     }
 
     public static float getAttribute(EntityPlayer player, EntityAttribute key) {
-        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getDisplayName());
+        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
+
+        if (npcPlayer == null) {
+            return (Float) key.getDefaultValue();
+        }
+
         return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
     }
 
     public static float getAttribute(EntityPlayer player, PlayerAttribute key) {
-        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getDisplayName());
+        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
+
+        if (npcPlayer == null) {
+            return (Float) key.getDefaultValue();
+        }
+
         return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
     }
 

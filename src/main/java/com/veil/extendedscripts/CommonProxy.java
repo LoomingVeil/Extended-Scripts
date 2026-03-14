@@ -3,6 +3,8 @@ package com.veil.extendedscripts;
 import com.veil.extendedscripts.commands.VeilCommand;
 import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
+import com.veil.extendedscripts.event.ArmorDamagedEvent;
+import com.veil.extendedscripts.event.HotbarSlotChangedEvent;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
@@ -24,6 +26,8 @@ import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.constants.ScriptContext;
+import noppes.npcs.controllers.ScriptHookController;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -76,6 +80,10 @@ public class CommonProxy {
         API.addGlobalObject("ItemType", ItemType.Instance);
         API.addGlobalObject("Effect", EffectID.Instance);
         API.addGlobalObject("SkinType", SkinType.Instance);
+
+        ScriptHookController hookController = ScriptHookController.Instance;
+        hookController.registerHook(ScriptContext.ITEM, new ArmorDamagedEvent().getHookName(), ArmorDamagedEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new HotbarSlotChangedEvent().getHookName(), HotbarSlotChangedEvent.class);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");
@@ -135,14 +143,18 @@ public class CommonProxy {
         Collection<AttributeDefinition> currentAttributes = AttributeController.getAllAttributes();
         Set<AttributeDefinition> attributesToAdd = new HashSet<>();
 
-        for (AttributeDefinition attribute : extendedAttributes) {
-            if (!currentAttributes.contains(attribute) && !currentAttributes.contains(attribute)) {
-                attributesToAdd.add(attribute);
+        if (extendedAttributes != null) {
+            for (AttributeDefinition attribute : extendedAttributes) {
+                if (!currentAttributes.contains(attribute) && !currentAttributes.contains(attribute)) {
+                    attributesToAdd.add(attribute);
+                }
             }
-        }
 
-        for (AttributeDefinition attribute : attributesToAdd) {
-            ExtendedAPI.registerAttribute(attribute);
+            for (AttributeDefinition attribute : attributesToAdd) {
+                ExtendedAPI.registerAttribute(attribute);
+            }
+
+            System.out.println("Successfully registered "+extendedAttributes.size()+" custom attributes.");
         }
     }
 

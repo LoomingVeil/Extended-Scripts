@@ -35,7 +35,7 @@ public class AttributeRemovePlayerCommand implements IVeilSubCommand {
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(playerSender);
             props.removeCoreAttribute(key);
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully removed attribute "+key+" from "+playerSender.getDisplayName()+"."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully removed attribute "+key+" from "+playerSender.getCommandSenderName()+"."));
         } else {
             String playerName = args[0];
             EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
@@ -53,7 +53,7 @@ public class AttributeRemovePlayerCommand implements IVeilSubCommand {
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
             props.removeCoreAttribute(key);
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully removed attribute "+key+" from "+player.getDisplayName()+"."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully removed attribute "+key+" from "+player.getCommandSenderName()+"."));
         }
     }
 

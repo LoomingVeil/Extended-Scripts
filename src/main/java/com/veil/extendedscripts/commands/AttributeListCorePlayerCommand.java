@@ -73,7 +73,7 @@ public class AttributeListCorePlayerCommand implements IVeilSubCommand {
     }
 
     private void showAttributes(ICommandSender sender, EntityPlayer playerToView, int page) {
-        noppes.npcs.extendedapi.entity.IPlayer player = (noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getPlayer(playerToView.getDisplayName());
+        noppes.npcs.extendedapi.entity.IPlayer player = (noppes.npcs.extendedapi.entity.IPlayer) AbstractNpcAPI.Instance().getPlayer(playerToView.getCommandSenderName());
         String[] keys = player.getCoreAttributeKeys();
         Arrays.sort(keys);
 

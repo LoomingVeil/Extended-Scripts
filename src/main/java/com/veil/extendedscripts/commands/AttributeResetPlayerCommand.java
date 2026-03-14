@@ -24,7 +24,7 @@ public class AttributeResetPlayerCommand implements IVeilSubCommand {
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(playerSender);
             props.resetCoreAttributes();
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+playerSender.getDisplayName()));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+playerSender.getCommandSenderName()));
         } else {
             String playerName = args[0];
             EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
@@ -36,7 +36,7 @@ public class AttributeResetPlayerCommand implements IVeilSubCommand {
             ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
             props.resetCoreAttributes();
 
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+player.getDisplayName()));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Successfully reset core attributes for "+player.getCommandSenderName()));
         }
     }
 

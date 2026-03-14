@@ -47,7 +47,7 @@ public class InspectSelfCommand implements IVeilSubCommand {
             }
         }
 
-        InspectCommand.handleShowingNbt(AbstractNpcAPI.Instance().getINbt(nbt), sender, newArgs.toArray(new String[0]), playerSender.getDisplayName(), onlyShowKeys, page);
+        InspectCommand.handleShowingNbt(AbstractNpcAPI.Instance().getINbt(nbt), sender, newArgs.toArray(new String[0]), playerSender.getCommandSenderName(), onlyShowKeys, page);
     }
 
     @Override

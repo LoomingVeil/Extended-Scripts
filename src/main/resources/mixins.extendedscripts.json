@@ -11,8 +11,6 @@
     "MixinEntityExtension",
     "MixinForgeHooks",
     "MixinGuiContainerCreative",
-    "MixinGuiScriptItem",
-    "MixinGuiScriptPlayer",
     "MixinInventoryEffectRenderer",
     "MixinInventoryPlayer",
     "MixinItemExtension",

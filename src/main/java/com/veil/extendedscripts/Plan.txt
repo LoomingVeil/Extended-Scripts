@@ -17,8 +17,9 @@ Things I want to add:
  - Barrier blocks
  - Scripted Item Block Placing
  - Add the Extended Scripts API tab to scripting
- - Fix attack event
+ - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
+ - See if I can mess with the skybox
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component)

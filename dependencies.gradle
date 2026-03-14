@@ -44,6 +44,6 @@ dependencies {
     // implementation files('libs')
     // implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly name: "[1.7.10]StatusEffectHUD-client-1.27"
-    compileOnly name: "CustomNpc-Plus-1.10.1"
+    compileOnly name: "CustomNpc-Plus-1.11.1"
     compileOnly name: "[1.7.10]bspkrsCore-universal-6.16"
 }

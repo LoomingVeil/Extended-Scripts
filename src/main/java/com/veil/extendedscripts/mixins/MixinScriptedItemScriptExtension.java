@@ -163,4 +163,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
             armorResource2 = new ResourceLocation(armorTexture2);
         }
     }
+
+    public Boolean isTextureAnimated() {
+        return Boolean.TRUE;
+    }
 }

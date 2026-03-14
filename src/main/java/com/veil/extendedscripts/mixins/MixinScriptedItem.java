@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 // Extends the scripted item itself
 @Mixin(value={ItemCustomizable.class})
 public abstract class MixinScriptedItem {
-
-
     @Unique
     public int getHarvestLevel(ItemStack stack, String toolClass) {
         NBTTagCompound itemData = getItemDataTag(stack);
@@ -35,5 +33,10 @@ public abstract class MixinScriptedItem {
             tag.setTag("ExtendedItemData", new NBTTagCompound());
         }
         return tag.getCompoundTag("ExtendedItemData");
+    }
+
+    @Unique
+    public Boolean isTextureAnimated() {
+        return false;
     }
 }

@@ -30,7 +30,7 @@ public class AttributeCore extends Item {
     public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player) {
         if (world.isRemote) return stack;
 
-        IPlayer npcPlayer = NpcAPI.Instance().getPlayer(player.getDisplayName());
+        IPlayer npcPlayer = NpcAPI.Instance().getPlayer(player.getCommandSenderName());
         IPlayerAttributes attributes = (IPlayerAttributes) npcPlayer.getAttributes();
         IItemStack npcItem = NpcAPI.Instance().getIItemStack(stack);
 

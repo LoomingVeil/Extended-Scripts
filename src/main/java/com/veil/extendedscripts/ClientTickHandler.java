@@ -31,7 +31,7 @@ public class ClientTickHandler {
                 oldResolution.setSize(prevWidth, prevHeight);
                 ScreenResolution newResolution = new ScreenResolution();
                 newResolution.setSize(scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
-                ResolutionChangedEvent attributeRecalcEvent = new ResolutionChangedEvent(AbstractNpcAPI.Instance().getPlayer(mc.thePlayer.getDisplayName()), oldResolution, newResolution);
+                ResolutionChangedEvent attributeRecalcEvent = new ResolutionChangedEvent(AbstractNpcAPI.Instance().getPlayer(mc.thePlayer.getCommandSenderName()), oldResolution, newResolution);
 
                 PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
                 handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);

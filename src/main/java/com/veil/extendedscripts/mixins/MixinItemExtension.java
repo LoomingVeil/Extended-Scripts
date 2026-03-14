@@ -15,9 +15,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value={ScriptItemStack.class})
-public class MixinItemExtension implements noppes.npcs.extendedapi.item.IItemStack {
+public abstract class MixinItemExtension implements noppes.npcs.extendedapi.item.IItemStack {
     @Shadow
     public ItemStack item;
+
+    @Shadow
+    public abstract boolean isBlock();
 
     @Unique
     public void setUnbreakable(boolean value) {
@@ -75,11 +78,6 @@ public class MixinItemExtension implements noppes.npcs.extendedapi.item.IItemSta
         String texturePath = split[1];
 
         return String.format("%s:textures/items/%s.png", domain, texturePath);
-    }
-
-    @Unique
-    public boolean isBlock() {
-        return item.getItem() instanceof ItemBlock;
     }
 
     @Unique

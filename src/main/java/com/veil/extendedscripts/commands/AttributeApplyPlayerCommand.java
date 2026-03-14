@@ -43,7 +43,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
             if (value > 0) {
                 sign = "+";
             }
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully given "+playerSender.getDisplayName()+" "+sign+value+" "+key+"."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully given "+playerSender.getCommandSenderName()+" "+sign+value+" "+key+"."));
         } else if (args.length >= 3) {
             String playerName = args[0];
             EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
@@ -73,7 +73,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
             if (value > 0) {
                 sign = "+";
             }
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully given "+player.getDisplayName()+" "+sign+value+" "+key+"."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully given "+player.getCommandSenderName()+" "+sign+value+" "+key+"."));
         } else {
             String playerName = args[0];
             EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);

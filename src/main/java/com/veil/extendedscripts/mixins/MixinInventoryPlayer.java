@@ -19,7 +19,7 @@ public class MixinInventoryPlayer {
     private void onGetTotalArmorValue(CallbackInfoReturnable<Integer> cir) {
         int base = cir.getReturnValue();
 
-        IPlayer npcPlayer = NpcAPI.Instance().getPlayer(player.getDisplayName());
+        IPlayer npcPlayer = NpcAPI.Instance().getPlayer(player.getCommandSenderName());
         if (npcPlayer.getAttributes().hasAttribute("armor_value")) {
             base += (int) npcPlayer.getAttributes().getAttribute("armor_value").getValue();
         }

@@ -16,7 +16,5 @@ public interface IItemStack {
      */
     String getBlockTexture(int side);
 
-    boolean isBlock();
-
     int getType();
 }

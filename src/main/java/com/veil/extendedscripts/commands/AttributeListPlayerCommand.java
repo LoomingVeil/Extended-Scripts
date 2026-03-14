@@ -74,7 +74,7 @@ public class AttributeListPlayerCommand implements IVeilSubCommand {
     }
 
     private void showAttributes(ICommandSender sender, EntityPlayer playerToView, int page) {
-        IPlayer player = AbstractNpcAPI.Instance().getPlayer(playerToView.getDisplayName());
+        IPlayer player = AbstractNpcAPI.Instance().getPlayer(playerToView.getCommandSenderName());
         ICustomAttribute[] attrs = player.getAttributes().getAttributes();
         Arrays.sort(attrs, (attr1, attr2) -> attr1.getAttribute().getKey().compareToIgnoreCase(attr2.getAttribute().getKey()));
 

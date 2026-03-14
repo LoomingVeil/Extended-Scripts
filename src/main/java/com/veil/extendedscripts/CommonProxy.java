@@ -3,8 +3,8 @@ package com.veil.extendedscripts;
 import com.veil.extendedscripts.commands.VeilCommand;
 import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
-import com.veil.extendedscripts.event.ArmorDamagedEvent;
-import com.veil.extendedscripts.event.HotbarSlotChangedEvent;
+import com.veil.extendedscripts.event.*;
+import com.veil.extendedscripts.extendedapi.event.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
@@ -82,8 +82,13 @@ public class CommonProxy {
         API.addGlobalObject("SkinType", SkinType.Instance);
 
         ScriptHookController hookController = ScriptHookController.Instance;
-        hookController.registerHook(ScriptContext.ITEM, new ArmorDamagedEvent().getHookName(), ArmorDamagedEvent.class);
-        hookController.registerHook(ScriptContext.PLAYER, new HotbarSlotChangedEvent().getHookName(), HotbarSlotChangedEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new HotbarSlotChangedEvent().getHookName(), IHotbarSlotChangedEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new ResolutionChangedEvent().getHookName(), IResolutionChangedEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new CustomProjectileImpactEvent().getHookName(), ICustomProjectileImpactEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new CustomProjectileTickEvent().getHookName(), ICustomProjectileTickEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new AttributeRecalculateEvent().getHookName(), IAttributeRecalculateEvent.class);
+        hookController.registerHook(ScriptContext.PLAYER, new ArmorChangedEvent().getHookName(), IArmorDamagedEvent.class);
+        hookController.registerHook(ScriptContext.ITEM, new ArmorDamagedEvent().getHookName(), IArmorDamagedEvent.class);
 
         if (Loader.isModLoaded("customnpcs")) {
             ModContainer container = Loader.instance().getIndexedModList().get("customnpcs");

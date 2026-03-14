@@ -1,7 +1,7 @@
 package noppes.npcs.api.handler.data;
 
-import noppes.npcs.api.entity.IPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import noppes.npcs.api.entity.IPlayer;
 
 import java.util.Map;
 

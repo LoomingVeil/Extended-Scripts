@@ -1,8 +1,8 @@
 package noppes.npcs.api.jobs;
 
-import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.IAvailability;
+import noppes.npcs.api.item.IItemStack;
 
 public interface IJobItemGiver extends IJob {
 

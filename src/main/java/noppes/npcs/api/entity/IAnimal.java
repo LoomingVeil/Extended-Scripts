@@ -1,7 +1,7 @@
 package noppes.npcs.api.entity;
 
-import noppes.npcs.api.item.IItemStack;
 import net.minecraft.entity.passive.EntityAnimal;
+import noppes.npcs.api.item.IItemStack;
 
 /**
  * Represents an animal entity with additional behavior such as breeding,

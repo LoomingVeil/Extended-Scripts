@@ -1,11 +1,11 @@
 package noppes.npcs.api.entity;
 
-import noppes.npcs.api.item.IItemStack;
 import net.minecraft.entity.Entity;
 import noppes.npcs.api.INbt;
 import noppes.npcs.api.IParticle;
 import noppes.npcs.api.IPos;
 import noppes.npcs.api.IWorld;
+import noppes.npcs.api.item.IItemStack;
 
 /**
  * Represents a generic entity in the world.
@@ -203,6 +203,11 @@ public interface IEntity<T extends Entity> {
      * @param dimensionId the dimension ID.
      */
     void setDimension(int dimensionId);
+
+    /**
+     * @return Array of entities that are colliding with this entity
+     */
+    IEntity[] getCollidingEntities();
 
     /**
      * Returns an array of entities within the specified range.
@@ -536,19 +541,20 @@ public interface IEntity<T extends Entity> {
     IEntity<?>[] getCapturedDrops();
 
     /**
-     * @since 1.7.10c
      * @return Whether the entity is sneaking.
+     * @since 1.7.10c
      */
     boolean isSneaking();
 
     /**
-     * @since 1.7.10c
      * @return Whether the entity is sprinting.
+     * @since 1.7.10c
      */
     boolean isSprinting();
 
     /**
      * Expert users only.
+     *
      * @return The underlying Minecraft entity.
      */
     T getMCEntity();

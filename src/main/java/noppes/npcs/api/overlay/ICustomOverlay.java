@@ -1,7 +1,7 @@
 package noppes.npcs.api.overlay;
 
-import noppes.npcs.api.entity.IPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import noppes.npcs.api.entity.IPlayer;
 
 import java.util.List;
 

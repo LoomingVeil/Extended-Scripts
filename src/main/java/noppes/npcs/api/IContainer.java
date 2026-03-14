@@ -1,9 +1,9 @@
 package noppes.npcs.api;
 
-import noppes.npcs.api.entity.IPlayer;
-import noppes.npcs.api.item.IItemStack;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import noppes.npcs.api.entity.IPlayer;
+import noppes.npcs.api.item.IItemStack;
 
 public interface IContainer {
     int getSize();
@@ -31,9 +31,9 @@ public interface IContainer {
 
     /**
      *
-     * @param itemStack The item stack to be searched in the container
+     * @param itemStack    The item stack to be searched in the container
      * @param ignoreDamage Whether damage should be ignored when searching
-     * @param ignoreNBT Whether NBT values should be ignored when searching
+     * @param ignoreNBT    Whether NBT values should be ignored when searching
      * @return The amount of the item stack found, based on the flags given above.
      */
     int count(IItemStack itemStack, boolean ignoreDamage, boolean ignoreNBT);

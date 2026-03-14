@@ -1,7 +1,7 @@
 package noppes.npcs.api.entity;
 
-import noppes.npcs.api.item.IItemStack;
 import net.minecraft.entity.item.EntityItem;
+import noppes.npcs.api.item.IItemStack;
 
 /**
  * Represents an item entity in the world.

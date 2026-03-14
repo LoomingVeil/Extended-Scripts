@@ -177,7 +177,7 @@ public interface IItemStack {
 
     /**
      * Sets the magic attribute value for the given key and magic identifier.
-     * The value is stored in the item's custom NBT under "RPGCore" -> "Magic".
+     * The value is stored in the item's custom NBT under "RPGCore", "Magic".
      *
      * @param key     The magic attribute key.
      * @param magicId The magic identifier.
@@ -351,7 +351,6 @@ public interface IItemStack {
 
     /**
      * Returns the underlying Minecraft NBTTagCompound for the item.
-     * The Nbt returned is the same format used to be added to blocks and items that store items.
      *
      * @return The NBTTagCompound.
      */
@@ -376,9 +375,9 @@ public interface IItemStack {
     /**
      * Compares this item with another item, with options to ignore damage and/or NBT data.
      *
-     * @param item        The item to compare.
+     * @param item         The item to compare.
      * @param ignoreDamage true to ignore damage values.
-     * @param ignoreNBT   true to ignore NBT data.
+     * @param ignoreNBT    true to ignore NBT data.
      * @return true if the items are considered equal, false otherwise.
      */
     boolean compare(IItemStack item, boolean ignoreDamage, boolean ignoreNBT);

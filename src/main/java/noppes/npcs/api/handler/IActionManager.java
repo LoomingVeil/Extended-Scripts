@@ -2,12 +2,13 @@ package noppes.npcs.api.handler;
 
 import noppes.npcs.api.handler.data.IAction;
 import noppes.npcs.api.handler.data.IActionChain;
+import noppes.npcs.api.handler.data.IActionQueue;
 import noppes.npcs.api.handler.data.actions.IConditionalAction;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
+
 
 /**
  * Manages a queue of {@link IAction} instances, allowing scheduling of delayed,
@@ -16,21 +17,56 @@ import java.util.function.Supplier;
 public interface IActionManager {
 
     /**
+     * Begin processing scheduled actions.  Must be called once.
+     *
+     * @return this action manager
+     */
+    IActionManager start();
+
+    /**
+     * Halt processing of actions.  Queued actions remain but will not run until
+     * {@link #start()} is called again.
+     *
+     * @return this action manager
+     */
+    IActionManager stop();
+
+    ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
+    // Creators
+
+    /**
      * Create a new action instance without immediately scheduling it.
      *
-     * @param name            a unique name for this action
-     * @param maxDuration     the maximum lifetime of the action in ticks
-     * @param startAfterTicks number of ticks to wait before the first run
-     * @param action          code to execute each time the action "fires"
+     * @param name        a unique name for this action
+     * @param maxDuration the maximum lifetime of the action in ticks
+     * @param delay       number of ticks to wait before the first run
+     * @param action      code to execute each time the action "fires"
      * @return a fresh {@link IAction} object
      */
-    IAction create(String name, int maxDuration, int startAfterTicks, Consumer<IAction> action);
+    IAction create(String name, int maxDuration, int delay, Consumer<IAction> action);
+
+    IAction create(int maxDuration, int delay, Consumer<IAction> task);
 
     IAction create(String name, int delay, Consumer<IAction> t);
 
     IAction create(int delay, Consumer<IAction> t);
 
     IAction create(String name, Consumer<IAction> t);
+
+    String getName();
+
+    IActionManager setName(String name);
+
+    boolean inDebugMode();
+
+    /**
+     * Enabling prints to the console the life cycle of IActionManager, it's IActionQueues and the scheduled IActions
+     *
+     * @param debug whether to enable debug logging
+     * @return this action manager
+     */
+    IActionManager setDebugMode(boolean debug);
 
     IAction create(String name);
 
@@ -39,76 +75,98 @@ public interface IActionManager {
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
-     * @param condition supplier checked every tick, if it returns true, task is fired
+     * @param condition checked every tick, if it returns true, task is fired
      * @param task      code to run once condition first becomes true
      * @return the action scheduled
      */
-    IConditionalAction create(Supplier<Boolean> condition, Consumer<IAction> task);
+    IConditionalAction create(Function<IAction, Boolean> condition, Consumer<IAction> task);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
      * @param name      unique name
-     * @param condition supplier checked every tick, if it returns true, task is fired
+     * @param condition checked every tick, if it returns true, task is fired
      * @param task      code to run once condition first becomes true
      * @return the action scheduled
      */
-    IConditionalAction create(String name, Supplier<Boolean> condition, Consumer<IAction> task);
+    IConditionalAction create(String name, Function<IAction, Boolean> condition, Consumer<IAction> task);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
-     * @param condition     supplier checked every tick, if it returns true, task is fired
+     * @param condition     checked every tick, if it returns true, task is fired
      * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
      * @return the action scheduled
      */
-    IConditionalAction create(Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen);
-
-    /**
-     * Schedule a conditional action that gives up after at most maxChecks attempts.
-     *
-     * @param name          unique name
-     * @param condition     supplier checked every tick, if it returns true, task is fired
-     * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
-     * @return the action scheduled
-     */
-    IConditionalAction create(String name, Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen);
-
-    /**
-     * Schedule a conditional action that gives up after at most maxChecks attempts.
-     *
-     * @param condition     supplier checked every tick, if it returns true, task is fired
-     * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
-     * @param onTermination code to run when the termination condition returns true
-     * @return the action scheduled
-     */
-    IConditionalAction create(Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen, Consumer<IAction> onTermination);
+    IConditionalAction create(Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
      * @param name          unique name
-     * @param condition     supplier checked every tick, if it returns true, task is fired
+     * @param condition     checked every tick, if it returns true, task is fired
      * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
+     * @return the action scheduled
+     */
+    IConditionalAction create(String name, Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen);
+
+    /**
+     * Schedule a conditional action that gives up after at most maxChecks attempts.
+     *
+     * @param condition     checked every tick, if it returns true, task is fired
+     * @param task          code to run once condition first becomes true
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
      * @param onTermination code to run when the termination condition returns true
      * @return the action scheduled
      */
-    IConditionalAction create(String name, Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen, Consumer<IAction> onTermination);
+    IConditionalAction create(Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen, Consumer<IAction> onTermination);
 
     /**
-     * Begin processing scheduled actions.  Must be called once.
+     * Schedule a conditional action that gives up after at most maxChecks attempts.
+     *
+     * @param name          unique name
+     * @param condition     checked every tick, if it returns true, task is fired
+     * @param task          code to run once condition first becomes true
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param onTermination code to run when the termination condition returns true
+     * @return the action scheduled
      */
-    void start();
+    IConditionalAction create(String name, Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen, Consumer<IAction> onTermination);
+
+    /// ////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////
+    // Queues
+
+    IActionQueue createQueue(String name);
+
+    IActionQueue createQueue(String name, boolean isParallel);
+
+    IActionQueue getOrCreateQueue(String name);
+
+    IActionQueue getOrCreateQueue(String name, boolean isParallel);
+
+    IActionQueue getQueue(String name);
+
+    boolean hasQueue(String name);
 
     /**
-     * Halt processing of actions.  Queued actions remain but will not run until
-     * {@link #start()} is called again.
+     * @param name the name for the new action
+     * @return True if queue successfully removed from IActionManager and cleared
      */
-    void stop();
+    boolean removeQueue(String name);
+
+    ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
+    // Sequential
+
+    /**
+     * Retrieve the entire action queue.
+     *
+     * @return live reference to the internal {@link Queue} of actions
+     */
+    IActionQueue getSequentialQueue();
 
     /**
      * Schedule an existing action for execution.
@@ -116,18 +174,72 @@ public interface IActionManager {
      * @param action the action to enqueue
      * @return the action scheduled
      */
-    IAction scheduleAction(IAction action);
+    IAction schedule(IAction action);
+
+    /**
+     * Multiple actions chained one after another
+     * i.e schedule(act1,act2,act3,...)
+     *
+     * @param actions the actions to schedule
+     */
+    void schedule(IAction... actions);
+
+    /**
+     * Convenience for {@link #create(Consumer)} + enqueue.
+     *
+     * @param task code to execute each time the task "fires"
+     * @return the task scheduled
+     */
+    IAction schedule(Consumer<IAction> task);
+
+    /**
+     * Multiple tasks chained one after another
+     * i.e schedule(task1,task2,task3,...)
+     *
+     * @param tasks the task consumers to schedule
+     */
+    void schedule(Consumer<IAction>... tasks);
+
+    /**
+     * Convenience for {@link #create(String, Consumer)} + enqueue.
+     *
+     * @param delay number of ticks to wait before the first task run
+     * @param task  code to execute each time the task "fires"
+     * @return the task scheduled
+     */
+    IAction schedule(int delay, Consumer<IAction> task);
+
+    /**
+     * Convenience for {@link #create(String, Consumer)} + enqueue.
+     *
+     * @param name a unique name for this action
+     * @param task code to execute each time the task "fires"
+     * @return the task scheduled
+     */
+    IAction schedule(String name, Consumer<IAction> task);
+
+    /**
+     * Convenience for {@link #create(String, int, Consumer)} + enqueue.
+     *
+     * @param name  a unique name for this action
+     * @param delay number of ticks to wait before the first task run
+     * @param task  code to execute each time the task "fires"
+     * @return the task scheduled
+     */
+    IAction schedule(String name, int delay, Consumer<IAction> task);
 
     /**
      * Convenience for {@link #create(String, int, int, Consumer)} + enqueue.
      *
-     * @param name            a unique name for this action
-     * @param maxDuration     the maximum lifetime of the action in ticks
-     * @param startAfterTicks number of ticks to wait before the first run
-     * @param action          code to execute each time the action "fires"
-     * @return the action scheduled
+     * @param name        a unique name for this action
+     * @param maxDuration the maximum lifetime of the action in ticks
+     * @param delay       number of ticks to wait before the first task run
+     * @param task        code to execute each time the task "fires"
+     * @return the task scheduled
      */
-    IAction scheduleAction(String name, int maxDuration, int startAfterTicks, Consumer<IAction> action);
+    IAction schedule(String name, int maxDuration, int delay, Consumer<IAction> task);
+
+    IAction schedule(int maxDuration, int delay, Consumer<IAction> task);
 
     /**
      * Insert an action at a specific position in the queue.
@@ -138,134 +250,172 @@ public interface IActionManager {
      */
     IAction scheduleActionAt(int index, IAction action);
 
-    /**
-     * Get the zero-based position of an action in the queue.
-     *
-     * @param action the action to look up
-     * @return its index, or -1 if not found
-     */
-    int getIndex(IAction action);
+    ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
+    // Conditionals
 
     /**
-     * Peek at the next action to run (the head of the queue).
-     *
-     * @return the current head action, or null if queue is empty
+     * @return the list of all conditional actions scheduled
      */
-    IAction getCurrentAction();
+    IActionQueue getConditionalQueue();
+
+    IConditionalAction schedule(IConditionalAction action);
 
     /**
-     * Retrieve the entire action queue.
+     * Multiple conditionals
+     * i.e schedule(act1,act2,act3,...)
      *
-     * @return live reference to the internal {@link Queue} of actions
+     * @param actions the conditional actions to schedule
      */
-    Queue<IAction> getActionQueue();
+    void schedule(IConditionalAction... actions);
 
+    /**
+     * Schedule a conditional action that gives up after at most maxChecks attempts.
+     *
+     * @param condition checked every tick, if it returns true, task is fired
+     * @param task      code to run once condition first becomes true
+     * @return the action scheduled
+     */
+    IConditionalAction schedule(Function<IAction, Boolean> condition, Consumer<IAction> task);
+
+    /**
+     * Schedule a conditional action that gives up after at most maxChecks attempts.
+     *
+     * @param condition     checked every tick, if it returns true, task is fired
+     * @param task          code to run once condition first becomes true
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
+     * @return the action scheduled
+     */
+    IConditionalAction schedule(Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen);
+
+    /**
+     * Schedule a conditional action that gives up after at most maxChecks attempts.
+     *
+     * @param condition     checked every tick, if it returns true, task is fired
+     * @param task          code to run once condition first becomes true
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param onTermination code to run when the termination condition returns true
+     * @return the action scheduled
+     */
+    IConditionalAction schedule(Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen, Consumer<IAction> onTermination);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
      * @param name      unique name
-     * @param condition supplier checked every tick, if it returns true, task is fired
+     * @param condition checked every tick, if it returns true, task is fired
      * @param task      code to run once condition first becomes true
      * @return the action scheduled
      */
-    IConditionalAction scheduleAction(String name, Supplier<Boolean> condition, Consumer<IAction> task);
+    IConditionalAction schedule(String name, Function<IAction, Boolean> condition, Consumer<IAction> task);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
      * @param name          unique name
-     * @param condition     supplier checked every tick, if it returns true, task is fired
+     * @param condition     checked every tick, if it returns true, task is fired
      * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
      * @return the action scheduled
      */
-    IConditionalAction scheduleAction(String name, Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen);
+    IConditionalAction schedule(String name, Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen);
 
     /**
      * Schedule a conditional action that gives up after at most maxChecks attempts.
      *
      * @param name          unique name
-     * @param condition     supplier checked every tick, if it returns true, task is fired
+     * @param condition     checked every tick, if it returns true, task is fired
      * @param task          code to run once condition first becomes true
-     * @param terminateWhen supplier checked every tick, if it returns true, action is terminated (gets marked done)
+     * @param terminateWhen checked every tick, if it returns true, action is terminated (gets marked done)
      * @param onTermination code to run when the termination condition returns true
      * @return the action scheduled
      */
-    IConditionalAction scheduleAction(String name, Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen, Consumer<IAction> onTermination);
+    IConditionalAction schedule(String name, Function<IAction, Boolean> condition, Consumer<IAction> task, Function<IAction, Boolean> terminateWhen, Consumer<IAction> onTermination);
 
-    IConditionalAction scheduleAction(IConditionalAction action);
+    ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
+    // Parallels
 
     /**
-     *
-     * @return the list of all conditional actions
+     * @return the list of all parallel actions scheduled
      */
-    List<IConditionalAction> getConditionalActions();
+    IActionQueue getParallelQueue();
 
     /**
-     * Cancel (remove) the first queued action with the given name.
+     * Schedules actions on the parallelQueue, where all actions are executed simultaneously
+     *
+     * @param action the action to add to the parallel chain
+     * @return the parallel action
+     */
+
+    IAction scheduleParallel(IAction action);
+
+    /**
+     * Multiple actions in parallel
+     * i.e scheduleParallel(act1,act2,act3,...)
+     *
+     * @param actions the actions to run in parallel
+     */
+    void scheduleParallel(IAction... actions);
+
+    IAction scheduleParallel(Consumer<IAction> task);
+
+    void scheduleParallel(Consumer<IAction>... tasks);
+
+    IAction scheduleParallel(int delay, Consumer<IAction> task);
+
+    IAction scheduleParallel(int maxDuration, int delay, Consumer<IAction> task);
+
+    IAction scheduleParallel(String name, Consumer<IAction> task);
+
+    IAction scheduleParallel(String name, int delay, Consumer<IAction> task);
+
+    IAction scheduleParallel(String name, int maxDuration, int delay, Consumer<IAction> task);
+
+    /**
+     * @return All the IActionQueues within this Manager, including main sequential, parallel and conditional
+     */
+    IActionQueue[] getAllQueues();
+
+    /**
+     * @param name action name to check for
+     * @return true if action is scheduled in any of the available  queues
+     */
+    boolean hasAny(String name);
+
+    /**
+     * @param name the name for the new parallel action
+     * @return Checks through all available queues and fetches the first IAction with given name
+     */
+    IAction getAny(String name);
+
+    /**
+     * Checks through all available queues and cancels (remove) the first action with the given name.
      *
      * @param name the name assigned when scheduling
      * @return true if one was found and removed, false otherwise
      */
-    boolean cancelAction(String name);
+    boolean cancelAny(String name);
 
     /**
-     * Remove every scheduled action immediately.
+     * Clears all available queues and kills all of their scheduled IActions.
      */
     void clear();
 
     /**
-     * Convenience: create and enqueue a normal repeating task.
+     * @return a chain that can be used to fire Actions sequentially based on sequentialQueue
      */
-    default void addTask(String name, int maxDuration, int startAfterTicks, Consumer<IAction> task) {
-        scheduleAction(name, maxDuration, startAfterTicks, task);
-    }
-
-    /**
-     * Convenience: create & enqueue a task that will fire exactly once
-     * after the given delay, and then auto-complete.
-     *
-     * @param name             a unique name for this action
-     * @param startAfterTicks  delay before it runs (in ticks)
-     * @param task             code to execute once
-     */
-    default void addSingleTask(String name, int startAfterTicks, Consumer<IAction> task) {
-        IAction action = create(name, 1, startAfterTicks, act -> {
-            task.accept(act);
-            act.markDone();
-        });
-        // force it to fire on the very next tick once the delay expires
-        action.setUpdateEveryXTick(1);
-        scheduleAction(action);
-    }
-
-    /**
-     * Same as above, but fires immediately (no delay).
-     */
-    default void addSingleTask(String name, Consumer<IAction> task) {
-        addSingleTask(name, 0, task);
-    }
-
-
-    /**
-     * Convenience: create & enqueue a conditional task that re-checks forever.
-     */
-    default void addConditionalTask(String name, Supplier<Boolean> condition, Consumer<IAction> task) {
-        scheduleAction(name, condition, task);
-    }
-
-    /**
-     * Convenience: create & enqueue a conditional task that gives up after maxChecks.
-     */
-    default void addConditionalTask(String name, Supplier<Boolean> condition, Consumer<IAction> task, Supplier<Boolean> terminateWhen) {
-        scheduleAction(name, condition, task, terminateWhen);
-    }
-
-
-    IAction scheduleParallelAction(IAction action);
-
     IActionChain chain();
 
+    /**
+     *
+     * @return a chain that can be used to fire Actions in parallel based on parallelQueue
+     */
     IActionChain parallelChain();
+
+    /**
+     *
+     * @return a string containing all the IActionQueues active within the manager
+     */
+    String printQueues();
 }

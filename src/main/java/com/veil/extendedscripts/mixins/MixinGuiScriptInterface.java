@@ -19,24 +19,28 @@ public abstract class MixinGuiScriptInterface extends GuiNPCInterface {
     @Shadow
     protected int activeTab = 0;
 
-    @Inject(method = "initGui", at = @At(value = "RETURN"))
+    @Inject(method = "initSettingsTab", at = @At(value = "RETURN"), remap = false)
     public void initGui(CallbackInfo cif) {
-        if (activeTab == 0) {
-            GuiNpcButton copyButton = getButton(100);
-            GuiNpcButton clearButton = getButton(102);
-            GuiNpcButton refButton = getButton(110);
+        // Move the copy and clear buttons down to make some room for the new buttons.
+        GuiNpcButton copyButton = getButton(100);
+        GuiNpcButton clearButton = getButton(102);
 
-            copyButton.yPosition += 21;
-            clearButton.yPosition += 21;
+        copyButton.yPosition += 21;
+        clearButton.yPosition += 21;
 
-            addButton(new GuiNpcButton(142, refButton.xPosition, refButton.yPosition + 21, 80, 20, "gui.extendeddoc"));
-        }
+        GuiNpcButton refButton = getButton(110);
+        addButton(new GuiNpcButton(142, refButton.xPosition, refButton.yPosition + 21, 80, 20, "gui.extendeddoc"));
+
+        refButton = getButton(109);
+        addButton(new GuiNpcButton(143, refButton.xPosition, refButton.yPosition + 21, 80, 20, "gui.extendedwebsite"));
     }
 
     @Inject(method = "actionPerformed", at = @At(value = "RETURN"))
     protected void actionPerformed(GuiButton guibutton, CallbackInfo cif) {
         if (guibutton.id == 142) {
             this.displayGuiScreen(new GuiConfirmOpenLink(((GuiScriptInterface) (Object) this), "https://loomingveil.github.io/Extended-Scripts-Combined-API/", 4, true));
+        } else if (guibutton.id == 143) {
+            this.displayGuiScreen(new GuiConfirmOpenLink(((GuiScriptInterface) (Object) this), "https://github.com/LoomingVeil/Extended-Scripts", 4, true));
         }
     }
 }

@@ -26,6 +26,8 @@ import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.client.gui.util.script.interpreter.js_parser.JSTypeInfo;
+import noppes.npcs.client.gui.util.script.interpreter.js_parser.JSTypeRegistry;
 import noppes.npcs.constants.ScriptContext;
 import noppes.npcs.controllers.ScriptHookController;
 
@@ -55,10 +57,6 @@ public class CommonProxy {
 
         FMLCommonHandler.instance().bus().register(new ScriptedObjectEventHandler());
         MinecraftForge.EVENT_BUS.register(new ScriptedObjectEventHandler());
-    }
-
-    public void postInit(FMLPostInitializationEvent event) {
-        AttributeEventHandler.init();
 
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
         API.addGlobalObject("extAPI", ExtendedAPI.Instance);
@@ -79,6 +77,19 @@ public class CommonProxy {
         API.addGlobalObject("ItemType", ItemType.Instance);
         API.addGlobalObject("Effect", EffectID.Instance);
         API.addGlobalObject("SkinType", SkinType.Instance);
+
+        /*JSTypeRegistry.getInstance().registerGlobalObject("extAPI", "AbstractExtendedAPI");
+        JSTypeRegistry.getInstance().registerGlobalObject("Color", "IColor");
+        JSTypeRegistry.getInstance().registerGlobalObject("IArmorType", "IArmorType");
+        Set<String> keys = JSTypeRegistry.getInstance().getTypeNames();
+        System.out.println("All Classes:");
+        for (String key : keys) {
+            System.out.println(key);
+        }*/
+    }
+
+    public void postInit(FMLPostInitializationEvent event) {
+        AttributeEventHandler.init();
 
         ScriptHookController hookController = ScriptHookController.Instance;
         hookController.registerHook(ScriptContext.PLAYER, new HotbarSlotChangedEvent().getHookName(), IHotbarSlotChangedEvent.class);

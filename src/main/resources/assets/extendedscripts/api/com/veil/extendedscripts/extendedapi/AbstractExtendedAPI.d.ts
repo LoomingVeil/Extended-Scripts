@@ -9,7 +9,7 @@ import { IAttributeDefinition } from "./../../../../noppes/npcs/api/handler/data
 /**
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
  */
-declare namespace extAPI {
+declare namespace AbstractExtendedAPI {
 	/**
 	 * Gets an array of the names of the registered entities in the game.
 	 * These names can be used in functions like {@link #createIEntity(String, IWorld)}.
@@ -18,7 +18,7 @@ declare namespace extAPI {
 
 	/**
 	 * Creates an instance of an IEntity that can be spawned in the world with {@link IWorld#spawnEntityInWorld(noppes.npcs.api.entity.IEntity)}
-	 * 
+	 *
 	 * @param entityName To see all valid names, call {@link #getEntityNameList()}
 	 * @return An IEntity or null if entityName is invalid
 	 */
@@ -34,7 +34,7 @@ declare namespace extAPI {
 
 	/**
 	 * Converts a hex code to an integer color that can be used for ScriptedItem's setColor {@link noppes.npcs.api.item.IItemCustomizable#setColor(Integer)} method.
-	 * 
+	 *
 	 * @param hex A length six hex code (#'s are removed automatically)
 	 * @return An integer color or -1 if wrong length and -2 if string is not a hex code.
 	 */
@@ -46,7 +46,7 @@ declare namespace extAPI {
 
 	/**
 	 * Registers a custom attribute that can both be applied via script or /kam attribute. Attributes are registered per world.
-	 * 
+	 *
 	 * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
 	 * @param displayName This name will show up on your item.
 	 * @param colorCode Takes one of Minecraft's 16 colors 0-9 and a-f. See {@link IColorCodes}.
@@ -76,7 +76,7 @@ declare namespace extAPI {
 
 	/**
 	 * Creates an object which can be added to {@link com.veil.extendedscripts.extendedapi.item.IItemPotion} objects.
-	 * 
+	 *
 	 * @param duration duration in ticks.
 	 * @param amplifier 0 indexed so 0 is level I, 1 is level II, ect.
 	 * @throws Exception when an invalid id is inputted.

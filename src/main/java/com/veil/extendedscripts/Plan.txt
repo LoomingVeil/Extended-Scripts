@@ -16,7 +16,6 @@ Things I want to add:
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
- - Add the Extended Scripts API tab to scripting
  - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
  - See if I can mess with the skybox
@@ -28,7 +27,6 @@ Lists to add when we see something:
 Confusing CustomNPC+ gui stuff:
  - Fix the issue where loaded scripts improperly show §
  - See if we can make right-clicking be a previous option button
- - Syntax highlighting for valid event names
 
 Event stuff that IDK how to do yet:
  - Death event that lets you escape death
@@ -37,4 +35,3 @@ Things that might just be impossible:
  - Making some working version of player.stopUsingItem()
  - Reading the player's controls
  - Check if texture exists
- - See if we can change how ctrl + backspace works in the code editor

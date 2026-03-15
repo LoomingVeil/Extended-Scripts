@@ -16,6 +16,7 @@ Things I want to add:
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
+ - Add the Extended Scripts API tab to scripting (It only doesn't work outside of the development environment)
  - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
  - See if I can mess with the skybox

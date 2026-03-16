@@ -3,7 +3,7 @@ package com.veil.extendedscripts.extendedapi.constants;
 /**
  * This object stores Minecraft's particle names available to all scripting handlers through the "Particle" keyword.
  */
-public interface IParticleType {
+public interface AbstractParticleType {
     String HUGE_EXPLOSION = "hugeexplosion";
     String LARGE_EXPLOSION = "largeexplode";
     String FIREWORKS_SPARK = "fireworksSpark";

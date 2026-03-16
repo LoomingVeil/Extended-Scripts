@@ -8,4 +8,10 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractArmorType
 */
 export interface AbstractArmorType {
+	NONE: number;
+	ALL: number;
+	HEAD: number;
+	CHEST: number;
+	LEGS: number;
+	FEET: number;
 }

@@ -5,7 +5,13 @@
 
 /**
  * This object stores block sides available to all scripting handlers through the "BlockSide" keyword.
-  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IBlockSide
+  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractBlockSide
 */
-export interface IBlockSide {
+export interface AbstractBlockSide {
+	BOTTOM: number;
+	TOP: number;
+	BACK: number;
+	FRONT: number;
+	LEFT: number;
+	RIGHT: number;
 }

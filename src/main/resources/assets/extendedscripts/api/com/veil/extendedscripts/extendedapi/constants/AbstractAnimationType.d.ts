@@ -8,4 +8,12 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractAnimationType
 */
 export interface AbstractAnimationType {
+	NONE: number;
+	SITTING: number;
+	LYING: number;
+	SNEAKING: number;
+	DANCING: number;
+	AIMING: number;
+	CRAWLING: number;
+	HUGGING: number;
 }

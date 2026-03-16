@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-import com.veil.extendedscripts.extendedapi.constants.IItemType;
+import com.veil.extendedscripts.extendedapi.constants.AbstractItemType;
 
-public class ItemType implements IItemType {
+public class ItemType implements AbstractItemType {
     public static final ItemType Instance = new ItemType();
     public final int DEFAULT = 0;
     public final int BOOK = 1;

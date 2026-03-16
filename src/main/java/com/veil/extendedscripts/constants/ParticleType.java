@@ -1,11 +1,11 @@
 package com.veil.extendedscripts.constants;
 
-import com.veil.extendedscripts.extendedapi.constants.IParticleType;
+import com.veil.extendedscripts.extendedapi.constants.AbstractParticleType;
 
 /**
  * {@link net.minecraft.client.renderer.RenderGlobal#spawnParticle(String, double, double, double, double, double, double) for particle list}
  */
-public class ParticleType implements IParticleType {
+public class ParticleType implements AbstractParticleType {
     public static final ParticleType Instance = new ParticleType();
     public final String HUGE_EXPLOSION = "hugeexplosion";
     public final String LARGE_EXPLOSION = "largeexplode";

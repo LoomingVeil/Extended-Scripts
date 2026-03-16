@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-import com.veil.extendedscripts.extendedapi.constants.ISkinType;
+import com.veil.extendedscripts.extendedapi.constants.AbstractSkinType;
 
-public class SkinType implements ISkinType {
+public class SkinType implements AbstractSkinType {
     public static SkinType Instance = new SkinType();
     public final int TEXTURE = 0;
     public final int PLAYER = 1;

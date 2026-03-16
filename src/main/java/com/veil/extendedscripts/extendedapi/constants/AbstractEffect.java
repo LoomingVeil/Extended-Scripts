@@ -1,6 +1,6 @@
 package com.veil.extendedscripts.extendedapi.constants;
 
-public interface IEffect {
+public interface AbstractEffect {
     int SPEED = 1;
     int SLOWNESS = 2;
     int HASTE = 3;

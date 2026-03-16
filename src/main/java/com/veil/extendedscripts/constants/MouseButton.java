@@ -1,6 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-public class MouseButton implements com.veil.extendedscripts.extendedapi.constants.IMouseButton {
+import com.veil.extendedscripts.extendedapi.constants.AbstractMouseButton;
+
+public class MouseButton implements AbstractMouseButton {
     public static final MouseButton Instance = new MouseButton();
     public static final int SCROLL = -1;
     public static final int LEFT = 0;

@@ -5,7 +5,14 @@
 
 /**
  * This object stores npc role types available to all scripting handlers through the "Role" keyword.
-  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IRoleType
+  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractRoleType
 */
-export interface IRoleType {
+export interface AbstractRoleType {
+	NONE: number;
+	TRADER: number;
+	FOLLOWER: number;
+	BANK: number;
+	TRANSPORTER: number;
+	MAILMAN: number;
+	COMPANION: number;
 }

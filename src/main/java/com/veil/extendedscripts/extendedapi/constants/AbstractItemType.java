@@ -5,7 +5,7 @@ package com.veil.extendedscripts.extendedapi.constants;
  * to determine what kind of item it is.
  * This object is available to all scripting handlers through the "ItemType" keyword.
  */
-public interface IItemType {
+public interface AbstractItemType {
     int DEFAULT = 0;
     int BOOK = 1;
     int BLOCK = 2;

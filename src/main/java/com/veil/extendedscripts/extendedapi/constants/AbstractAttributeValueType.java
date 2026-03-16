@@ -3,7 +3,7 @@ package com.veil.extendedscripts.extendedapi.constants;
 /**
  * This object stores attribute value types available to all scripting handlers through the "AttributeValueType" keyword.
  */
-public interface IAttributeValueType {
+public interface AbstractAttributeValueType {
     int FLAT = 0;
     int PERCENT = 1;
     int MAGIC = 2;

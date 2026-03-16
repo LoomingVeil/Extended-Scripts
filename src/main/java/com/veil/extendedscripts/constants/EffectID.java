@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-import com.veil.extendedscripts.extendedapi.constants.IEffect;
+import com.veil.extendedscripts.extendedapi.constants.AbstractEffect;
 
-public class EffectID implements IEffect {
+public class EffectID implements AbstractEffect {
     public static final EffectID Instance = new EffectID();
     public final int SPEED = 1;
     public final int SLOWNESS = 2;

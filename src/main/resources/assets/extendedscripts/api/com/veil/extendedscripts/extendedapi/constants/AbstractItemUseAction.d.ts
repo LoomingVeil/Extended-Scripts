@@ -5,7 +5,12 @@
 
 /**
  * This object stores {@link noppes.npcs.api.item.IItemCustomizable} use types available to all scripting handlers through the "ItemUseAction" keyword.
-  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IItemUseAction
+  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractItemUseAction
 */
-export interface IItemUseAction {
+export interface AbstractItemUseAction {
+	NONE: number;
+	BLOCK: number;
+	BOW: number;
+	EAT: number;
+	DRINK: number;
 }

@@ -1,8 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-import com.veil.extendedscripts.extendedapi.constants.IItemUseAction;
+import com.veil.extendedscripts.extendedapi.constants.AbstractItemUseAction;
 
-public class ItemUseAction implements IItemUseAction {
+public class ItemUseAction implements AbstractItemUseAction {
     public static final ItemUseAction Instance = new ItemUseAction();
     public final int NONE = 0;
     public final int BLOCK = 1;

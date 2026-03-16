@@ -4,7 +4,7 @@ package com.veil.extendedscripts.extendedapi.constants;
  * This object stores colors available to all scripting handlers through the "Color" keyword.
  * The values stored here are the characters for each color without the formatting character.
  */
-public interface IColorCodes {
+public interface AbstractColorCodes {
     char BLACK = '0';
     char DARK_BLUE = '1';
     char DARK_GREEN = '2';

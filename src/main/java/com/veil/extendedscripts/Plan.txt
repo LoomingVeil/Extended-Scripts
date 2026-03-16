@@ -20,10 +20,9 @@ Things I want to add:
  - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
  - See if I can mess with the skybox
- - Add the pointer
 
 Lists to add when we see something:
- - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component)
+ - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component, ability phase, ability allowed type, abilityLockMovementType, abilityRotationType)
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

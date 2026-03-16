@@ -5,7 +5,13 @@
 
 /**
  * This object stores mouse button ids available to all scripting handlers through the "MouseButton" keyword.
-  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IMouseButton
+  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractMouseButton
 */
-export interface IMouseButton {
+export interface AbstractMouseButton {
+	SCROLL: number;
+	LEFT: number;
+	RIGHT: number;
+	MIDDLE: number;
+	MB4: number;
+	MB5: number;
 }

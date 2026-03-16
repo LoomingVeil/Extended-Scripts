@@ -3,7 +3,7 @@ package com.veil.extendedscripts.extendedapi.constants;
 /**
  * This object stores block sides available to all scripting handlers through the "BlockSide" keyword.
  */
-public interface IBlockSide {
+public interface AbstractBlockSide {
     int BOTTOM = 0;
     int TOP = 1;
     int BACK = 2;

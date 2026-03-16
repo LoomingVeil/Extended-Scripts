@@ -4,6 +4,7 @@ import com.veil.extendedscripts.commands.VeilCommand;
 import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.event.*;
+import com.veil.extendedscripts.extendedapi.constants.AbstractAbilityUserType;
 import com.veil.extendedscripts.extendedapi.event.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
@@ -78,15 +79,12 @@ public class CommonProxy {
         API.addGlobalObject("ItemType", ItemType.Instance);
         API.addGlobalObject("Effect", EffectID.Instance);
         API.addGlobalObject("SkinType", SkinType.Instance);
-
-        /*JSTypeRegistry.getInstance().registerGlobalObject("extAPI", "AbstractExtendedAPI");
-        JSTypeRegistry.getInstance().registerGlobalObject("Color", "IColor");
-        JSTypeRegistry.getInstance().registerGlobalObject("IArmorType", "IArmorType");
-        Set<String> keys = JSTypeRegistry.getInstance().getTypeNames();
-        System.out.println("All Classes:");
-        for (String key : keys) {
-            System.out.println(key);
-        }*/
+        API.addGlobalObject("DataType", DataType.Instance);
+        API.addGlobalObject("CollisionType", CollisionType.Instance);
+        API.addGlobalObject("CombatPolicy", CombatPolicy.Instance);
+        API.addGlobalObject("TacticalVariant", TacticalVariant.Instance);
+        API.addGlobalObject("AbilityPhase", AbilityPhase.Instance);
+        API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
     }
 
     public void postInit(FMLPostInitializationEvent event) {

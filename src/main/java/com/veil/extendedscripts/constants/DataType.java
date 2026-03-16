@@ -1,6 +1,8 @@
 package com.veil.extendedscripts.constants;
 
-public class DataType {
+import com.veil.extendedscripts.extendedapi.constants.AbstractDataType;
+
+public class DataType implements AbstractDataType {
     public static final DataType Instance = new DataType();
     public final int BYTE = 1;
     public final int SHORT = 2;

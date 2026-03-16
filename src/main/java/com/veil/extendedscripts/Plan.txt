@@ -22,7 +22,7 @@ Things I want to add:
  - See if I can mess with the skybox
 
 Lists to add when we see something:
- - Continue searching for more Enums to implement (Nbt data types, npc collision type, overlay component, ability phase, ability allowed type, abilityLockMovementType, abilityRotationType)
+ - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationType)
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

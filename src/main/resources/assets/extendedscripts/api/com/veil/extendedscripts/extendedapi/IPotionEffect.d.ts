@@ -1,20 +1,17 @@
-import { IObject } from "./../../../../IObject";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi
+ */
 
-
-export interface IPotionEffect extends IObject {
-	getName(): string;
-
-	getID(): number;
-
-	setID(ID: number): void;
-
-	getDuration(): number;
-
-	setDuration(duration: number): void;
-
-	getAmplifier(): number;
-
-	setAmplifier(amplifier: number): void;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.IPotionEffect
+ */
+export interface IPotionEffect {
+    getName(): String;
+    getID(): import('./int').int;
+    setID(ID: import('./int').int): import('./void').void;
+    getDuration(): import('./int').int;
+    setDuration(duration: import('./int').int): import('./void').void;
+    getAmplifier(): import('./int').int;
+    setAmplifier(amplifier: import('./int').int): import('./void').void;
 }
-

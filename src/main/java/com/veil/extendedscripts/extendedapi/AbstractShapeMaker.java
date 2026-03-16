@@ -6,7 +6,7 @@ import noppes.npcs.api.IPos;
  * Provides a variant of methods for creating shapes.
  * TAKE NOTE: This class is a work in progress. Pyramid and cone shapes are known to have issues.
  */
-public interface IShapeMaker {
+public interface AbstractShapeMaker {
     IPos[] getBox(IPos center, int width, int length, int height);
 
     IPos[] getBox(IPos pos1, IPos pos2);

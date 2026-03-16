@@ -1,13 +1,11 @@
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.constants
+ */
 
 /**
  * This object stores mouse button ids available to all scripting handlers through the "MouseButton" keyword.
- */
-declare namespace MouseButton {
-	var SCROLL: number;
-	var LEFT: number;
-	var RIGHT: number;
-	var MIDDLE: number;
-	var MB4: number;
-	var MB5: number;
+  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IMouseButton
+*/
+export interface IMouseButton {
 }
-

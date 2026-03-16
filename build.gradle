@@ -1,0 +1,48 @@
+
+plugins {
+    id 'com.gtnewhorizons.gtnhconvention'
+    id 'dts.typescript-generator'
+}
+
+// ============================================================================
+// TypeScript Definition Generation Task
+// Generates .d.ts files from Java API sources for scripting IDE support
+// ============================================================================
+// TypeScript plugin is applied above in the main plugins block
+
+tasks.named("generateTypeScriptDefinitions").configure {
+    // Source directories containing the Java contract sources AND (optionally) implementation sources.
+    // If you enable enrichment via implementationPackages, make sure the relevant implementation sources
+    // are included here so they can be scanned.
+    // Example (CustomNPC-Plus layout): contracts under src/api/java, implementations under src/main/java
+    sourceDirectories = ['src/main/java']
+
+    // Packages in source directories to generate .d.ts files for
+    apiPackages = ['com.veil.extendedscripts.extendedapi'] as Set
+
+    // Output directory for the generated .d.ts files
+    // Must be within resources/assets/${modId}/api to be detected by CNPC+
+    outputDirectory = "src/main/resources/assets/${modId}/api"
+
+    // Whether to clean old generated files before regenerating
+    cleanOutputFirst = true
+
+    // Whether to map Java primitives (int, float, double, etc.) to TypeScript 'number'
+    // Set to false (default) to preserve Java primitive types in generated .d.ts for better API clarity
+    // Set to true to map all Java primitives to TS equivalents (int -> number, float -> number, etc.)
+    mapJavaPrimitivesToJS = false
+
+    // Optional: enable implementation-backed field enrichment.
+    // These are package prefixes for implementation classes. When provided, the generator scans
+    // sourceDirectories for classes under these packages that implement interfaces under apiPackages,
+    // and injects their public instance fields into the generated contract interface .d.ts.
+    //
+    // IMPORTANT: Avoid including your API package itself (e.g. '...api') here, otherwise you may
+    // scan API helper classes and create unnecessary ambiguity/overhead.
+    implementationPackages = [
+        'com.veil.extendedscripts.constants',
+        'com.veil.extendedscripts.projectile',
+        'com.veil.extendedscripts.items',
+        'com.veil.extendedscripts.event'
+    ] as Set
+}

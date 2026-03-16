@@ -1,25 +1,18 @@
-import { ICustomProjectile } from "./../entity/ICustomProjectile";
-import { IBlock } from "./../../../../../noppes/npcs/api/IBlock";
-import { IObject } from "./../../../../../IObject";
-import { IEntity } from "./../../../../../noppes/npcs/api/entity/IEntity";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.event
+ */
 
-
-export interface ICustomProjectileImpactEvent extends IObject {
-	getHookName(): string;
-
-	getProjectile(): ICustomProjectile;
-
-	getID(): number;
-
-	getTarget(): IEntity;
-
-	getBlock(): IBlock;
-
-	didShatter(): boolean;
-
-	hitEntity(): boolean;
-
-	hitBlock(): boolean;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent
+ */
+export interface ICustomProjectileImpactEvent {
+    getHookName(): String;
+    getProjectile(): import('../entity/ICustomProjectile').ICustomProjectile;
+    getID(): import('./int').int;
+    getTarget(): IEntity;
+    getBlock(): IBlock;
+    didShatter(): import('./boolean').boolean;
+    hitEntity(): import('./boolean').boolean;
+    hitBlock(): import('./boolean').boolean;
 }
-

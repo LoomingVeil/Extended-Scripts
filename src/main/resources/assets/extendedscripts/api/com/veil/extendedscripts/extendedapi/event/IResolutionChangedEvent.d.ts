@@ -1,11 +1,12 @@
-import { IScreenResolution } from "./../IScreenResolution";
-import { IPlayerEvent } from "./../../../../../noppes/npcs/api/event/IPlayerEvent";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.event
+ */
 
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.event.IResolutionChangedEvent
+ */
 export interface IResolutionChangedEvent extends IPlayerEvent {
-	getOldResolution(): IScreenResolution;
-
-	getNewResolution(): IScreenResolution;
-
+    getOldResolution(): import('../IScreenResolution').IScreenResolution;
+    getNewResolution(): import('../IScreenResolution').IScreenResolution;
 }
-

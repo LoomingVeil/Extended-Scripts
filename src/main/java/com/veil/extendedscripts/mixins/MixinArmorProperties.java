@@ -13,6 +13,7 @@ import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.constants.EnumScriptType;
 import noppes.npcs.controllers.ScriptController;
 import noppes.npcs.controllers.data.INpcScriptHandler;
+import noppes.npcs.controllers.data.IScriptHandler;
 import noppes.npcs.controllers.data.PlayerDataScript;
 import noppes.npcs.extendedapi.item.IItemCustomizable;
 import noppes.npcs.items.ItemScripted;
@@ -52,7 +53,7 @@ public class MixinArmorProperties {
 
                         ArmorDamagedEvent event = new ArmorDamagedEvent(customItem, itemDamage, source, entity, i);
 
-                        INpcScriptHandler handler = (INpcScriptHandler) customItem.getScriptHandler();
+                        IScriptHandler handler = (IScriptHandler) customItem.getScriptHandler();
                         handler.callScript(event.getHookName(), event);
                         NpcAPI.EVENT_BUS.post(event);
                     } else if (inventory[i].getItem() instanceof ItemArmor) {

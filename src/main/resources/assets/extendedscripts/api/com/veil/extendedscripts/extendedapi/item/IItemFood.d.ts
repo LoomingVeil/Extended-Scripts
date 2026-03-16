@@ -1,10 +1,12 @@
-import { IObject } from "./../../../../../IObject";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.item
+ */
 
-
-export interface IItemFood extends IObject {
-	getHungerRestored(): number;
-
-	getSaturation(): number;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.item.IItemFood
+ */
+export interface IItemFood {
+    getHungerRestored(): import('./int').int;
+    getSaturation(): import('./float').float;
 }
-

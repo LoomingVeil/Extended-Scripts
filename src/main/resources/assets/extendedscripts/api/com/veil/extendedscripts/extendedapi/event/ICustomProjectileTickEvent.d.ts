@@ -1,13 +1,13 @@
-import { ICustomProjectile } from "./../entity/ICustomProjectile";
-import { IObject } from "./../../../../../IObject";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.event
+ */
 
-
-export interface ICustomProjectileTickEvent extends IObject {
-	getHookName(): string;
-
-	getProjectile(): ICustomProjectile;
-
-	getID(): number;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent
+ */
+export interface ICustomProjectileTickEvent {
+    getHookName(): String;
+    getProjectile(): import('../entity/ICustomProjectile').ICustomProjectile;
+    getID(): import('./int').int;
 }
-

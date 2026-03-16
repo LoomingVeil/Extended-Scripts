@@ -3,7 +3,7 @@ package com.veil.extendedscripts;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
 import com.veil.extendedscripts.extendedapi.IPotionEffect;
-import com.veil.extendedscripts.extendedapi.IShapeMaker;
+import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
@@ -58,8 +58,8 @@ public class ExtendedAPI implements AbstractExtendedAPI {
         return lastWorldsAttributes;
     }
 
-    public IShapeMaker getShapeMaker() {
-        return (IShapeMaker) ShapeMaker.Instance;
+    public AbstractShapeMaker getShapeMaker() {
+        return (AbstractShapeMaker) ShapeMaker.Instance;
     }
 
     private boolean doesTextureExist(String path) {

@@ -1,8 +1,11 @@
-import { IObject } from "./../../../../../IObject";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.item
+ */
 
-
-export interface IItemTool extends IObject {
-	getToolMaterial(): string;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.item.IItemTool
+ */
+export interface IItemTool {
+    getToolMaterial(): String;
 }
-

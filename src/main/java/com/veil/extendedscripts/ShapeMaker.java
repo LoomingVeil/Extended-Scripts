@@ -1,6 +1,6 @@
 package com.veil.extendedscripts;
 
-import com.veil.extendedscripts.extendedapi.IShapeMaker;
+import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IPos;
 
@@ -18,7 +18,7 @@ enum ShapeType {
 /**
  * Provides a variant of methods for creating shapes
  */
-public class ShapeMaker implements IShapeMaker {
+public class ShapeMaker implements AbstractShapeMaker {
     public static ShapeMaker Instance = new ShapeMaker();
 
     /**

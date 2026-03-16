@@ -1,11 +1,7 @@
 package com.veil.extendedscripts.extendedapi;
 
-import com.veil.extendedscripts.PotionEffect;
 import com.veil.extendedscripts.extendedapi.constants.*;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
-import com.veil.extendedscripts.projectile.EntityCustomProjectile;
-import kamkeel.npcs.controllers.AttributeController;
-import net.minecraft.entity.player.EntityPlayer;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLivingBase;
@@ -53,7 +49,7 @@ public interface AbstractExtendedAPI {
      * @param displayName This name will show up on your item.
      * @param colorCode Takes one of Minecraft's 16 colors 0-9 and a-f. See {@link IColorCodes}.
      * @param attributeType 0. Flat, 1. Percent, 2. Magic. See {@link IAttributeValueType}
-     * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link IAttributeSection}
+     * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link AbstractAttributeSection}
      */
     void registerAttribute(String key, String displayName, char colorCode, int attributeType, int section);
 

@@ -1,8 +1,10 @@
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.constants
+ */
 
-declare namespace SkinType {
-	var TEXTURE: number;
-	var PLAYER: number;
-	var URL: number;
-	var URL64: number;
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.constants.ISkinType
+ */
+export interface ISkinType {
 }
-

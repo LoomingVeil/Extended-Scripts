@@ -1,16 +1,15 @@
-import { IObject } from "./../../../../IObject";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi
+ */
 
-
-export interface IScreenResolution extends IObject {
-	getWidth(): number;
-
-	getHeight(): number;
-
-	getScale(): number;
-
-	getWidthPercent(percent: number): number;
-
-	getHeightPercent(percent: number): number;
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.IScreenResolution
+ */
+export interface IScreenResolution {
+    getWidth(): import('./int').int;
+    getHeight(): import('./int').int;
+    getScale(): import('./float').float;
+    getWidthPercent(percent: import('./double').double): import('./int').int;
+    getHeightPercent(percent: import('./double').double): import('./int').int;
 }
-

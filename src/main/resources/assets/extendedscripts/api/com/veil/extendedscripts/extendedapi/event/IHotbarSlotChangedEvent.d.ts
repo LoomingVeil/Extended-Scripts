@@ -1,19 +1,14 @@
-import { IItemStack } from "./../../../../../noppes/npcs/api/item/IItemStack";
-import { IPlayerEvent } from "./../../../../../noppes/npcs/api/event/IPlayerEvent";
+/**
+ * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
+ * Package: com.veil.extendedscripts.extendedapi.event
+ */
 
-
+/**
+ * @javaFqn com.veil.extendedscripts.extendedapi.event.IHotbarSlotChangedEvent
+ */
 export interface IHotbarSlotChangedEvent extends IPlayerEvent {
-	oldSlot: number;
-	newSlot: number;
-	oldStack: IItemStack;
-	newStack: IItemStack;
-	getOldSlot(): number;
-
-	getNewSlot(): number;
-
-	getOldStack(): IItemStack;
-
-	getNewStack(): IItemStack;
-
+    getOldSlot(): import('./int').int;
+    getNewSlot(): import('./int').int;
+    getOldStack(): IItemStack;
+    getNewStack(): IItemStack;
 }
-

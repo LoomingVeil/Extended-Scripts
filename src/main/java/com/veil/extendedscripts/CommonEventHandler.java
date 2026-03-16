@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -102,11 +103,30 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public void onPlayerLeftClick(PlayerInteractEvent event) {
+        if (event.entityPlayer.getHeldItem() == null) return;
         if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-            if (event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().getItem() == ExtendedScripts.worldClippers) {
+            if (event.entityPlayer.getHeldItem().getItem() == ExtendedScripts.worldClippers) {
                 ExtendedScripts.worldClippers.setBlockTarget(event.entityPlayer.getHeldItem(), event.world, event.entityPlayer, event.x, event.y, event.z);
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onMouseInput(MouseEvent event) {
+        if (event.button != 0 || !event.buttonstate) return; // Only left click down
+
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayer player = mc.thePlayer;
+        if (player == null || mc.theWorld == null) return;
+
+        ItemStack held = player.getHeldItem();
+        if (held == null || !(held.getItem() instanceof Pointer)) return;
+
+        // Copy to clipboard client-side
+        Pointer pointer = (Pointer) held.getItem();
+        pointer.copyToClipboard(held, player);
+
+        event.setCanceled(true); // Optional: prevent the click from doing anything else
     }
 
     @SubscribeEvent

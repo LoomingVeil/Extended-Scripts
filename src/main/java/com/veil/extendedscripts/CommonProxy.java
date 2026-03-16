@@ -45,6 +45,7 @@ public class CommonProxy {
 
         GameRegistry.registerItem(ExtendedScripts.worldClippers, "world_clippers");
         GameRegistry.registerItem(ExtendedScripts.attributeCore, "attribute_core");
+        GameRegistry.registerItem(ExtendedScripts.pointer, "pointer");
 
         FMLCommonHandler.instance().bus().register(new GlobalFileCopierHandler());
         MinecraftForge.EVENT_BUS.register(new GlobalFileCopierHandler());

@@ -18,7 +18,7 @@ tasks.named("generateTypeScriptDefinitions").configure {
     sourceDirectories = ['src/main/java']
 
     // Packages in source directories to generate .d.ts files for
-    apiPackages = ['com.veil.extendedscripts.extendedapi'] as Set
+    apiPackages = ['com.veil.extendedscripts.extendedapi', 'noppes.npcs.extendedapi'] as Set
 
     // Output directory for the generated .d.ts files
     // Must be within resources/assets/${modId}/api to be detected by CNPC+
@@ -41,8 +41,16 @@ tasks.named("generateTypeScriptDefinitions").configure {
     // scan API helper classes and create unnecessary ambiguity/overhead.
     implementationPackages = [
         'com.veil.extendedscripts.constants',
-        'com.veil.extendedscripts.projectile',
-        'com.veil.extendedscripts.items',
         'com.veil.extendedscripts.event'
     ] as Set
+}
+
+jar {
+    manifest {
+        attributes (
+            'MixinConfigs': 'mixins.extendedscripts.json',
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'FMLCorePluginContainsFMLMod': 'true'
+        )
+    }
 }

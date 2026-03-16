@@ -1,13 +1,19 @@
-/**
- * Generated from Java file for CustomNPC+ Minecraft Mod 1.7.10
- * Package: com.veil.extendedscripts.extendedapi.constants
- */
+package com.veil.extendedscripts.extendedapi.constants;
 
 /**
  * All {@link noppes.npcs.api.entity.IEntity} implement getType(). You can compare that result with this class's fields
  * to determine what kind of entity it is or use it in certain functions {@link noppes.npcs.api.entity.IEntity#getSurroundingEntities(int, int)}
  * This object is available to all scripting handlers through the "EntityType" keyword.
-  * @javaFqn com.veil.extendedscripts.extendedapi.constants.IEntityType
-*/
-export interface IEntityType {
+ */
+public interface AbstractEntityType {
+    int ENTITY = 0;
+    int PLAYER = 1;
+    int NPC = 2;
+    int MONSTER = 3;
+    int ANIMAL = 4;
+    int LIVING = 5;
+    int ITEM = 6;
+    int PROJECTILE = 7;
+    int PIXELMON = 8;
+    int VILLAGER = 9;
 }

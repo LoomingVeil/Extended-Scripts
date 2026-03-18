@@ -11,6 +11,7 @@ public class Config {
     public static boolean enableEffectPages;
     public static boolean enableEffectPageModification;
     public static boolean showPotionEffectLevelsAsNumbers;
+    public static boolean enableScriptedArmorTextures;
     public static void init(File configFile) {
         if (!hasBeenLoaded) {
             if (config == null) {
@@ -32,6 +33,10 @@ public class Config {
             "You may need to disable this if you have another mod that modifies the in inventory effect screen. Disabling this will also disable showing CustomNPC+ custom effects with your potion effects"
         );
         enableEffectPages = config.getBoolean("enableEffectPages", Configuration.CATEGORY_GENERAL, true, "Enables pages for effects when you have more than five at once.");
+        enableScriptedArmorTextures = config.getBoolean(
+            "enableScriptedArmorTextures", Configuration.CATEGORY_GENERAL, true,
+            "When true, scripted items that is also armor can render custom textures. However, this may cause crashes with certain mods such as Angelica"
+        );
         showPotionEffectLevelsAsNumbers = config.getBoolean(
             "showPotionEffectLevelsAsNumbers",
             Configuration.CATEGORY_GENERAL,

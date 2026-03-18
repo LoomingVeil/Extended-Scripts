@@ -37,6 +37,12 @@ public class MixinConfig implements IMixinConfigPlugin {
             }
         }
 
+        if (!Config.enableScriptedArmorTextures) {
+            if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinRenderPlayer")) {
+                return false;
+            }
+        }
+
         return true;
     }
 

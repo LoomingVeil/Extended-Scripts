@@ -14,10 +14,24 @@ export interface AbstractAttributeSection {
      * @return The corresponding ordinal, or -1 if not found.
      */
     getValue(value: String): import('./int').int;
+	/**
+	 * Value is 0
+	 */
 	BASE: number;
+	/**
+	 * Value is 1
+	 */
 	MODIFIER: number;
+	/**
+	 * Value is 2
+	 */
 	STATS: number;
+	/**
+	 * Value is 3
+	 */
 	INFO: number;
+	/**
+	 * Value is 4
+	 */
 	EXTRA: number;
-	getValue(String: number;
 }

@@ -10,14 +10,44 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractItemType
 */
 export interface AbstractItemType {
+	/**
+	 * Value is 0
+	 */
 	DEFAULT: number;
+	/**
+	 * Value is 1
+	 */
 	BOOK: number;
+	/**
+	 * Value is 2
+	 */
 	BLOCK: number;
+	/**
+	 * Value is 4
+	 */
 	SWORD: number;
+	/**
+	 * Value is 5
+	 */
 	ARMOR: number;
+	/**
+	 * Value is 5
+	 */
 	PLANTABLE: number;
+	/**
+	 * Value is 6
+	 */
 	SCRIPTED_ITEM: number;
+	/**
+	 * Value is 7
+	 */
 	FOOD: number;
+	/**
+	 * Value is 8
+	 */
 	POTION: number;
+	/**
+	 * Value is 9
+	 */
 	TOOL: number;
 }

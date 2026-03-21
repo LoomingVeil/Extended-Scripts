@@ -9,8 +9,16 @@
 */
 export interface AbstractAttributeValueType {
     getValue(value: String): import('./int').int;
+	/**
+	 * Value is 0
+	 */
 	FLAT: number;
+	/**
+	 * Value is 1
+	 */
 	PERCENT: number;
+	/**
+	 * Value is 2
+	 */
 	MAGIC: number;
-	getValue(String: number;
 }

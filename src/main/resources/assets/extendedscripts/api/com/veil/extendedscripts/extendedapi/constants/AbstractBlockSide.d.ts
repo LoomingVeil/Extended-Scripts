@@ -8,10 +8,28 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractBlockSide
 */
 export interface AbstractBlockSide {
+	/**
+	 * Value is 0
+	 */
 	BOTTOM: number;
+	/**
+	 * Value is 1
+	 */
 	TOP: number;
+	/**
+	 * Value is 2
+	 */
 	BACK: number;
+	/**
+	 * Value is 3
+	 */
 	FRONT: number;
+	/**
+	 * Value is 4
+	 */
 	LEFT: number;
+	/**
+	 * Value is 5
+	 */
 	RIGHT: number;
 }

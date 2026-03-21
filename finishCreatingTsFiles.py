@@ -17,15 +17,26 @@ for filename in os.listdir(source_folder):
         with open(os.path.join(source_folder, filename), "r") as f:
             print(f"Reading {filename}")
             for line in f.readlines():
+                if "=" not in line:
+                    continue
                 line = line.lstrip().replace("public final ", "")
                 if line.startswith("int"):
-                        variables_to_add.append(line.replace("int ", "").split(" ")[0] + ": number;")
+                        variables_to_add.append({
+                            "name": line.replace("int ", "").split(" ")[0] + ": number;",
+                            "value": line.split(" = ")[1].replace(";", "").strip()
+                        })
                         found_something_in_file = True
                 elif line.startswith("char"):
-                    variables_to_add.append(line.replace("char ", "").split(" ")[0] + ": string;")
+                    variables_to_add.append({
+                        "name": line.replace("char ", "").split(" ")[0] + ": string;",
+                        "value": line.split(" = ")[1].replace(";", "").strip()
+                    })
                     found_something_in_file = True
                 elif line.startswith("String"):
-                    variables_to_add.append(line.replace("String ", "").split(" ")[0] + ": string;")
+                    variables_to_add.append({
+                        "name": line.replace("String ", "").split(" ")[0] + ": string;",
+                        "value": line.split(" = ")[1].replace(";", "").strip()
+                    })
                     found_something_in_file = True
 
             if found_something_in_file:
@@ -41,7 +52,8 @@ for filename in variables:
 
     current_text = current_text[:-2]
     for variable in variables[filename]:
-        current_text += "\t" + variable + "\n"
+        current_text += f"\t/**\n\t * Value is {variable['value']}\n\t */\n"
+        current_text += "\t" + variable["name"] + "\n"
     current_text += "}\n"
 
     with open(os.path.join(target_folder, filename + ".d.ts"), "w") as f:

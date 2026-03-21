@@ -10,14 +10,44 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractEntityType
 */
 export interface AbstractEntityType {
+	/**
+	 * Value is 0
+	 */
 	ENTITY: number;
+	/**
+	 * Value is 1
+	 */
 	PLAYER: number;
+	/**
+	 * Value is 2
+	 */
 	NPC: number;
+	/**
+	 * Value is 3
+	 */
 	MONSTER: number;
+	/**
+	 * Value is 4
+	 */
 	ANIMAL: number;
+	/**
+	 * Value is 5
+	 */
 	LIVING: number;
+	/**
+	 * Value is 6
+	 */
 	ITEM: number;
+	/**
+	 * Value is 7
+	 */
 	PROJECTILE: number;
+	/**
+	 * Value is 8
+	 */
 	PIXELMON: number;
+	/**
+	 * Value is 9
+	 */
 	VILLAGER: number;
 }

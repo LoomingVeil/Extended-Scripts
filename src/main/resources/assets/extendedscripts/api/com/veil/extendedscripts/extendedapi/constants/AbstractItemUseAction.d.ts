@@ -8,9 +8,24 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractItemUseAction
 */
 export interface AbstractItemUseAction {
+	/**
+	 * Value is 0
+	 */
 	NONE: number;
+	/**
+	 * Value is 1
+	 */
 	BLOCK: number;
+	/**
+	 * Value is 2
+	 */
 	BOW: number;
+	/**
+	 * Value is 3
+	 */
 	EAT: number;
+	/**
+	 * Value is 4
+	 */
 	DRINK: number;
 }

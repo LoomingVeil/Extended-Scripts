@@ -171,7 +171,7 @@ public class CommonProxy {
                 ExtendedAPI.registerAttribute(attribute);
             }
 
-            System.out.println("Successfully registered "+extendedAttributes.size()+" custom attributes.");
+            // System.out.println("Successfully registered "+extendedAttributes.size()+" custom attributes.");
         }
     }
 

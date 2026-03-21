@@ -7,8 +7,20 @@
  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractAbilityUserType
  */
 export interface AbstractAbilityUserType {
+	/**
+	 * Value is 0
+	 */
 	NPC_ONLY: number;
+	/**
+	 * Value is 1
+	 */
 	PLAYER_ONLY: number;
+	/**
+	 * Value is 2
+	 */
 	BOTH: number;
+	/**
+	 * Value is 3
+	 */
 	NONE: number;
 }

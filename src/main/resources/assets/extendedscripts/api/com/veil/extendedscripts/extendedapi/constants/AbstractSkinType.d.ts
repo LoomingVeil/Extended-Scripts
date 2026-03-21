@@ -7,8 +7,20 @@
  * @javaFqn com.veil.extendedscripts.extendedapi.constants.AbstractSkinType
  */
 export interface AbstractSkinType {
+	/**
+	 * Value is 0
+	 */
 	TEXTURE: number;
+	/**
+	 * Value is 1
+	 */
 	PLAYER: number;
+	/**
+	 * Value is 2
+	 */
 	URL: number;
+	/**
+	 * Value is 3
+	 */
 	URL64: number;
 }

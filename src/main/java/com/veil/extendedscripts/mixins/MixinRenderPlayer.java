@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = RenderPlayer.class)
 public abstract class MixinRenderPlayer extends RendererLivingEntity {
     @Shadow
-    public ModelBiped modelBipedMain;
-    @Shadow
     public ModelBiped modelArmorChestplate;
     @Shadow
     public ModelBiped modelArmor;
@@ -40,7 +38,7 @@ public abstract class MixinRenderPlayer extends RendererLivingEntity {
      * @author Veil
      * @reason Could not be accomplished otherwise.
      */
-    @Overwrite
+    /*@Overwrite
     protected int shouldRenderPass(AbstractClientPlayer p_77032_1_, int slot, float p_77032_3_) {
         ItemStack itemstack = p_77032_1_.inventory.armorItemInSlot(3 - slot);
 
@@ -144,5 +142,61 @@ public abstract class MixinRenderPlayer extends RendererLivingEntity {
         }
 
         return -1;
+    }*/
+
+    @Inject(method = "shouldRenderPass", at = @At("HEAD"), cancellable = true)
+    private void onShouldRenderPass(AbstractClientPlayer player, int slot, float partialTicks, CallbackInfoReturnable<Integer> cir) {
+        ItemStack itemstack = player.inventory.armorItemInSlot(3 - slot);
+        if (itemstack == null || !(itemstack.getItem() instanceof ItemScripted)) return;
+
+        IItemStack itemStack = NpcAPI.Instance().getIItemStack(itemstack);
+        IItemCustomizable custom = (IItemCustomizable) itemStack;
+
+        try {
+            this.bindTexture(custom.getArmorResource(slot));
+        } catch (ReportedException e) {
+            if (e.getMessage().equals("Registering texture")) {
+                cir.setReturnValue(-1);
+                return;
+            }
+        }
+
+        ModelBiped modelbiped = slot == 2 ? this.modelArmor : this.modelArmorChestplate;
+        modelbiped.bipedHead.showModel = slot == 0;
+        modelbiped.bipedHeadwear.showModel = slot == 0;
+        modelbiped.bipedBody.showModel = slot == 1 || slot == 2;
+        modelbiped.bipedRightArm.showModel = slot == 1;
+        modelbiped.bipedLeftArm.showModel = slot == 1;
+        modelbiped.bipedRightLeg.showModel = slot == 2 || slot == 3;
+        modelbiped.bipedLeftLeg.showModel = slot == 2 || slot == 3;
+        modelbiped = net.minecraftforge.client.ForgeHooksClient.getArmorModel(player, itemstack, slot, modelbiped);
+        this.setRenderPassModel(modelbiped);
+        modelbiped.onGround = this.mainModel.onGround;
+        modelbiped.isRiding = this.mainModel.isRiding;
+        modelbiped.isChild = this.mainModel.isChild;
+
+        int color = custom.getArmorColor();
+        if (color != -1) {
+            float r = (float)(color >> 16 & 255) / 255.0F;
+            float g = (float)(color >> 8 & 255) / 255.0F;
+            float b = (float)(color & 255) / 255.0F;
+            GL11.glColor3f(r, g, b);
+
+            // 17 if overlay texture exists, 16 otherwise
+            if (custom.getArmorTexture2() != null) {
+                cir.setReturnValue(itemstack.isItemEnchanted() ? 32 : 17);
+            } else {
+                cir.setReturnValue(itemstack.isItemEnchanted() ? 31 : 16);
+            }
+            return;
+        }
+
+        GL11.glColor3f(1.0F, 1.0F, 1.0F);
+
+        if (custom.getArmorTexture2() != null) {
+            cir.setReturnValue(itemstack.isItemEnchanted() ? 16 : 2);
+        } else {
+            cir.setReturnValue(itemstack.isItemEnchanted() ? 15 : 1);
+        }
     }
 }

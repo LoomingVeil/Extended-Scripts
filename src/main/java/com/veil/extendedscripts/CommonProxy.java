@@ -7,6 +7,7 @@ import com.veil.extendedscripts.event.*;
 import com.veil.extendedscripts.extendedapi.constants.AbstractAbilityUserType;
 import com.veil.extendedscripts.extendedapi.event.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
+import com.veil.extendedscripts.placeholder.CustomEffectPlaceholder;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
@@ -85,6 +86,8 @@ public class CommonProxy {
         API.addGlobalObject("TacticalVariant", TacticalVariant.Instance);
         API.addGlobalObject("AbilityPhase", AbilityPhase.Instance);
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
+
+        API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
     }
 
     public void postInit(FMLPostInitializationEvent event) {

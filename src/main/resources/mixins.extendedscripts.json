@@ -22,7 +22,8 @@
     "MixinScriptedItemScriptExtension",
     "MixinWorldExtension",
     "MixinScriptOverlayExtension",
-    "MixinScriptOverlayLabelExtension"
+    "MixinScriptOverlayLabelExtension",
+    "MixinItemCustomRenderer"
   ],
   "client": [
     "MixinRenderPlayer"

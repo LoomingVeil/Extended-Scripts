@@ -2,6 +2,7 @@ package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
+import com.veil.extendedscripts.extendedapi.IFieldInfo;
 import com.veil.extendedscripts.extendedapi.IPotionEffect;
 import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;

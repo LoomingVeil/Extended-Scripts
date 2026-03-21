@@ -20,6 +20,7 @@ Things I want to add:
  - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
  - See if I can mess with the skybox
+ - Add nextComponentId() for custom guis components
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationType)

@@ -28,6 +28,17 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     private ResourceLocation armorResource1 = new ResourceLocation(armorTexture1);
     private ResourceLocation armorResource2 = new ResourceLocation(armorTexture2);
 
+    public boolean useFirstPersonOverrides = false;
+    public Float fpTranslateX = 0.0F;
+    public Float fpTranslateY = 0.0F;
+    public Float fpTranslateZ = 0.0F;
+    public Float fpScaleX = 1.0F;
+    public Float fpScaleY = 1.0F;
+    public Float fpScaleZ = 1.0F;
+    public Float fpRotationX = 0.0F;
+    public Float fpRotationY = 0.0F;
+    public Float fpRotationZ = 0.0F;
+
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void onInit(ItemStack item, CallbackInfo ci) {
         loadExtendedItemData();
@@ -107,6 +118,48 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         return null;
     }
 
+    public boolean usesFirstPersonOverrides() {
+        return useFirstPersonOverrides;
+    }
+
+    public void setUseFirstPersonOverrides(boolean useFirstPersonOverrides) {
+        this.useFirstPersonOverrides = useFirstPersonOverrides;
+        saveExtendedItemData();
+    }
+
+    public Float getFirstPersonTranslateX() { return fpTranslateX; }
+    public Float getFirstPersonTranslateY() { return fpTranslateY; }
+    public Float getFirstPersonTranslateZ() { return fpTranslateZ; }
+
+    public Float getFirstPersonScaleX() { return fpScaleX; }
+    public Float getFirstPersonScaleY() { return fpScaleY; }
+    public Float getFirstPersonScaleZ() { return fpScaleZ; }
+
+    public Float getFirstPersonRotationX() { return fpRotationX; }
+    public Float getFirstPersonRotationY() { return fpRotationY; }
+    public Float getFirstPersonRotationZ() { return fpRotationZ; }
+
+    public void setFirstPersonTranslate(Float x, Float y, Float z) {
+        fpTranslateX = x;
+        fpTranslateY = y;
+        fpTranslateZ = z;
+        saveExtendedItemData();
+    }
+
+    public void setFirstPersonScale(Float x, Float y, Float z) {
+        fpScaleX = x;
+        fpScaleY = y;
+        fpScaleZ = z;
+        saveExtendedItemData();
+    }
+
+    public void setFirstPersonRotation(Float x, Float y, Float z) {
+        fpRotationX = x;
+        fpRotationY = y;
+        fpRotationZ = z;
+        saveExtendedItemData();
+    }
+
     @Unique
     public void saveExtendedItemData() {
         NBTTagCompound tag = item.getTagCompound();
@@ -133,6 +186,20 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         itemData.setInteger("armorColor", armorColor);
         itemData.setString("armorTexture1", armorTexture1);
         itemData.setString("armorTexture2", armorTexture2);
+
+        itemData.setBoolean("useFirstPersonOverrides", useFirstPersonOverrides);
+
+        itemData.setFloat("firstPersonTranslateX", fpTranslateX);
+        itemData.setFloat("firstPersonTranslateY", fpTranslateY);
+        itemData.setFloat("firstPersonTranslateZ", fpTranslateZ);
+
+        itemData.setFloat("firstPersonScaleX", fpScaleX);
+        itemData.setFloat("firstPersonScaleY", fpScaleY);
+        itemData.setFloat("firstPersonScaleZ", fpScaleZ);
+
+        itemData.setFloat("firstPersonRotationX", fpRotationX);
+        itemData.setFloat("firstPersonRotationY", fpRotationY);
+        itemData.setFloat("firstPersonRotationZ", fpRotationZ);
     }
 
     @Unique
@@ -162,9 +229,19 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         if (armorResource2 != null && !armorResource2.getResourcePath().equals(armorTexture2)) {
             armorResource2 = new ResourceLocation(armorTexture2);
         }
-    }
 
-    public Boolean isTextureAnimated() {
-        return Boolean.TRUE;
+        useFirstPersonOverrides = itemData.getBoolean("useFirstPersonOverrides");
+
+        fpTranslateX = itemData.getFloat("firstPersonTranslateX");
+        fpTranslateY = itemData.getFloat("firstPersonTranslateY");
+        fpTranslateZ = itemData.getFloat("firstPersonTranslateZ");
+
+        fpScaleX = itemData.hasKey("firstPersonScaleX") ? itemData.getFloat("firstPersonScaleX") : 1.0F;
+        fpScaleY = itemData.hasKey("firstPersonScaleY") ? itemData.getFloat("firstPersonScaleY") : 1.0F;
+        fpScaleZ = itemData.hasKey("firstPersonScaleZ") ? itemData.getFloat("firstPersonScaleZ") : 1.0F;
+
+        fpRotationX = itemData.getFloat("firstPersonRotationX");
+        fpRotationY = itemData.getFloat("firstPersonRotationY");
+        fpRotationZ = itemData.getFloat("firstPersonRotationZ");
     }
 }

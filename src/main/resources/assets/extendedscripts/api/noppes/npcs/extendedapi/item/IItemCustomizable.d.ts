@@ -30,4 +30,18 @@ export interface IItemCustomizable {
      * You can ignore this function. There are likely no cases where it would be useful.
      */
     getArmorResource(slot: import('./int').int): ResourceLocation;
+    usesFirstPersonOverrides(): import('./boolean').boolean;
+    setUseFirstPersonOverrides(useFirstPersonOverrides: import('./boolean').boolean): import('./void').void;
+    getFirstPersonTranslateX(): Float;
+    getFirstPersonTranslateY(): Float;
+    getFirstPersonTranslateZ(): Float;
+    getFirstPersonScaleX(): Float;
+    getFirstPersonScaleY(): Float;
+    getFirstPersonScaleZ(): Float;
+    getFirstPersonRotationX(): Float;
+    getFirstPersonRotationY(): Float;
+    getFirstPersonRotationZ(): Float;
+    setFirstPersonTranslate(x: Float, y: Float, z: Float): import('./void').void;
+    setFirstPersonScale(x: Float, y: Float, z: Float): import('./void').void;
+    setFirstPersonRotation(x: Float, y: Float, z: Float): import('./void').void;
 }

@@ -45,6 +45,15 @@ tasks.named("generateTypeScriptDefinitions").configure {
     ] as Set
 }
 
+// This task is used in place if generateTypeScriptDefinitions as I can't seem to configure that plugin
+// such that the public instance variables are properly written to certain files.
+tasks.register("modifiedGenerateTypeScriptDefinitons", Exec) {
+    group = 'api'
+    description = 'Does what generateTypeScriptDefinitions does, but also modifies all the files in com.veil.extendedscripts.extendedapi.constants to include thier public instance variables.'
+    dependsOn 'generateTypeScriptDefinitions'
+    commandLine 'python', 'finishCreatingTsFiles.py'
+}
+
 jar {
     manifest {
         attributes (

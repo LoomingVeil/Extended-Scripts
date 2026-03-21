@@ -1,7 +1,6 @@
 package noppes.npcs.extendedapi.item;
 
 import net.minecraft.util.ResourceLocation;
-import org.spongepowered.asm.mixin.Unique;
 
 public interface IItemCustomizable {
     /**
@@ -35,4 +34,24 @@ public interface IItemCustomizable {
      * You can ignore this function. There are likely no cases where it would be useful.
      */
     ResourceLocation getArmorResource(int slot);
+
+    boolean usesFirstPersonOverrides();
+
+    void setUseFirstPersonOverrides(boolean useFirstPersonOverrides);
+
+    Float getFirstPersonTranslateX();
+    Float getFirstPersonTranslateY();
+    Float getFirstPersonTranslateZ();
+
+    Float getFirstPersonScaleX();
+    Float getFirstPersonScaleY();
+    Float getFirstPersonScaleZ();
+
+    Float getFirstPersonRotationX();
+    Float getFirstPersonRotationY();
+    Float getFirstPersonRotationZ();
+
+    void setFirstPersonTranslate(Float x, Float y, Float z);
+    void setFirstPersonScale(Float x, Float y, Float z);
+    void setFirstPersonRotation(Float x, Float y, Float z);
 }

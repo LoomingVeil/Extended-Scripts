@@ -18,6 +18,7 @@ declare global {
     type AbstractCollisionType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCollisionType').AbstractCollisionType;
     type AbstractColorCodes = import('./com/veil/extendedscripts/extendedapi/constants/AbstractColorCodes').AbstractColorCodes;
     type AbstractCombatPolicy = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCombatPolicy').AbstractCombatPolicy;
+    type AbstractCustomEffectPlaceholder = import('./com/veil/extendedscripts/extendedapi/placeholder/AbstractCustomEffectPlaceholder').AbstractCustomEffectPlaceholder;
     type AbstractDataType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractDataType').AbstractDataType;
     type AbstractEffect = import('./com/veil/extendedscripts/extendedapi/constants/AbstractEffect').AbstractEffect;
     type AbstractEntityType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractEntityType').AbstractEntityType;
@@ -44,6 +45,7 @@ declare global {
     type ICustomProjectileRenderProperties = import('./com/veil/extendedscripts/extendedapi/entity/ICustomProjectileRenderProperties').ICustomProjectileRenderProperties;
     type ICustomProjectileTickEvent = import('./com/veil/extendedscripts/extendedapi/event/ICustomProjectileTickEvent').ICustomProjectileTickEvent;
     type IEntity = import('./noppes/npcs/extendedapi/entity/IEntity').IEntity;
+    type IFieldInfo = import('./com/veil/extendedscripts/extendedapi/IFieldInfo').IFieldInfo;
     type IHotbarSlotChangedEvent = import('./com/veil/extendedscripts/extendedapi/event/IHotbarSlotChangedEvent').IHotbarSlotChangedEvent;
     type IItemCustomizable = import('./noppes/npcs/extendedapi/item/IItemCustomizable').IItemCustomizable;
     type IItemFood = import('./com/veil/extendedscripts/extendedapi/item/IItemFood').IItemFood;

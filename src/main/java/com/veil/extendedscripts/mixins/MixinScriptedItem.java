@@ -2,6 +2,7 @@ package com.veil.extendedscripts.mixins;
 
 
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +37,7 @@ public abstract class MixinScriptedItem {
     }
 
     @Unique
-    public Boolean isTextureAnimated() {
-        return false;
+    public boolean requiresMultipleRenderPasses() {
+        return true;
     }
 }

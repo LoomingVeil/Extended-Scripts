@@ -27,6 +27,10 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     public String armorTexture2 = "minecraft:textures/models/armor/iron_layer_2.png";
     private ResourceLocation armorResource1 = new ResourceLocation(armorTexture1);
     private ResourceLocation armorResource2 = new ResourceLocation(armorTexture2);
+    public String armorOverlayTexture1 = "";
+    public String armorOverlayTexture2 = "";
+    private ResourceLocation armorOverlayResource1 = null;
+    private ResourceLocation armorOverlayResource2 = null;
 
     public boolean useFirstPersonOverrides = false;
     public Float fpTranslateX = 0.0F;
@@ -118,6 +122,51 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         return null;
     }
 
+    @Unique
+    public String getArmorOverlayTexture1() {
+        return armorOverlayTexture1;
+    }
+
+    @Unique
+    public void setArmorOverlayTexture1(String armorOverlayTexture1) {
+        this.armorOverlayTexture1 = armorOverlayTexture1;
+        if (armorOverlayTexture1 == null) {
+            armorOverlayResource1 = null;
+        } else if (armorOverlayResource1 == null || !armorOverlayResource1.getResourcePath().equals(armorOverlayTexture1)) {
+            armorOverlayResource1 = new ResourceLocation(armorOverlayTexture1);
+        }
+
+        saveExtendedItemData();
+    }
+
+    @Unique
+    public String getArmorOverlayTexture2() {
+        return armorOverlayTexture2;
+    }
+
+    @Unique
+    public void setArmorOverlayTexture2(String armorOverlayTexture2) {
+        this.armorOverlayTexture2 = armorOverlayTexture2;
+        if (armorOverlayTexture2 == null) {
+            armorOverlayResource2 = null;
+        } else if (armorOverlayResource2 == null || !armorOverlayResource2.getResourcePath().equals(armorOverlayTexture2)) {
+            armorOverlayResource2 = new ResourceLocation(armorOverlayTexture2);
+        }
+
+        saveExtendedItemData();
+    }
+
+    @Unique
+    public ResourceLocation getArmorOverlayResource(int slot) {
+        if (slot == 0 || slot == 1 || slot == 3) { // Helmet, Chestplate, Boots
+            return armorOverlayResource1;
+        } else if (slot == 2) { // Leggings
+            return armorOverlayResource2;
+        }
+
+        return null;
+    }
+
     public boolean usesFirstPersonOverrides() {
         return useFirstPersonOverrides;
     }
@@ -187,6 +236,9 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         itemData.setString("armorTexture1", armorTexture1);
         itemData.setString("armorTexture2", armorTexture2);
 
+        itemData.setString("armorOverlayTexture1", armorOverlayTexture1);
+        itemData.setString("armorOverlayTexture2", armorOverlayTexture2);
+
         itemData.setBoolean("useFirstPersonOverrides", useFirstPersonOverrides);
 
         itemData.setFloat("firstPersonTranslateX", fpTranslateX);
@@ -228,6 +280,15 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         this.armorTexture2 = itemData.getString("armorTexture2");
         if (armorResource2 != null && !armorResource2.getResourcePath().equals(armorTexture2)) {
             armorResource2 = new ResourceLocation(armorTexture2);
+        }
+
+        this.armorOverlayTexture1 = itemData.getString("armorOverlayTexture1");
+        if (armorOverlayResource1 == null || !armorOverlayResource1.getResourcePath().equals(armorOverlayTexture1)) {
+            armorOverlayResource1 = new ResourceLocation(armorOverlayTexture1);
+        }
+        this.armorOverlayTexture2 = itemData.getString("armorOverlayTexture2");
+        if (armorOverlayResource2 == null || !armorOverlayResource2.getResourcePath().equals(armorOverlayTexture2)) {
+            armorOverlayResource2 = new ResourceLocation(armorOverlayTexture2);
         }
 
         useFirstPersonOverrides = itemData.getBoolean("useFirstPersonOverrides");

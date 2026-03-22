@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ReportedException;
+import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.item.IItemCustom;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.extendedapi.item.IItemCustomizable;
@@ -198,5 +199,34 @@ public abstract class MixinRenderPlayer extends RendererLivingEntity {
         } else {
             cir.setReturnValue(itemstack.isItemEnchanted() ? 15 : 1);
         }
+    }
+
+    @Inject(method = "func_82408_c",
+        at = @At("HEAD"),
+        cancellable = true)
+    private void onRenderOverlayPass(AbstractClientPlayer player, int slot, float partialTicks, CallbackInfo ci) {
+        ItemStack itemstack = player.inventory.armorItemInSlot(3 - slot);
+        if (itemstack == null || !(itemstack.getItem() instanceof ItemScripted)) return;
+
+        IItemStack itemStack = NpcAPI.Instance().getIItemStack(itemstack);
+        IItemCustomizable custom = (IItemCustomizable) itemStack;
+
+        ResourceLocation overlayTexture = custom.getArmorOverlayResource(slot);
+        if (overlayTexture == null) {
+            ci.cancel(); // no overlay, suppress the vanilla attempt entirely
+            return;
+        }
+
+        try {
+            this.bindTexture(overlayTexture);
+        } catch (ReportedException e) {
+            if (e.getMessage().equals("Registering texture")) {
+                ci.cancel();
+                return;
+            }
+        }
+
+        GL11.glColor3f(1.0F, 1.0F, 1.0F);
+        ci.cancel();
     }
 }

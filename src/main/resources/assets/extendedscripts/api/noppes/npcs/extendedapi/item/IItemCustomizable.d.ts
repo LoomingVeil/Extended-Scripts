@@ -30,6 +30,11 @@ export interface IItemCustomizable {
      * You can ignore this function. There are likely no cases where it would be useful.
      */
     getArmorResource(slot: import('./int').int): ResourceLocation;
+    getArmorOverlayTexture1(): String;
+    setArmorOverlayTexture1(armorOverlayTexture1: String): import('./void').void;
+    getArmorOverlayTexture2(): String;
+    setArmorOverlayTexture2(armorOverlayTexture2: String): import('./void').void;
+    getArmorOverlayResource(slot: import('./int').int): ResourceLocation;
     usesFirstPersonOverrides(): import('./boolean').boolean;
     setUseFirstPersonOverrides(useFirstPersonOverrides: import('./boolean').boolean): import('./void').void;
     getFirstPersonTranslateX(): Float;

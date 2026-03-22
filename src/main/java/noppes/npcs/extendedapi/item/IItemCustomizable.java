@@ -1,6 +1,7 @@
 package noppes.npcs.extendedapi.item;
 
 import net.minecraft.util.ResourceLocation;
+import org.spongepowered.asm.mixin.Unique;
 
 public interface IItemCustomizable {
     /**
@@ -34,6 +35,16 @@ public interface IItemCustomizable {
      * You can ignore this function. There are likely no cases where it would be useful.
      */
     ResourceLocation getArmorResource(int slot);
+
+    String getArmorOverlayTexture1();
+
+    void setArmorOverlayTexture1(String armorOverlayTexture1);
+
+    String getArmorOverlayTexture2();
+
+    void setArmorOverlayTexture2(String armorOverlayTexture2);
+
+    ResourceLocation getArmorOverlayResource(int slot);
 
     boolean usesFirstPersonOverrides();
 

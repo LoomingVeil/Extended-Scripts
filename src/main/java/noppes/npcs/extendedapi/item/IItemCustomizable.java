@@ -44,11 +44,30 @@ public interface IItemCustomizable {
 
     void setArmorOverlayTexture2(String armorOverlayTexture2);
 
+    /**
+     * You can ignore this function. There are likely no cases where it would be useful.
+     */
     ResourceLocation getArmorOverlayResource(int slot);
 
     boolean usesFirstPersonOverrides();
 
+    /**
+     * When enabled, while rendering this item in first person, the values set by
+     * {@link #setFirstPersonRotation(Float, Float, Float)}, {@link #setFirstPersonTranslate(Float, Float, Float)}, and {@link #setFirstPersonRotation(Float, Float, Float)}
+     * This can be useful for making bows as the amount of adjustments required to make it look like the vanilla bow in
+     * third person can make it look quite awkward in first person.
+     * @param useFirstPersonOverrides
+     */
     void setUseFirstPersonOverrides(boolean useFirstPersonOverrides);
+
+    boolean isDyeable();
+
+    /**
+     * When enabled, this item can be used in a crafting table with dyes to change the color.
+     * The color set from {@link noppes.npcs.api.item.IItemCustom#setColor(Integer)} is used as the base and
+     * both the item and armor colors are changed to be identical.
+     */
+    void setDyeable(boolean dyeable);
 
     Float getFirstPersonTranslateX();
     Float getFirstPersonTranslateY();

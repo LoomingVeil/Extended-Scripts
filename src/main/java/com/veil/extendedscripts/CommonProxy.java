@@ -26,6 +26,7 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.client.gui.util.script.interpreter.js_parser.JSTypeInfo;
@@ -88,6 +89,8 @@ public class CommonProxy {
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
 
         API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
+
+        CraftingManager.getInstance().getRecipeList().add(new ScriptedItemDyeRecipe());
     }
 
     public void postInit(FMLPostInitializationEvent event) {

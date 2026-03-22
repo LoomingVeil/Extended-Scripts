@@ -31,6 +31,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     public String armorOverlayTexture2 = "";
     private ResourceLocation armorOverlayResource1 = null;
     private ResourceLocation armorOverlayResource2 = null;
+    public boolean dyeable = false;
 
     public boolean useFirstPersonOverrides = false;
     public Float fpTranslateX = 0.0F;
@@ -167,27 +168,51 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         return null;
     }
 
+    @Unique
     public boolean usesFirstPersonOverrides() {
         return useFirstPersonOverrides;
     }
 
+    @Unique
     public void setUseFirstPersonOverrides(boolean useFirstPersonOverrides) {
         this.useFirstPersonOverrides = useFirstPersonOverrides;
         saveExtendedItemData();
     }
 
+    @Unique
+    public boolean isDyeable() {
+        return dyeable;
+    }
+
+    @Unique
+    public void setDyeable(boolean dyeable) {
+        this.dyeable = dyeable;
+
+        saveExtendedItemData();
+    }
+
+    @Unique
     public Float getFirstPersonTranslateX() { return fpTranslateX; }
+    @Unique
     public Float getFirstPersonTranslateY() { return fpTranslateY; }
+    @Unique
     public Float getFirstPersonTranslateZ() { return fpTranslateZ; }
 
+    @Unique
     public Float getFirstPersonScaleX() { return fpScaleX; }
+    @Unique
     public Float getFirstPersonScaleY() { return fpScaleY; }
+    @Unique
     public Float getFirstPersonScaleZ() { return fpScaleZ; }
 
+    @Unique
     public Float getFirstPersonRotationX() { return fpRotationX; }
+    @Unique
     public Float getFirstPersonRotationY() { return fpRotationY; }
+    @Unique
     public Float getFirstPersonRotationZ() { return fpRotationZ; }
 
+    @Unique
     public void setFirstPersonTranslate(Float x, Float y, Float z) {
         fpTranslateX = x;
         fpTranslateY = y;
@@ -195,6 +220,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         saveExtendedItemData();
     }
 
+    @Unique
     public void setFirstPersonScale(Float x, Float y, Float z) {
         fpScaleX = x;
         fpScaleY = y;
@@ -202,6 +228,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         saveExtendedItemData();
     }
 
+    @Unique
     public void setFirstPersonRotation(Float x, Float y, Float z) {
         fpRotationX = x;
         fpRotationY = y;
@@ -238,6 +265,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
 
         itemData.setString("armorOverlayTexture1", armorOverlayTexture1);
         itemData.setString("armorOverlayTexture2", armorOverlayTexture2);
+
+        itemData.setBoolean("dyeable", dyeable);
 
         itemData.setBoolean("useFirstPersonOverrides", useFirstPersonOverrides);
 
@@ -291,6 +320,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
             armorOverlayResource2 = new ResourceLocation(armorOverlayTexture2);
         }
 
+        dyeable = itemData.getBoolean("dyeable");
         useFirstPersonOverrides = itemData.getBoolean("useFirstPersonOverrides");
 
         fpTranslateX = itemData.getFloat("firstPersonTranslateX");

@@ -34,9 +34,25 @@ export interface IItemCustomizable {
     setArmorOverlayTexture1(armorOverlayTexture1: String): import('./void').void;
     getArmorOverlayTexture2(): String;
     setArmorOverlayTexture2(armorOverlayTexture2: String): import('./void').void;
+    /**
+     * You can ignore this function. There are likely no cases where it would be useful.
+     */
     getArmorOverlayResource(slot: import('./int').int): ResourceLocation;
     usesFirstPersonOverrides(): import('./boolean').boolean;
+    /**
+     * When enabled, while rendering this item in first person, the values set by
+     * {@link #setFirstPersonRotation(Float, Float, Float)}, {@link #setFirstPersonTranslate(Float, Float, Float)}, and {@link #setFirstPersonRotation(Float, Float, Float)}
+     * This can be useful for making bows as the amount of adjustments required to make it look like the vanilla bow in
+     * third person can make it look quite awkward in first person.
+     * @param useFirstPersonOverrides
+     */
     setUseFirstPersonOverrides(useFirstPersonOverrides: import('./boolean').boolean): import('./void').void;
+    isDyeable(): import('./boolean').boolean;
+    /**
+     * When enabled, this item can be used in a crafting table with dyes to change the color.
+     * Until a better idea is established, these recipes will affect both item color and armor color.
+     */
+    setDyeable(dyeable: import('./boolean').boolean): import('./void').void;
     getFirstPersonTranslateX(): Float;
     getFirstPersonTranslateY(): Float;
     getFirstPersonTranslateZ(): Float;

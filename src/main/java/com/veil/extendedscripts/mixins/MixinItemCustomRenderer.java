@@ -1,10 +1,15 @@
 package com.veil.extendedscripts.mixins;
 
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import noppes.npcs.api.item.IItemCustomizable;
 import noppes.npcs.api.item.IItemStack;
+import noppes.npcs.client.ClientCacheHandler;
+import noppes.npcs.client.renderer.ImageData;
 import noppes.npcs.client.renderer.items.ItemCustomRenderer;
 import noppes.npcs.scripted.NpcAPI;
 import org.lwjgl.opengl.GL11;
@@ -14,14 +19,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static noppes.npcs.client.renderer.items.ItemCustomRenderer.renderCustomItemIn2D;
+
 @Mixin(value = ItemCustomRenderer.class, remap = false)
 public abstract class MixinItemCustomRenderer {
-
     @Shadow
     private int item3dRenderTicks;
 
     @Shadow
     public abstract void renderItem3d(IItemCustomizable scriptCustomItem, EntityLivingBase entityLivingBase, ItemStack itemStack);
+
+    @Shadow
+    public abstract void renderCustomItemSlot(int posX, int posY, int imageWidth, int imageHeight, float itemRed, float itemGreen, float itemBlue, float vOff, float vEnd);
 
     @Inject(method = "renderItem", at = @At("HEAD"), cancellable = true)
     public void mixinRenderItem(IItemRenderer.ItemRenderType type, ItemStack itemStack, Object[] data, CallbackInfo ci) {
@@ -66,5 +75,64 @@ public abstract class MixinItemCustomRenderer {
         GL11.glPopMatrix();
 
         ci.cancel();
+    }
+
+    @Inject(
+        method = "renderInventoryCustomItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnoppes/npcs/client/renderer/items/ItemCustomRenderer;renderCustomItemSlot(IIIIFFFFF)V",
+            shift = At.Shift.AFTER
+        )
+    )
+    private void onAfterRenderInventoryCustomItem(IItemCustomizable scriptCustomItem, CallbackInfo ci) {
+        noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
+        String overlayTexture = extendedItem.getItemOverlayTexture();
+        if (overlayTexture == null || overlayTexture.isEmpty()) return;
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        ImageData overlayImageData = ClientCacheHandler.getImageData(overlayTexture);
+        overlayImageData.bindTexture();
+        renderCustomItemSlot(0, 0, 16, 16, 1.0F, 1.0F, 1.0F, 0f, 1f);
+    }
+
+    @Inject(
+        method = "renderItem3d",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;hasEffect(I)Z"
+        )
+    )
+    private void onBeforeGlintItem3d(IItemCustomizable scriptCustomItem, EntityLivingBase entityLivingBase, ItemStack itemStack, CallbackInfo ci) {
+        noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
+        String overlayTexture = extendedItem.getItemOverlayTexture();
+        if (overlayTexture == null || overlayTexture.isEmpty()) return;
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        ImageData overlayImageData = ClientCacheHandler.getImageData(overlayTexture);
+        overlayImageData.bindTexture();
+        renderCustomItemIn2D(scriptCustomItem, Tessellator.instance, 1.0F, 0f, 0.0F, 1f, 0.0625F);
+    }
+
+    @Inject(
+        method = "renderEntityCustomItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/item/ItemStack;hasEffect(I)Z"
+        )
+    )
+    private void onBeforeGlintEntityCustomItem(IItemCustomizable scriptCustomItem, ItemStack itemStack, EntityItem entityItem, CallbackInfo ci) {
+        noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
+        String overlayTexture = extendedItem.getItemOverlayTexture();
+        if (overlayTexture == null || overlayTexture.isEmpty()) return;
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        ImageData overlayImageData = ClientCacheHandler.getImageData(overlayTexture);
+        overlayImageData.bindTexture();
+
+        Tessellator tessellator = Tessellator.instance;
+        float f9 = 0.0625F;
+        int entityFrameH = overlayImageData.getTotalHeight();
+        ItemRenderer.renderItemIn2D(tessellator, 1.0F, 0f, 0.0F, 1f, overlayImageData.getTotalWidth(), entityFrameH, f9);
     }
 }

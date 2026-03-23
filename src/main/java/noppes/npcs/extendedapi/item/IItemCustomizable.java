@@ -44,6 +44,10 @@ public interface IItemCustomizable {
 
     void setArmorOverlayTexture2(String armorOverlayTexture2);
 
+    String getItemOverlayTexture();
+
+    void setItemOverlayTexture(String itemOverlayTexture);
+
     /**
      * You can ignore this function. There are likely no cases where it would be useful.
      */

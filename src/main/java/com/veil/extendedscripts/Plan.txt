@@ -22,6 +22,7 @@ Things I want to add:
  - See if I can mess with the skybox
  - Add nextComponentId() for custom guis components
  - See if we can mess with name tags
+ - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationType)

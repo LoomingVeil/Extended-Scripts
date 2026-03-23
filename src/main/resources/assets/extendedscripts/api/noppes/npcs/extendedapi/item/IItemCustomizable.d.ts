@@ -34,6 +34,8 @@ export interface IItemCustomizable {
     setArmorOverlayTexture1(armorOverlayTexture1: String): import('./void').void;
     getArmorOverlayTexture2(): String;
     setArmorOverlayTexture2(armorOverlayTexture2: String): import('./void').void;
+    getItemOverlayTexture(): String;
+    setItemOverlayTexture(itemOverlayTexture: String): import('./void').void;
     /**
      * You can ignore this function. There are likely no cases where it would be useful.
      */
@@ -50,7 +52,8 @@ export interface IItemCustomizable {
     isDyeable(): import('./boolean').boolean;
     /**
      * When enabled, this item can be used in a crafting table with dyes to change the color.
-     * Until a better idea is established, these recipes will affect both item color and armor color.
+     * The color set from {@link noppes.npcs.api.item.IItemCustom#setColor(Integer)} is used as the base and
+     * both the item and armor colors are changed to be identical.
      */
     setDyeable(dyeable: import('./boolean').boolean): import('./void').void;
     getFirstPersonTranslateX(): Float;

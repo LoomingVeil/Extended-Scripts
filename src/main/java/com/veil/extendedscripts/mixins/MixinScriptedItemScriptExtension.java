@@ -31,6 +31,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     public String armorOverlayTexture2 = "";
     private ResourceLocation armorOverlayResource1 = null;
     private ResourceLocation armorOverlayResource2 = null;
+    public String itemOverlayTexture = "";
+    private ResourceLocation itemOverlayResource = null;
     public boolean dyeable = false;
 
     public boolean useFirstPersonOverrides = false;
@@ -169,6 +171,23 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     }
 
     @Unique
+    public String getItemOverlayTexture() {
+        return itemOverlayTexture;
+    }
+
+    @Unique
+    public void setItemOverlayTexture(String itemOverlayTexture) {
+        this.itemOverlayTexture = itemOverlayTexture;
+        if (itemOverlayTexture == null || itemOverlayTexture.equals("")) {
+            itemOverlayResource = null;
+        } else if (itemOverlayResource == null || !itemOverlayResource.getResourcePath().equals(itemOverlayTexture)) {
+            itemOverlayResource = new ResourceLocation(itemOverlayTexture);
+        }
+
+        saveExtendedItemData();
+    }
+
+    @Unique
     public boolean usesFirstPersonOverrides() {
         return useFirstPersonOverrides;
     }
@@ -266,6 +285,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         itemData.setString("armorOverlayTexture1", armorOverlayTexture1);
         itemData.setString("armorOverlayTexture2", armorOverlayTexture2);
 
+        itemData.setString("itemOverlayTexture", itemOverlayTexture);
+
         itemData.setBoolean("dyeable", dyeable);
 
         itemData.setBoolean("useFirstPersonOverrides", useFirstPersonOverrides);
@@ -318,6 +339,11 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         this.armorOverlayTexture2 = itemData.getString("armorOverlayTexture2");
         if (armorOverlayResource2 == null || !armorOverlayResource2.getResourcePath().equals(armorOverlayTexture2)) {
             armorOverlayResource2 = new ResourceLocation(armorOverlayTexture2);
+        }
+
+        this.itemOverlayTexture = itemData.getString("itemOverlayTexture");
+        if (itemOverlayResource == null || !itemOverlayResource.getResourcePath().equals(itemOverlayTexture)) {
+            itemOverlayResource = new ResourceLocation(itemOverlayTexture);
         }
 
         dyeable = itemData.getBoolean("dyeable");

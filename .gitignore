@@ -11,6 +11,7 @@
 /config/
 /crash-reports/
 /logs/
+.gradle-user-home
 options.txt
 /saves/
 usernamecache.json

@@ -24,7 +24,9 @@
     "MixinScriptGuiExtension",
     "MixinScriptOverlayExtension",
     "MixinScriptOverlayLabelExtension",
-    "MixinItemCustomRenderer"
+    "MixinItemCustomRenderer",
+    "MixinEntityRenderer",
+    "MixinNetHandlerPlayServer"
   ],
   "client": [
     "MixinRenderPlayer"

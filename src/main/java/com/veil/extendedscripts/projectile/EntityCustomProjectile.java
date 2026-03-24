@@ -452,7 +452,6 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
 //    			}
 
                 if (!worldObj.isRemote && !inGround && (!loadedFromNbt || (loadedFromNbt && ticksInAir > 3))) {
-                    System.out.println(this.ticksInAir);
                     CustomProjectileImpactEvent impactEvent = new CustomProjectileImpactEvent(null, this, null, new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ), false);
 
                     PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(impactEvent.getPlayer());

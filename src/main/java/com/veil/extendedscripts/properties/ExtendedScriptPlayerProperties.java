@@ -173,6 +173,9 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
 
     @SuppressWarnings("unchecked")
     public <T> T get(PlayerAttribute attr) {
+        if (!playerAttributes.containsKey(attr)) {
+            playerAttributes.put(attr, attr.getDefaultValue());
+        }
         return (T) playerAttributes.get(attr);
     }
 

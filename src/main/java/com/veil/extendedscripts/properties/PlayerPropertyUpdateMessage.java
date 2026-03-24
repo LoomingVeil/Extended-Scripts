@@ -1,18 +1,18 @@
 package com.veil.extendedscripts.properties;
 
+import com.veil.extendedscripts.ClientTransferStorage;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.Sys;
 
 public class PlayerPropertyUpdateMessage implements IMessage {
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
     private boolean keepInventory = false;
-
+    private float attackReach = 3;
 
     public PlayerPropertyUpdateMessage() {} // Required default constructor
 
@@ -20,6 +20,7 @@ public class PlayerPropertyUpdateMessage implements IMessage {
         this.canFly = props.get(PlayerAttribute.CAN_FLY);
         this.lastSeenFlying = props.get(PlayerAttribute.LAST_SEEN_FLYING);
         this.keepInventory = props.get(PlayerAttribute.KEEP_INVENTORY);
+        this.attackReach = props.get(PlayerAttribute.ATTACK_REACH);
     }
 
     @Override
@@ -27,6 +28,7 @@ public class PlayerPropertyUpdateMessage implements IMessage {
         this.canFly = buf.readBoolean();
         this.lastSeenFlying = buf.readBoolean();
         this.keepInventory = buf.readBoolean();
+        this.attackReach = buf.readFloat();
     }
 
     @Override
@@ -34,6 +36,7 @@ public class PlayerPropertyUpdateMessage implements IMessage {
         buf.writeBoolean(this.canFly);
         buf.writeBoolean(this.lastSeenFlying);
         buf.writeBoolean(this.keepInventory);
+        buf.writeFloat(this.attackReach);
     }
 
     // --- Message Handler ---
@@ -51,6 +54,9 @@ public class PlayerPropertyUpdateMessage implements IMessage {
                             props.set(PlayerAttribute.CAN_FLY, message.canFly);
                             props.set(PlayerAttribute.LAST_SEEN_FLYING, message.lastSeenFlying);
                             props.set(PlayerAttribute.KEEP_INVENTORY, message.keepInventory);
+                            props.set(PlayerAttribute.ATTACK_REACH, message.attackReach);
+
+                            ClientTransferStorage.attackReach = message.attackReach;
 
                             if (!player.capabilities.isCreativeMode) {
                                 player.capabilities.allowFlying = message.canFly;

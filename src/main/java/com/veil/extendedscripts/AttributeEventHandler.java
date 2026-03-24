@@ -357,6 +357,16 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
             player.sendPlayerAbilities();
         }
 
+        ExtendedScriptPlayerProperties playerProperties = ExtendedScripts.getPlayerProperties(player);
+        if (playerProperties != null) {
+            float recalculatedAttackReach = ExtendedAPI.getAttribute(player, PlayerAttribute.ATTACK_REACH);
+            float currentAttackReach = playerProperties.get(PlayerAttribute.ATTACK_REACH);
+
+            if (Math.abs(currentAttackReach - recalculatedAttackReach) > 0.0001F) {
+                playerProperties.set(PlayerAttribute.ATTACK_REACH, recalculatedAttackReach);
+            }
+        }
+
         AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player));
 
         PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());

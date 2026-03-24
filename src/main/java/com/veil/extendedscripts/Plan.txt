@@ -12,7 +12,7 @@ Things I want to add:
  - Add custom projectile disable damage, hit endermen, can hurt owner, make sure all attributes are saved to nbt
  - Fix shatterParticle not appearing when shattering on mobs
  - Make a command for viewing and managing stored data
- - Add bounciness, multi-jump, reach, and damage reflection
+ - Add bounciness, multi-jump, damage reflection, and sprint speed
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
@@ -22,7 +22,6 @@ Things I want to add:
  - See if I can mess with the skybox
  - See if we can mess with name tags
  - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.
- - Add a means of getting the vanilla particles as custom particles.
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationType)

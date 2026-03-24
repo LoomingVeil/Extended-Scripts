@@ -145,6 +145,9 @@ public class CommonProxy {
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.ARMOR_VALUE.asSnakeCase(), "Armor Value", ColorCodes.Instance.GRAY, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        AttributeController.registerAttribute(PlayerAttribute.ATTACK_REACH.asSnakeCase(), "Attack Reach", ColorCodes.Instance.GREEN, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        // Not implemented yet
+        // AttributeController.registerAttribute(PlayerAttribute.SPRINT_BOOST.asSnakeCase(), "Sprint Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

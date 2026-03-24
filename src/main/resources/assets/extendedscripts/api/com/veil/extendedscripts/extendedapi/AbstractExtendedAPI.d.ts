@@ -69,4 +69,12 @@ export interface AbstractExtendedAPI {
      * Having certain non-standard special characters may produce inaccurate results.
      */
     getStringPixelWidth(text: String): import('./int').int;
+    /**
+     * All vanilla particles use a single texture: minecraft:textures/particle/particles.png, but only use a tiny piece.
+     * This function does something similar. Use the CustomParticleIndex keyword for a list of valid inputs.
+     * By applying {@link IParticle#setHEXColor(int, int, float, int)} to your particle with the right color,
+     * you should be able to recreate any vanilla particle.
+     * Changing the sizes the size and offset so changing these values after this function may have unexpected results.
+     */
+    createCustomParticlePreset(particleIndex: import('./int').int): IParticle;
 }

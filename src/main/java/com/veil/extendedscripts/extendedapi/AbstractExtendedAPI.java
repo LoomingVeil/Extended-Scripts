@@ -2,6 +2,7 @@ package com.veil.extendedscripts.extendedapi;
 
 import com.veil.extendedscripts.extendedapi.constants.*;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
+import noppes.npcs.api.IParticle;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLivingBase;
@@ -87,4 +88,13 @@ public interface AbstractExtendedAPI {
      * Having certain non-standard special characters may produce inaccurate results.
      */
     int getStringPixelWidth(String text);
+
+    /**
+     * All vanilla particles use a single texture: minecraft:textures/particle/particles.png, but only use a tiny piece.
+     * This function does something similar. Use the CustomParticleIndex keyword for a list of valid inputs.
+     * By applying {@link IParticle#setHEXColor(int, int, float, int)} to your particle with the right color,
+     * you should be able to recreate any vanilla particle.
+     * Changing the sizes the size and offset so changing these values after this function may have unexpected results.
+     */
+    IParticle createCustomParticlePreset(int particleIndex);
 }

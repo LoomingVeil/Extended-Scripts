@@ -19,6 +19,7 @@ declare global {
     type AbstractColorCodes = import('./com/veil/extendedscripts/extendedapi/constants/AbstractColorCodes').AbstractColorCodes;
     type AbstractCombatPolicy = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCombatPolicy').AbstractCombatPolicy;
     type AbstractCustomEffectPlaceholder = import('./com/veil/extendedscripts/extendedapi/placeholder/AbstractCustomEffectPlaceholder').AbstractCustomEffectPlaceholder;
+    type AbstractCustomParticleIndex = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCustomParticleIndex').AbstractCustomParticleIndex;
     type AbstractDataType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractDataType').AbstractDataType;
     type AbstractEffect = import('./com/veil/extendedscripts/extendedapi/constants/AbstractEffect').AbstractEffect;
     type AbstractEntityType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractEntityType').AbstractEntityType;
@@ -38,6 +39,7 @@ declare global {
     type IAttributeRecalculateEvent = import('./com/veil/extendedscripts/extendedapi/event/IAttributeRecalculateEvent').IAttributeRecalculateEvent;
     type IBlock = import('./noppes/npcs/extendedapi/IBlock').IBlock;
     type IBlockData = import('./com/veil/extendedscripts/extendedapi/IBlockData').IBlockData;
+    type ICustomGui = import('./noppes/npcs/extendedapi/gui/ICustomGui').ICustomGui;
     type ICustomNpc = import('./noppes/npcs/extendedapi/entity/ICustomNpc').ICustomNpc;
     type ICustomOverlay = import('./noppes/npcs/extendedapi/overlay/ICustomOverlay').ICustomOverlay;
     type ICustomProjectile = import('./com/veil/extendedscripts/extendedapi/entity/ICustomProjectile').ICustomProjectile;

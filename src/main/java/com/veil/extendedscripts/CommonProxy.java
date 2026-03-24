@@ -87,6 +87,7 @@ public class CommonProxy {
         API.addGlobalObject("TacticalVariant", TacticalVariant.Instance);
         API.addGlobalObject("AbilityPhase", AbilityPhase.Instance);
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
+        API.addGlobalObject("CustomParticleIndex", CustomParticleIndex.Instance);
 
         API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
 

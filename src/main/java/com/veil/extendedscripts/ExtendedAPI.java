@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.IParticle;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLivingBase;
@@ -257,5 +258,22 @@ public class ExtendedAPI implements AbstractExtendedAPI {
         length += text.length() - 1;
 
         return length;
+    }
+
+    /**
+     * All vanilla particles use a single texture: minecraft:textures/particle/particles.png, but only use a tiny piece.
+     * This function does something similar. Use the CustomParticleIndex keyword for a list of valid inputs.
+     * By applying {@link IParticle#setHEXColor(int, int, float, int)} to your particle with the right color,
+     * you should be able to recreate any vanilla particle.
+     * Changing the sizes the size and offset so changing these values after this function may have unexpected results.
+     */
+    public IParticle createCustomParticlePreset(int particleIndex) {
+        IParticle newParticle = AbstractNpcAPI.Instance().createParticle("minecraft:textures/particle/particles.png");
+        newParticle.setSize(8, 8);
+        int row = (particleIndex - 1) % 16;
+        int col = Math.floorDiv(particleIndex - 1, 16);
+        newParticle.setOffset(row * 8, col * 8);
+
+        return newParticle;
     }
 }

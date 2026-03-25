@@ -4,10 +4,8 @@ import com.veil.extendedscripts.commands.VeilCommand;
 import com.veil.extendedscripts.commands.InspectCommand;
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.event.*;
-import com.veil.extendedscripts.extendedapi.constants.AbstractAbilityUserType;
 import com.veil.extendedscripts.extendedapi.event.*;
 import com.veil.extendedscripts.guis.VirtualGuiHandler;
-import com.veil.extendedscripts.placeholder.CustomEffectPlaceholder;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
@@ -25,12 +23,9 @@ import cpw.mods.fml.common.versioning.ArtifactVersion;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
-import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.AbstractNpcAPI;
-import noppes.npcs.client.gui.util.script.interpreter.js_parser.JSTypeInfo;
-import noppes.npcs.client.gui.util.script.interpreter.js_parser.JSTypeRegistry;
 import noppes.npcs.constants.ScriptContext;
 import noppes.npcs.controllers.ScriptHookController;
 
@@ -74,12 +69,12 @@ public class CommonProxy {
         API.addGlobalObject("MouseButton", MouseButton.Instance);
         API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);
-        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
-        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+        API.addGlobalObject("AttributeSection", AttributeSection.Instance);
+        API.addGlobalObject("AttributeValueType", AttributeValueType.Instance);
         API.addGlobalObject("BlockSide", BlockSide.Instance);
         API.addGlobalObject("ArmorSlot", ArmorType.Instance);
         API.addGlobalObject("ItemType", ItemType.Instance);
-        API.addGlobalObject("Effect", EffectID.Instance);
+        API.addGlobalObject("Effect", Effect.Instance);
         API.addGlobalObject("SkinType", SkinType.Instance);
         API.addGlobalObject("DataType", DataType.Instance);
         API.addGlobalObject("CollisionType", CollisionType.Instance);
@@ -89,7 +84,7 @@ public class CommonProxy {
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
         API.addGlobalObject("CustomParticleIndex", CustomParticleIndex.Instance);
 
-        API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
+        // API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
 
         CraftingManager.getInstance().getRecipeList().add(new ScriptedItemDyeRecipe());
     }
@@ -129,23 +124,23 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new AttributeEventHandler());
 
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
-        API.addGlobalObject("AttributeSection", ExtendedAttributeSection.Instance);
-        API.addGlobalObject("AttributeValueType", ExtendedAttributeValueType.Instance);
+        API.addGlobalObject("AttributeSection", AttributeSection.Instance);
+        API.addGlobalObject("AttributeValueType", AttributeValueType.Instance);
 
-        AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase(), "Upward Gravity", ColorCodes.Instance.DARK_PURPLE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_GRAVITY.asSnakeCase(), "Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY.asSnakeCase(), "Downward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_UPWARD_GRAVITY.asSnakeCase(), "Upward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_VERTICAL.asSnakeCase(), "Jump Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_HORIZONTAL.asSnakeCase(), "Jump Breadth", ColorCodes.Instance.DARK_GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase(), "Max Fall Distance", ColorCodes.Instance.WHITE, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
-        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), "Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
-        AttributeController.registerAttribute(PlayerAttribute.ARMOR_VALUE.asSnakeCase(), "Armor Value", ColorCodes.Instance.GRAY, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
-        AttributeController.registerAttribute(PlayerAttribute.ATTACK_REACH.asSnakeCase(), "Attack Reach", ColorCodes.Instance.GREEN, AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UPWARD_GRAVITY.asSnakeCase(), "Upward Gravity", ColorCodes.Instance.DARK_PURPLE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_GRAVITY.asSnakeCase(), "Underwater Gravity", ColorCodes.Instance.DARK_AQUA, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_DOWNWARD_GRAVITY.asSnakeCase(), "Downward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.UNDERWATER_UPWARD_GRAVITY.asSnakeCase(), "Upward Underwater Gravity", ColorCodes.Instance.DARK_AQUA, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_VERTICAL.asSnakeCase(), "Jump Boost", ColorCodes.Instance.GREEN, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.JUMP_POWER_HORIZONTAL.asSnakeCase(), "Jump Breadth", ColorCodes.Instance.DARK_GREEN, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(EntityAttribute.MAX_FALL_DISTANCE.asSnakeCase(), "Max Fall Distance", ColorCodes.Instance.WHITE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), "Flight Speed", ColorCodes.Instance.WHITE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
+        AttributeController.registerAttribute(PlayerAttribute.ARMOR_VALUE.asSnakeCase(), "Armor Value", ColorCodes.Instance.GRAY, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        AttributeController.registerAttribute(PlayerAttribute.ATTACK_REACH.asSnakeCase(), "Attack Reach", ColorCodes.Instance.GREEN, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
         // Not implemented yet
         // AttributeController.registerAttribute(PlayerAttribute.SPRINT_BOOST.asSnakeCase(), "Sprint Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
     }

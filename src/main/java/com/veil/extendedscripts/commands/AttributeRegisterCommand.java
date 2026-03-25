@@ -3,8 +3,8 @@ package com.veil.extendedscripts.commands;
 import com.veil.extendedscripts.ChatUtils;
 import com.veil.extendedscripts.ExtendedAPI;
 import com.veil.extendedscripts.constants.ColorCodes;
-import com.veil.extendedscripts.constants.ExtendedAttributeSection;
-import com.veil.extendedscripts.constants.ExtendedAttributeValueType;
+import com.veil.extendedscripts.constants.AttributeSection;
+import com.veil.extendedscripts.constants.AttributeValueType;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -75,13 +75,13 @@ public class AttributeRegisterCommand implements IVeilSubCommand {
                 return;
             }
 
-            int valueType = ExtendedAttributeValueType.Instance.getValue(args[3]);
+            int valueType = AttributeValueType.Instance.getValue(args[3]);
             if (valueType == -1) {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Type "+args[3]+" doesn't exist. Use tab completion for valid value types."));
                 return;
             }
 
-            int section = ExtendedAttributeSection.Instance.getValue(args[4]);
+            int section = AttributeSection.Instance.getValue(args[4]);
             if (section == -1) {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Section "+args[4]+" doesn't exist. Use tab completion for valid sections."));
                 return;

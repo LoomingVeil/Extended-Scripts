@@ -1,21 +1,12 @@
 package com.veil.extendedscripts.commands;
 
 import com.veil.extendedscripts.ChatUtils;
-import com.veil.extendedscripts.ExtendedAPI;
-import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.constants.ColorCodes;
-import com.veil.extendedscripts.constants.ExtendedAttributeSection;
-import com.veil.extendedscripts.constants.ExtendedAttributeValueType;
-import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class AttributeCommand implements IVeilSubCommand {
     private final static String gray = "§"+ColorCodes.Instance.GRAY;

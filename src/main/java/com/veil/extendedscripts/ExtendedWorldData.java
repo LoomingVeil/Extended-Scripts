@@ -1,7 +1,7 @@
 package com.veil.extendedscripts;
 
-import com.veil.extendedscripts.constants.ExtendedAttributeSection;
-import com.veil.extendedscripts.constants.ExtendedAttributeValueType;
+import com.veil.extendedscripts.constants.AttributeSection;
+import com.veil.extendedscripts.constants.AttributeValueType;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -36,8 +36,8 @@ public class ExtendedWorldData extends WorldSavedData {
                 compound.getString("key"),
                 compound.getString("displayName"),
                 (char) compound.getInteger("color"),
-                ExtendedAttributeValueType.toKamAttribute(compound.getInteger("attributeValueType")),
-                ExtendedAttributeSection.toKamSection(compound.getInteger("attributeSection"))
+                AttributeValueType.toKamAttribute(compound.getInteger("attributeValueType")),
+                AttributeSection.toKamSection(compound.getInteger("attributeSection"))
             ));
         }
     }

@@ -2,7 +2,6 @@ package com.veil.extendedscripts;
 
 import com.veil.extendedscripts.constants.*;
 import com.veil.extendedscripts.extendedapi.AbstractExtendedAPI;
-import com.veil.extendedscripts.extendedapi.IFieldInfo;
 import com.veil.extendedscripts.extendedapi.IPotionEffect;
 import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
@@ -11,13 +10,10 @@ import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
-import kamkeel.npcs.controllers.data.attribute.AttributeValueType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -156,12 +152,12 @@ public class ExtendedAPI implements AbstractExtendedAPI {
      * @param key This, by convention, is always lowercase and words are separated by _'s. This name is used within your scripts to denote your attribute.
      * @param displayName This name will show up on your item.
      * @param colorCode Takes one of Minecraft's 16 colors 0-9 and a-f. See {@link ColorCodes}.
-     * @param attributeType 0. Flat, 1. Percent, 2. Magic. {@link ExtendedAttributeValueType}
-     * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link ExtendedAttributeSection}
+     * @param attributeType 0. Flat, 1. Percent, 2. Magic. {@link AttributeValueType}
+     * @param section 0. Base, 1. Modifier, 2. Stats, 3. Info, 4. Extra. The higher the number, the further down the section is. See {@link AttributeSection}
      */
     public void registerAttribute(String key, String displayName, char colorCode, int attributeType, int section) {
-        AttributeValueType valueType = ExtendedAttributeValueType.toKamAttribute(attributeType);
-        AttributeDefinition.AttributeSection sectionType = ExtendedAttributeSection.toKamSection(section);
+        kamkeel.npcs.controllers.data.attribute.AttributeValueType valueType = AttributeValueType.toKamAttribute(attributeType);
+        AttributeDefinition.AttributeSection sectionType = AttributeSection.toKamSection(section);
 
         AttributeDefinition newAttribute = AttributeController.registerAttribute(key, displayName, colorCode, valueType, sectionType);
         ExtendedScripts.getExtendedWorldData().addExtendedAttribute(newAttribute);

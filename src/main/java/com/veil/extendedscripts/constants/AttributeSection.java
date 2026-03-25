@@ -3,8 +3,8 @@ package com.veil.extendedscripts.constants;
 
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
 
-public class ExtendedAttributeSection {
-    public final static ExtendedAttributeSection Instance = new ExtendedAttributeSection();
+public class AttributeSection {
+    public final static AttributeSection Instance = new AttributeSection();
     public final int BASE = 0;
     public final int MODIFIER = 1;
     public final int STATS = 2;

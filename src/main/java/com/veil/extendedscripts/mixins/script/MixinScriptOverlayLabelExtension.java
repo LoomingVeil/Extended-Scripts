@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import com.veil.extendedscripts.ExtendedAPI;
 import noppes.npcs.extendedapi.overlay.IOverlayLabel;

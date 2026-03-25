@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import noppes.npcs.api.overlay.ICustomOverlayComponent;
 import noppes.npcs.extendedapi.overlay.ICustomOverlay;

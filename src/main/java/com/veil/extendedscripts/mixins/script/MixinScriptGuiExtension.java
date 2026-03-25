@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import noppes.npcs.api.gui.ICustomGuiComponent;
 import noppes.npcs.extendedapi.gui.ICustomGui;

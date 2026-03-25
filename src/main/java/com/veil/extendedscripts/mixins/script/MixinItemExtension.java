@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.Slot;

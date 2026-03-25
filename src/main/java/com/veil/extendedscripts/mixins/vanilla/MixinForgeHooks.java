@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.vanilla;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeHooks;

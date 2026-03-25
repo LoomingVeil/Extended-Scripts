@@ -30,15 +30,15 @@ public class MixinConfig implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (!Config.enableEffectPageModification) {
-            if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinGuiContainerCreative")) {
+            if (mixinClassName.equals("com.veil.extendedscripts.mixins.vanilla.MixinGuiContainerCreative")) {
                 return false;
-            } else if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinInventoryEffectRenderer")) {
+            } else if (mixinClassName.equals("com.veil.extendedscripts.mixins.vanilla.MixinInventoryEffectRenderer")) {
                 return false;
             }
         }
 
         if (!Config.enableScriptedArmorTextures) {
-            if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinRenderPlayer")) {
+            if (mixinClassName.equals("com.veil.extendedscripts.mixins.vanilla.MixinRenderPlayer")) {
                 return false;
             }
         }

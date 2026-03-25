@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.vanilla;
 
 import com.veil.extendedscripts.ClientTransferStorage;
 import net.minecraft.client.multiplayer.PlayerControllerMP;

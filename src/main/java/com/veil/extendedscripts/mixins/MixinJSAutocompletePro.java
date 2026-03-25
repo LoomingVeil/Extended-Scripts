@@ -15,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+/**
+ * Experimental class currently disabled
+ */
 @Mixin(value = JSAutocompleteProvider.class, remap = false)
 public class MixinJSAutocompletePro extends JavaAutocompleteProvider {
     @Inject(method = "addMemberSuggestions", at = @At(value = "HEAD"), cancellable = true)

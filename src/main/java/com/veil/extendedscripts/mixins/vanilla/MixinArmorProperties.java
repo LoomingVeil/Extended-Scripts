@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.vanilla;
 
 import com.veil.extendedscripts.event.ArmorDamagedEvent;
 import com.veil.extendedscripts.properties.PlayerAttribute;

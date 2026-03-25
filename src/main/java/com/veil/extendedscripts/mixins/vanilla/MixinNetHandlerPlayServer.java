@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.vanilla;
 
 import net.minecraft.network.NetHandlerPlayServer;
 import org.spongepowered.asm.mixin.Mixin;

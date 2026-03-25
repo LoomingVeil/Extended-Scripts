@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import com.mojang.authlib.GameProfile;
 import noppes.npcs.entity.EntityNPCInterface;

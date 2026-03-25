@@ -29,14 +29,14 @@ public class QuestIdGlobalDescriptor implements ScriptGlobalDescriptor {
                key,
                quest.getId(),
                getTypeName(),
-               buildQuestDocumentation(key, quest.getId(), quest)
+               buildDocumentation(key, quest.getId(), quest)
             ));
         }
 
         return members;
     }
 
-    private static String buildQuestDocumentation(String key, int questId, Quest quest) {
+    private static String buildDocumentation(String key, int questId, Quest quest) {
         if (quest == null) {
             return "Quest Key: " + key + "\nQuest ID: " + questId;
         }

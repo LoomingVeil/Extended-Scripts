@@ -25,7 +25,7 @@ Things I want to add:
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type)
- - Add more dynamic global types (DialogID, ClonesTab(1-15), Textures?, AnimationName, PlayerName, FactionID)
+ - Add more dynamic global types (ClonesTab(1-15), Textures?, AnimationName, PlayerName, FactionID, Attribute & Custom Attributes) look through noppes.npcs.constants for more
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

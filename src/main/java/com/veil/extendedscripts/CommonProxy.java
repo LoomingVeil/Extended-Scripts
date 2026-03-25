@@ -64,29 +64,41 @@ public class CommonProxy {
         AbstractNpcAPI API = AbstractNpcAPI.Instance();
         API.addGlobalObject("extAPI", ExtendedAPI.Instance);
         API.addGlobalObject("ShapeMaker", ShapeMaker.Instance);
-        API.addGlobalObject("AnimationType", AnimationType.Instance);
+        API.addGlobalObject("BlockSide", BlockSide.Instance);
+        API.addGlobalObject("CustomParticleIndex", CustomParticleIndex.Instance);
+        API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("Color", ColorCodes.Instance);
+        API.addGlobalObject("Effect", Effect.Instance);
+        API.addGlobalObject("Key", Keys.Instance);
+        API.addGlobalObject("MouseButton", MouseButton.Instance);
+        API.addGlobalObject("ArmorSlot", ArmorType.Instance);
+        API.addGlobalObject("DataType", DataType.Instance);
+
+        // CustomNpc+ Enums
+        API.addGlobalObject("AnimationType", AnimationType.Instance);
         API.addGlobalObject("EntityType", EntityType.Instance);
         API.addGlobalObject("Job", JobType.Instance);
         API.addGlobalObject("Role", RoleType.Instance);
-        API.addGlobalObject("Key", Keys.Instance);
-        API.addGlobalObject("MouseButton", MouseButton.Instance);
-        API.addGlobalObject("Particle", ParticleType.Instance);
         API.addGlobalObject("ItemUseAction", ItemUseAction.Instance);
         API.addGlobalObject("AttributeSection", AttributeSection.Instance);
         API.addGlobalObject("AttributeValueType", AttributeValueType.Instance);
-        API.addGlobalObject("BlockSide", BlockSide.Instance);
-        API.addGlobalObject("ArmorSlot", ArmorType.Instance);
         API.addGlobalObject("ItemType", ItemType.Instance);
-        API.addGlobalObject("Effect", Effect.Instance);
         API.addGlobalObject("SkinType", SkinType.Instance);
-        API.addGlobalObject("DataType", DataType.Instance);
         API.addGlobalObject("CollisionType", CollisionType.Instance);
         API.addGlobalObject("CombatPolicy", CombatPolicy.Instance);
         API.addGlobalObject("TacticalVariant", TacticalVariant.Instance);
         API.addGlobalObject("AbilityPhase", AbilityPhase.Instance);
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
-        API.addGlobalObject("CustomParticleIndex", CustomParticleIndex.Instance);
+        API.addGlobalObject("AbilityAnchorPoint", AbilityAnchorPoint.Instance);
+        API.addGlobalObject("AbilityHitType", AbilityHitType.Instance);
+        API.addGlobalObject("AbilityLockMode", AbilityLockMode.Instance);
+        API.addGlobalObject("AbilityRotationMode", AbilityRotationMode.Instance);
+        API.addGlobalObject("AbilityTargetFilter", AbilityTargetFilter.Instance);
+        API.addGlobalObject("AbilityTargetingMode", AbilityRotationMode.Instance);
+        API.addGlobalObject("AnimationPart", AnimationPart.Instance);
+        API.addGlobalObject("AuctionStatus", AuctionStatus.Instance);
+        API.addGlobalObject("ClaimType", ClaimType.Instance);
+        API.addGlobalObject("TimeAvailability", TimeAvailability.Instance);
 
         ScriptGlobalRegistry.register(new QuestIdGlobalDescriptor());
         ScriptGlobalRegistry.register(new CustomEffectGlobalDescriptor());
@@ -127,10 +139,6 @@ public class CommonProxy {
     public void attributeInit() {
         FMLCommonHandler.instance().bus().register(new AttributeEventHandler());
         MinecraftForge.EVENT_BUS.register(new AttributeEventHandler());
-
-        AbstractNpcAPI API = AbstractNpcAPI.Instance();
-        API.addGlobalObject("AttributeSection", AttributeSection.Instance);
-        API.addGlobalObject("AttributeValueType", AttributeValueType.Instance);
 
         AttributeController.registerAttribute(EntityAttribute.GRAVITY.asSnakeCase(), "Gravity", ColorCodes.Instance.DARK_PURPLE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(EntityAttribute.DOWNWARD_GRAVITY.asSnakeCase(), "Downward Gravity", ColorCodes.Instance.DARK_PURPLE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);

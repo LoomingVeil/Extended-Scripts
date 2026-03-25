@@ -8,13 +8,22 @@ declare global {
     // TYPE ALIASES - Make all interfaces available globally
     // ============================================================================
 
+    type AbstractAbilityAnchorPoint = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityAnchorPoint').AbstractAbilityAnchorPoint;
+    type AbstractAbilityHitType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityHitType').AbstractAbilityHitType;
+    type AbstractAbilityLockMode = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityLockMode').AbstractAbilityLockMode;
     type AbstractAbilityPhase = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityPhase').AbstractAbilityPhase;
+    type AbstractAbilityRotationMode = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityRotationMode').AbstractAbilityRotationMode;
+    type AbstractAbilityTargetFilter = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityTargetFilter').AbstractAbilityTargetFilter;
+    type AbstractAbilityTargetingMode = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityTargetingMode').AbstractAbilityTargetingMode;
     type AbstractAbilityUserType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAbilityUserType').AbstractAbilityUserType;
+    type AbstractAnimationPart = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAnimationPart').AbstractAnimationPart;
     type AbstractAnimationType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAnimationType').AbstractAnimationType;
     type AbstractArmorType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractArmorType').AbstractArmorType;
     type AbstractAttributeSection = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAttributeSection').AbstractAttributeSection;
     type AbstractAttributeValueType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAttributeValueType').AbstractAttributeValueType;
+    type AbstractAuctionStatus = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAuctionStatus').AbstractAuctionStatus;
     type AbstractBlockSide = import('./com/veil/extendedscripts/extendedapi/constants/AbstractBlockSide').AbstractBlockSide;
+    type AbstractClaimType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractClaimType').AbstractClaimType;
     type AbstractCollisionType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCollisionType').AbstractCollisionType;
     type AbstractColorCodes = import('./com/veil/extendedscripts/extendedapi/constants/AbstractColorCodes').AbstractColorCodes;
     type AbstractCombatPolicy = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCombatPolicy').AbstractCombatPolicy;
@@ -34,6 +43,7 @@ declare global {
     type AbstractShapeMaker = import('./com/veil/extendedscripts/extendedapi/AbstractShapeMaker').AbstractShapeMaker;
     type AbstractSkinType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractSkinType').AbstractSkinType;
     type AbstractTacticalVariant = import('./com/veil/extendedscripts/extendedapi/constants/AbstractTacticalVariant').AbstractTacticalVariant;
+    type AbstractTimeAvailability = import('./com/veil/extendedscripts/extendedapi/constants/AbstractTimeAvailability').AbstractTimeAvailability;
     type IArmorChangedEvent = import('./com/veil/extendedscripts/extendedapi/event/IArmorChangedEvent').IArmorChangedEvent;
     type IArmorDamagedEvent = import('./com/veil/extendedscripts/extendedapi/event/IArmorDamagedEvent').IArmorDamagedEvent;
     type IAttributeRecalculateEvent = import('./com/veil/extendedscripts/extendedapi/event/IAttributeRecalculateEvent').IAttributeRecalculateEvent;

@@ -23,6 +23,8 @@ import noppes.npcs.controllers.data.PlayerEffect;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 @Mod(
     modid = ExtendedScripts.MODID, version = Tags.VERSION,
@@ -41,6 +43,8 @@ public class ExtendedScripts {
     public static final WorldClippers worldClippers = new WorldClippers();
     public static final AttributeCore attributeCore = new AttributeCore();
     public static final Pointer pointer = new Pointer();
+    public static final Logger logger = LogManager.getLogManager().getLogger("Extended Scripts");
+
     @SidedProxy(clientSide = "com.veil.extendedscripts.ClientProxy", serverSide = "com.veil.extendedscripts.CommonProxy")
     public static CommonProxy proxy;
 

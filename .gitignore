@@ -12,6 +12,7 @@
 /crash-reports/
 /logs/
 .gradle-user-home
+.gradle-user
 options.txt
 /saves/
 usernamecache.json

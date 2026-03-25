@@ -9,6 +9,10 @@ import com.veil.extendedscripts.guis.VirtualGuiHandler;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
 import com.veil.extendedscripts.properties.PlayerAttribute;
+import com.veil.extendedscripts.scripting.CustomEffectGlobalDescriptor;
+import com.veil.extendedscripts.scripting.QuestIdGlobalDescriptor;
+import com.veil.extendedscripts.scripting.ScriptGlobalDescriptor;
+import com.veil.extendedscripts.scripting.ScriptGlobalRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
@@ -84,7 +88,8 @@ public class CommonProxy {
         API.addGlobalObject("AbilityUserType", AbilityUserType.Instance);
         API.addGlobalObject("CustomParticleIndex", CustomParticleIndex.Instance);
 
-        // API.addGlobalObject("CustomEffect", CustomEffectPlaceholder.Instance);
+        ScriptGlobalRegistry.register(new QuestIdGlobalDescriptor());
+        ScriptGlobalRegistry.register(new CustomEffectGlobalDescriptor());
 
         CraftingManager.getInstance().getRecipeList().add(new ScriptedItemDyeRecipe());
     }

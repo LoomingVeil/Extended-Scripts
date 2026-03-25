@@ -24,7 +24,8 @@ Things I want to add:
  - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.
 
 Lists to add when we see something:
- - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationType)
+ - Continue searching for more Enums to implement (overlay component, abilityLockMovementType, abilityRotationPhaseType, abilityRotationModeType)
+ - Add more dynamic global types (DialogID, ClonesTab(1-15), Textures?, AnimationName, PlayerName, FactionID)
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

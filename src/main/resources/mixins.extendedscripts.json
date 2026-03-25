@@ -25,11 +25,15 @@
     "script.MixinScriptOverlayExtension",
     "script.MixinScriptOverlayLabelExtension",
     "MixinItemCustomRenderer",
+    "MixinScriptContainerGlobals",
     "vanilla.MixinEntityRenderer",
     "vanilla.MixinNetHandlerPlayServer"
   ],
   "client": [
-    "vanilla.MixinRenderPlayer"
+    "vanilla.MixinRenderPlayer",
+    "MixinJSAutocompletePro",
+    "MixinScriptTextContainer",
+    "MixinTokenHoverInfo"
   ],
   "server": [],
   "minVersion": "0.7.11"

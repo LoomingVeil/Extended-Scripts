@@ -26,11 +26,9 @@
     "script.MixinScriptOverlayLabelExtension",
     "MixinItemCustomRenderer",
     "MixinScriptContainerGlobals",
-    "vanilla.MixinEntityRenderer",
     "vanilla.MixinNetHandlerPlayServer"
   ],
   "client": [
-    "vanilla.MixinRenderPlayer",
     "MixinJSAutocompletePro",
     "MixinScriptTextContainer",
     "MixinTokenHoverInfo"

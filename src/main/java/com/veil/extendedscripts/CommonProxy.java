@@ -156,7 +156,8 @@ public class CommonProxy {
         AttributeController.registerAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), "Vertical Flight Speed", ColorCodes.Instance.WHITE, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.SWIM_BOOST_WATER.asSnakeCase(), "Swim Boost", ColorCodes.Instance.AQUA, kamkeel.npcs.controllers.data.attribute.AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
         AttributeController.registerAttribute(PlayerAttribute.ARMOR_VALUE.asSnakeCase(), "Armor Value", ColorCodes.Instance.GRAY, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
-        AttributeController.registerAttribute(PlayerAttribute.ATTACK_REACH.asSnakeCase(), "Attack Reach", ColorCodes.Instance.GREEN, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
+        // WIP
+        // AttributeController.registerAttribute(PlayerAttribute.ATTACK_REACH.asSnakeCase(), "Attack Reach", ColorCodes.Instance.GREEN, kamkeel.npcs.controllers.data.attribute.AttributeValueType.FLAT, AttributeDefinition.AttributeSection.BASE);
         // Not implemented yet
         // AttributeController.registerAttribute(PlayerAttribute.SPRINT_BOOST.asSnakeCase(), "Sprint Boost", ColorCodes.Instance.GREEN, AttributeValueType.PERCENT, AttributeDefinition.AttributeSection.MODIFIER);
     }

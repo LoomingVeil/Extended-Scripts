@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(value = PlayerControllerMP.class)
 public class MixinPlayerControllerMP {
-    @Inject(method = "getBlockReachDistance", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "getBlockReachDistance", at = @At("HEAD"), cancellable = true)
     private void onGetBlockReachDistance(CallbackInfoReturnable<Float> cir) {
         cir.setReturnValue(ClientTransferStorage.attackReach + 3.0F);
-    }
+    }*/
 }

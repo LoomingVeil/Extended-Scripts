@@ -34,7 +34,8 @@ public class MixinEntityRenderer {
         )
     )
     private float redirectBlockReachDistance(PlayerControllerMP controller) {
-        return ClientTransferStorage.attackReach + 3.0F;
+        float modifier = ClientTransferStorage.attackReach;
+        return (modifier - 3) + (controller.isInCreativeMode() ? 5.0F : 4.5F);
     }
 }
 

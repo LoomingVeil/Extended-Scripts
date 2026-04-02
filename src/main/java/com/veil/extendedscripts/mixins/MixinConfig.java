@@ -2,14 +2,12 @@ package com.veil.extendedscripts.mixins;
 
 import com.veil.extendedscripts.Config;
 import com.veil.extendedscripts.ExtendedScripts;
-import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.lib.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class MixinConfig implements IMixinConfigPlugin {

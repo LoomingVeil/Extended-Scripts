@@ -3,12 +3,19 @@ package com.veil.extendedscripts.mixins;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import noppes.npcs.items.ItemCustomizable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // Extends the scripted item itself
-@Mixin(value={ItemCustomizable.class})
+@Pseudo
+@Mixin(targets = {
+    "noppes.npcs.items.ItemCustomizable",
+    "noppes.npcs.items.ItemScripted"
+}, remap = false)
 public abstract class MixinScriptedItem {
     @Unique
     public int getHarvestLevel(ItemStack stack, String toolClass) {

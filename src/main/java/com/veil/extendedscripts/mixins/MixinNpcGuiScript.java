@@ -10,16 +10,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = GuiScript.class)
+@Mixin(value = GuiScript.class, remap = false)
 public class MixinNpcGuiScript extends GuiScriptInterface {
-    @Inject(method = "initGui", at = @At(value = "RETURN"), remap = false)
-    public void initGui(CallbackInfo cif) {
+    @Inject(method = "initGui", at = @At(value = "RETURN"), remap = true)
+    public void mixinInitGui(CallbackInfo cif) {
         GuiMenuTopButton refButton = getTopButton(15);
         addTopButton(new GuiMenuTopButton(42, refButton, "gui.extendedapi"));
     }
 
-    @Inject(method = "actionPerformed", at = @At(value = "RETURN"))
-    protected void actionPerformed(GuiButton guibutton, CallbackInfo cif) {
+    @Inject(method = "actionPerformed", at = @At(value = "RETURN"), remap = true)
+    protected void mixinActionPerformed(GuiButton guibutton, CallbackInfo cif) {
         if (guibutton.id == 42) {
             this.displayGuiScreen(new GuiConfirmOpenLink(((GuiScriptInterface) (Object) this), "https://loomingveil.github.io/Extended-Scripts-Combined-API/", 4, true));
         }

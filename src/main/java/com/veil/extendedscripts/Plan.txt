@@ -22,6 +22,9 @@ Things I want to add:
  - See if I can mess with the skybox
  - See if we can mess with name tags
  - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.
+ - See if we can make NPCs real mounts
+ - Do after function
+ - Attaching abilities to energy projectiles
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type)

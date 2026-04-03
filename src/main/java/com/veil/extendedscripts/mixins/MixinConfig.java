@@ -44,6 +44,15 @@ public class MixinConfig implements IMixinConfigPlugin {
         return true;
     }
 
+    private static boolean classExists(String className) {
+        try {
+            Class.forName(className, false, MixinConfig.class.getClassLoader());
+            return true;
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     @Override
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
         // You can modify the set of target classes here if needed

@@ -15,6 +15,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
         org.spongepowered.asm.launch.MixinBootstrap.init();
         org.spongepowered.asm.mixin.Mixins.addConfiguration("mixins.extendedscripts.json");
+        // org.spongepowered.asm.mixin.Mixins.addConfiguration("mixins.extendedscripts.late.json");
     }
 
     @Override public String[] getASMTransformerClass() { return new String[0]; }

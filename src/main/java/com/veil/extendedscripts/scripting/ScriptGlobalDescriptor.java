@@ -24,7 +24,7 @@ public interface ScriptGlobalDescriptor {
     }
 
     /**
-     * Gets the type name of the value of this object such as number.
+     * Gets the type name of the value of this object such as number or string.
      */
     String getTypeName();
 

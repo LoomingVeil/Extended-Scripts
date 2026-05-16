@@ -40,7 +40,7 @@ public abstract class MixinGuiScriptInterface extends GuiNPCInterface {
         }
     }
 
-    @Inject(method = "actionPerformed", at = @At(value = "RETURN"), remap = true)
+    @Inject(method = "actionPerformed", at = @At(value = "RETURN"))
     protected void actionPerformed(GuiButton guibutton, CallbackInfo cif) {
         if (guibutton.id == 142) {
             this.displayGuiScreen(new GuiConfirmOpenLink((GuiYesNoCallback) (Object) this, "https://loomingveil.github.io/Extended-Scripts-Combined-API/", 4, true));

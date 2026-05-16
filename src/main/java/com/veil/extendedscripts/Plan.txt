@@ -25,10 +25,11 @@ Things I want to add:
  - See if we can make NPCs real mounts
  - Do after function
  - Attaching abilities to energy projectiles
+ - Add descriptions when hovering over classes.
 
 Lists to add when we see something:
- - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type)
- - Add more dynamic global types (ClonesTab(1-15), Textures?, AnimationName, PlayerName, FactionID, Attribute & Custom Attributes) look through noppes.npcs.constants for more
+ - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more
+ - Add more dynamic global types (Textures?, AnimationName, PlayerName, FactionID, Attribute & Custom Attributes)
  - Expand upon ItemTypes for more types (None for now)
 
 Confusing CustomNPC+ gui stuff:

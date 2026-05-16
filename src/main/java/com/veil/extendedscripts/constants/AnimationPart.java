@@ -4,11 +4,11 @@ import com.veil.extendedscripts.extendedapi.constants.AbstractAnimationPart;
 
 public class AnimationPart implements AbstractAnimationPart {
     public static final AnimationPart Instance = new AnimationPart();
-    public final int HEAD = 0;
-    public final int BODY = 1;
-    public final int RIGHT_ARM = 2;
-    public final int LEFT_ARM = 3;
-    public final int RIGHT_LEFT = 4;
-    public final int LEFT_LEG = 5;
-    public final int FULL_MODEL = 6;
+    public final String HEAD = "HEAD";
+    public final String BODY = "BODY";
+    public final String RIGHT_ARM = "RIGHT_ARM";
+    public final String LEFT_ARM = "LEFT_ARM";
+    public final String RIGHT_LEG = "RIGHT_LEG";
+    public final String LEFT_LEG = "LEFT_LEG";
+    public final String FULL_MODEL = "FULL_MODEL";
 }

@@ -1,6 +1,7 @@
 package com.veil.extendedscripts.scripting;
 
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.controllers.ServerCloneController;
 import noppes.npcs.scripted.entity.ScriptNpc;
 
@@ -42,7 +43,19 @@ public class CloneTabDescriptor implements ScriptGlobalDescriptor {
     }
 
     public String buildDocumentation(String cloneName) {
-        ScriptNpc npc = (ScriptNpc) ServerCloneController.Instance.get(tab, cloneName, AbstractNpcAPI.Instance().getIWorld(0));
+        ScriptNpc npc;
+        try {
+            npc = (ScriptNpc) ServerCloneController.Instance.get(tab, cloneName, AbstractNpcAPI.Instance().getIWorld(0));
+        } catch (ClassCastException e) {
+            try {
+                IEntity entity = ServerCloneController.Instance.get(tab, cloneName, AbstractNpcAPI.Instance().getIWorld(0));
+                return "Name: "+cloneName
+                    + "\nEntity Type: "+entity.getTypeName();
+            } catch (Exception unused) {
+                return "Failed to get Clone Data";
+            }
+        }
+
 
         return "Name: " + npc.getName()
             + "\nTab: " + tab

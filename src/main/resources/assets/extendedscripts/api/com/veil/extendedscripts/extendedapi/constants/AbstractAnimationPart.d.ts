@@ -8,31 +8,31 @@
  */
 export interface AbstractAnimationPart {
 	/**
-	 * Value is 0
+	 * Value is "HEAD"
 	 */
-	HEAD: number;
+	HEAD: string;
 	/**
-	 * Value is 1
+	 * Value is "BODY"
 	 */
-	BODY: number;
+	BODY: string;
 	/**
-	 * Value is 2
+	 * Value is "RIGHT_ARM"
 	 */
-	RIGHT_ARM: number;
+	RIGHT_ARM: string;
 	/**
-	 * Value is 3
+	 * Value is "LEFT_ARM"
 	 */
-	LEFT_ARM: number;
+	LEFT_ARM: string;
 	/**
-	 * Value is 4
+	 * Value is "RIGHT_LEG"
 	 */
-	RIGHT_LEFT: number;
+	RIGHT_LEG: string;
 	/**
-	 * Value is 5
+	 * Value is "LEFT_LEG"
 	 */
-	LEFT_LEG: number;
+	LEFT_LEG: string;
 	/**
-	 * Value is 6
+	 * Value is "FULL_MODEL"
 	 */
-	FULL_MODEL: number;
+	FULL_MODEL: string;
 }

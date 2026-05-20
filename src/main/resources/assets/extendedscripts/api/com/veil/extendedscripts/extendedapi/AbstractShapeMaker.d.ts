@@ -127,19 +127,15 @@ export interface AbstractShapeMaker {
     /** Hollow torus with tube-wall thickness 1. */
     getHollowTorus(center: IPos, majorRadius: import('./int').int, minorRadius: import('./int').int): IPos[];
     /**
-     * Draws an arc through 3D space.
-     *
-     * @param referencePos  Anchor position used for offsets.
-     * @param lookDir       Normalized forward direction.
-     * @param radius        Arc radius.
-     * @param heightOffset  Shift up/down along world Y from {@code referencePos}.
-     * @param forwardOffset Shift forward along {@code lookDir} from {@code referencePos}.
-     * @param angleDeg      Total sweep angle in degrees.
-     * @param pitchDeg      Rotation of the arc plane around look direction, in degrees.
-     * @param yawDeg        Rotation around world Y, in degrees.
-     * @param segments      Number of line segments used to approximate the arc.
+     * Finds points for an arc in 3D space.
+     * @param centerPos When radius angleDeg is 360, a circle will form with this point at the center.
+     * @param direction A direction that points towards one of the points on the circle. Use this to control pitch and yaw.
+     * @param radius When angleDef is 360, a circle with will form with this radius.
+     * @param angleDeg How much of the circle to show. If 180, you will see a semicircle with 90 degrees to the left of the direction vector and the other 90 on the other side.
+     * @param rollDeg Use this to roll the arc.
+     * @param numPoints Number of points used to approximate the arc.
      */
-    drawArc(referencePos: IPos, lookDir: IPos, radius: import('./double').double, heightOffset: import('./double').double, forwardOffset: import('./double').double, angleDeg: import('./double').double, pitchDeg: import('./double').double, yawDeg: import('./double').double, segments: import('./int').int): IPos[];
+    drawArc(centerPos: IPos, direction: IPos, radius: import('./double').double, angleDeg: import('./double').double, rollDeg: import('./double').double, numPoints: import('./int').int): IPos[];
     /**
      * Draws a simple arc centered at {@code center} in the XZ plane.
      *
@@ -169,6 +165,17 @@ export interface AbstractShapeMaker {
      * <p>Base ring lies in the XZ plane, then is rotated by X (pitch), Y (yaw), Z (roll).
      */
     drawRing(center: IPos, radius: import('./double').double, segments: import('./int').int, pitchDeg: import('./double').double, yawDeg: import('./double').double, rollDeg: import('./double').double): IPos[];
+    /**
+     * Finds points for a crescent in 3D space. This is just 2 arcs.
+     * @param centerPos When radius angleDeg is 360, a circle will form with this point at the center.
+     * @param direction A direction that points towards one of the points on the circle. Use this to control pitch and yaw.
+     * @param radius Radius of the outer arc.
+     * @param width Determines the distance between the outer arc and the inner arc.
+     * @param angleDeg How much of the circle to show. If 180, you will see a semicircle with 90 degrees to the left of the direction vector and the other 90 on the other side.
+     * @param rollDeg Use this to roll the arc.
+     * @param numPoints Number of points used to approximate the arc.
+     */
+    drawCrescent(centerPos: IPos, direction: IPos, radius: import('./double').double, width: import('./double').double, angleDeg: import('./double').double, rollDeg: import('./double').double, numPoints: import('./int').int): IPos[];
     /**
      * Draws a 3D Lissajous curve centered at {@code center}.
      *

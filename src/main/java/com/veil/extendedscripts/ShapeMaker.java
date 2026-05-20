@@ -3,6 +3,7 @@ package com.veil.extendedscripts;
 import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import noppes.npcs.api.AbstractNpcAPI;
 import noppes.npcs.api.IPos;
+import noppes.npcs.scripted.NpcAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -585,7 +586,7 @@ public class ShapeMaker implements AbstractShapeMaker {
     public IPos[] drawArc(IPos referencePos, IPos lookDir, double radius, double heightOffset, double forwardOffset, double angleDeg, double pitchDeg, double yawDeg, int segments) {
         int seg = Math.max(1, segments);
         double angle = Math.toRadians(angleDeg);
-        double pitch = Math.toRadians(pitchDeg);
+        double pitch = Math.toRadians(pitchDeg); // Technically acting as "Roll" (tilt of the slash)
         double yaw = Math.toRadians(yawDeg);
 
         double fwdX = lookDir.getXD();
@@ -610,28 +611,32 @@ public class ShapeMaker implements AbstractShapeMaker {
             rightY = 0;
             rightZ = 0;
             rightLen = 1;
+        } else {
+            rightX /= rightLen;
+            rightY /= rightLen;
+            rightZ /= rightLen;
         }
-        rightX /= rightLen;
-        rightY /= rightLen;
-        rightZ /= rightLen;
 
-        // up = cross(fwd, right).
-        double upX = yawFwdY * rightZ - yawFwdZ * rightY;
-        double upY = yawFwdZ * rightX - yawFwdX * rightZ;
-        double upZ = yawFwdX * rightY - yawFwdY * rightX;
+        // up = cross(right, fwd). Fixed to ensure it points UP instead of DOWN.
+        double upX = rightY * yawFwdZ - rightZ * yawFwdY;
+        double upY = rightZ * yawFwdX - rightX * yawFwdZ;
+        double upZ = rightX * yawFwdY - rightY * yawFwdX;
 
+        // Apply pitch/roll to the right vector
         double cosPitch = Math.cos(pitch);
         double sinPitch = Math.sin(pitch);
         double rightPX = rightX * cosPitch + upX * sinPitch;
         double rightPY = rightY * cosPitch + upY * sinPitch;
         double rightPZ = rightZ * cosPitch + upZ * sinPitch;
 
+        // Fixed: Added yawFwdY * forwardOffset so the arc follows vertical gaze properly
         double centerX = referencePos.getXD() + yawFwdX * forwardOffset;
-        double centerY = referencePos.getYD() + heightOffset;
+        double centerY = referencePos.getYD() + heightOffset + yawFwdY * forwardOffset;
         double centerZ = referencePos.getZD() + yawFwdZ * forwardOffset;
 
         double halfAngle = angle / 2.0;
         List<IPos> points = new ArrayList<>(seg + 1);
+
         for (int i = 0; i <= seg; i++) {
             double t = i / (double) seg;
             double theta = -halfAngle + t * angle;
@@ -646,6 +651,72 @@ public class ShapeMaker implements AbstractShapeMaker {
         }
 
         return points.toArray(new IPos[0]);
+    }
+
+    public IPos[] drawArc(IPos centerPos, IPos direction, double radius, double angleDeg, double rollDeg, int numPoints) {
+        if (numPoints < 2) numPoints = 2; // Prevent division by zero
+
+        double angleRad = Math.toRadians(angleDeg);
+        double rollRad = Math.toRadians(rollDeg);
+
+        // 1. Forward Vector (F)
+        double fx = direction.getXD();
+        double fy = direction.getYD();
+        double fz = direction.getZD();
+
+        // Normalize Forward
+        double fLen = Math.sqrt(fx * fx + fy * fy + fz * fz);
+        if (fLen > 0.0001) {
+            fx /= fLen; fy /= fLen; fz /= fLen;
+        } else {
+            fx = 0; fy = 0; fz = 1;
+        }
+
+        // 2. Right Vector (R) = Forward cross WorldUp(0, 1, 0)
+        double rx = -fz;
+        double ry = 0;
+        double rz = fx;
+
+        // Normalize Right
+        double rLen = Math.sqrt(rx * rx + rz * rz);
+        if (rLen < 0.0001) {
+            rx = 1; ry = 0; rz = 0;
+        } else {
+            rx /= rLen; ry /= rLen; rz /= rLen;
+        }
+
+        // 3. Local Up Vector (U) = Right cross Forward
+        double ux = ry * fz - rz * fy;
+        double uy = rz * fx - rx * fz;
+        double uz = rx * fy - ry * fx;
+
+        // 4. Apply Roll
+        double cosRoll = Math.cos(rollRad);
+        double sinRoll = Math.sin(rollRad);
+
+        double sweepX = rx * cosRoll + ux * sinRoll;
+        double sweepY = ry * cosRoll + uy * sinRoll;
+        double sweepZ = rz * cosRoll + uz * sinRoll;
+
+        // 5. Generate the Points
+        double halfAngle = angleRad / 2.0;
+        IPos[] points = new IPos[numPoints];
+
+        for (int i = 0; i < numPoints; i++) {
+            double t = i / (double)(numPoints - 1);
+            double theta = -halfAngle + (t * angleRad);
+
+            double cosT = Math.cos(theta);
+            double sinT = Math.sin(theta);
+
+            double px = centerPos.getXD() + (fx * cosT + sweepX * sinT) * radius;
+            double py = centerPos.getYD() + (fy * cosT + sweepY * sinT) * radius;
+            double pz = centerPos.getZD() + (fz * cosT + sweepZ * sinT) * radius;
+
+            points[i] = pos(px, py, pz);
+        }
+
+        return points;
     }
 
     /**
@@ -713,6 +784,92 @@ public class ShapeMaker implements AbstractShapeMaker {
     public IPos[] drawRing(IPos center, double radius, int segments, double pitchDeg, double yawDeg, double rollDeg) {
         IPos[] ring = drawRing(center, radius, segments);
         return rotatePoints(ring, center, pitchDeg, yawDeg, rollDeg);
+    }
+
+    public IPos[] drawCrescent(IPos centerPos, IPos direction, double radius, double width, double angleDeg, double rollDeg, int numPoints) {
+        if (numPoints < 4) numPoints = 4; // Need enough points to form a loop
+
+        double angleRad = Math.toRadians(angleDeg);
+        double rollRad = Math.toRadians(rollDeg);
+
+        // 1. Forward Vector (F)
+        double fx = direction.getXD();
+        double fy = direction.getYD();
+        double fz = direction.getZD();
+
+        double fLen = Math.sqrt(fx * fx + fy * fy + fz * fz);
+        if (fLen > 0.0001) {
+            fx /= fLen; fy /= fLen; fz /= fLen;
+        } else {
+            fx = 0; fy = 0; fz = 1;
+        }
+
+        // 2. Right Vector (R) = Forward cross WorldUp(0, 1, 0)
+        double rx = -fz;
+        double ry = 0;
+        double rz = fx;
+
+        double rLen = Math.sqrt(rx * rx + rz * rz);
+        if (rLen < 0.0001) {
+            rx = 1; ry = 0; rz = 0;
+        } else {
+            rx /= rLen; ry /= rLen; rz /= rLen;
+        }
+
+        // 3. Local Up Vector (U) = Right cross Forward
+        double ux = ry * fz - rz * fy;
+        double uy = rz * fx - rx * fz;
+        double uz = rx * fy - ry * fx;
+
+        // 4. Apply Roll
+        double cosRoll = Math.cos(rollRad);
+        double sinRoll = Math.sin(rollRad);
+
+        double sweepX = rx * cosRoll + ux * sinRoll;
+        double sweepY = ry * cosRoll + uy * sinRoll;
+        double sweepZ = rz * cosRoll + uz * sinRoll;
+
+        // 5. Generate the Points Loop
+        double halfAngle = angleRad / 2.0;
+        int outerPoints = numPoints / 2;
+        int innerPoints = numPoints - outerPoints;
+        IPos[] points = new IPos[numPoints];
+
+        // Outer Arc (Sweeping Left to Right)
+        for (int i = 0; i < outerPoints; i++) {
+            double t = i / (double)(outerPoints - 1);
+            double theta = -halfAngle + (t * angleRad);
+
+            double cosT = Math.cos(theta);
+            double sinT = Math.sin(theta);
+
+            double px = centerPos.getXD() + (fx * cosT + sweepX * sinT) * radius;
+            double py = centerPos.getYD() + (fy * cosT + sweepY * sinT) * radius;
+            double pz = centerPos.getZD() + (fz * cosT + sweepZ * sinT) * radius;
+
+            points[i] = NpcAPI.Instance().getIPos(px, py, pz);
+        }
+
+        // Inner Arc (Sweeping Right back to Left)
+        for (int i = 0; i < innerPoints; i++) {
+            double t = 1.0 - (i / (double)(innerPoints - 1)); // Invert t to go backwards
+            double theta = -halfAngle + (t * angleRad);
+
+            double cosT = Math.cos(theta);
+            double sinT = Math.sin(theta);
+
+            // Taper the radius to create the crescent shape
+            double currentWidth = width * Math.cos(theta * (Math.PI / angleRad));
+            double currentRadius = radius - currentWidth;
+
+            double px = centerPos.getXD() + (fx * cosT + sweepX * sinT) * currentRadius;
+            double py = centerPos.getYD() + (fy * cosT + sweepY * sinT) * currentRadius;
+            double pz = centerPos.getZD() + (fz * cosT + sweepZ * sinT) * currentRadius;
+
+            points[outerPoints + i] = NpcAPI.Instance().getIPos(px, py, pz);
+        }
+
+        return points;
     }
 
     /**

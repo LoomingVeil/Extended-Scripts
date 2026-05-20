@@ -203,20 +203,15 @@ public interface AbstractShapeMaker {
     // =========================================================================
 
     /**
-     * Draws an arc through 3D space.
-     *
-     * @param referencePos  Anchor position used for offsets.
-     * @param lookDir       Normalized forward direction.
-     * @param radius        Arc radius.
-     * @param heightOffset  Shift up/down along world Y from {@code referencePos}.
-     * @param forwardOffset Shift forward along {@code lookDir} from {@code referencePos}.
-     * @param angleDeg      Total sweep angle in degrees.
-     * @param pitchDeg      Rotation of the arc plane around look direction, in degrees.
-     * @param yawDeg        Rotation around world Y, in degrees.
-     * @param segments      Number of line segments used to approximate the arc.
+     * Finds points for an arc in 3D space.
+     * @param centerPos When radius angleDeg is 360, a circle will form with this point at the center.
+     * @param direction A direction that points towards one of the points on the circle. Use this to control pitch and yaw.
+     * @param radius When angleDef is 360, a circle with will form with this radius.
+     * @param angleDeg How much of the circle to show. If 180, you will see a semicircle with 90 degrees to the left of the direction vector and the other 90 on the other side.
+     * @param rollDeg Use this to roll the arc.
+     * @param numPoints Number of points used to approximate the arc.
      */
-    IPos[] drawArc(IPos referencePos, IPos lookDir, double radius, double heightOffset, double forwardOffset,
-                   double angleDeg, double pitchDeg, double yawDeg, int segments);
+    IPos[] drawArc(IPos centerPos, IPos direction, double radius, double angleDeg, double rollDeg, int numPoints);
 
     /**
      * Draws a simple arc centered at {@code center} in the XZ plane.
@@ -251,6 +246,18 @@ public interface AbstractShapeMaker {
      * <p>Base ring lies in the XZ plane, then is rotated by X (pitch), Y (yaw), Z (roll).
      */
     IPos[] drawRing(IPos center, double radius, int segments, double pitchDeg, double yawDeg, double rollDeg);
+
+    /**
+     * Finds points for a crescent in 3D space. This is just 2 arcs.
+     * @param centerPos When radius angleDeg is 360, a circle will form with this point at the center.
+     * @param direction A direction that points towards one of the points on the circle. Use this to control pitch and yaw.
+     * @param radius Radius of the outer arc.
+     * @param width Determines the distance between the outer arc and the inner arc.
+     * @param angleDeg How much of the circle to show. If 180, you will see a semicircle with 90 degrees to the left of the direction vector and the other 90 on the other side.
+     * @param rollDeg Use this to roll the arc.
+     * @param numPoints Number of points used to approximate the arc.
+     */
+    IPos[] drawCrescent(IPos centerPos, IPos direction, double radius, double width, double angleDeg, double rollDeg, int numPoints);
 
     /**
      * Draws a 3D Lissajous curve centered at {@code center}.

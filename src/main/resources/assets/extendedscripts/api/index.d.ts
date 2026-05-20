@@ -67,6 +67,7 @@ declare global {
     type IOverlayLabel = import('./noppes/npcs/extendedapi/overlay/IOverlayLabel').IOverlayLabel;
     type IPlayer = import('./noppes/npcs/extendedapi/entity/IPlayer').IPlayer;
     type IPlayerAttributes = import('./noppes/npcs/extendedapi/handler/data/IPlayerAttributes').IPlayerAttributes;
+    type IPos = import('./noppes/npcs/extendedapi/IPos').IPos;
     type IPotionEffect = import('./com/veil/extendedscripts/extendedapi/IPotionEffect').IPotionEffect;
     type IResolutionChangedEvent = import('./com/veil/extendedscripts/extendedapi/event/IResolutionChangedEvent').IResolutionChangedEvent;
     type IScreenResolution = import('./com/veil/extendedscripts/extendedapi/IScreenResolution').IScreenResolution;

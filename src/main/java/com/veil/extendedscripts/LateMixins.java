@@ -23,7 +23,7 @@ public class LateMixins implements ILateMixinLoader {
         if (side == MixinEnvironment.Side.CLIENT) {
             mixins.add("MixinNpcGuiScript");
             mixins.add("MixinGuiScriptInterface");
-            mixins.add("MixinGuiNPCInterfaceKeyboardNav");
+//            mixins.add("MixinGuiNPCInterfaceKeyboardNav");
         }
         return mixins;
     }

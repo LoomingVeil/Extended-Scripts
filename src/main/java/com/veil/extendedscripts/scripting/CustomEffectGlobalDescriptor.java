@@ -38,7 +38,7 @@ public class CustomEffectGlobalDescriptor implements ScriptGlobalDescriptor {
 
     private String buildDocumentation(CustomEffect effect) {
         return "Name: "+effect.getName()
-            + "ID: " + effect.getID()
-            + "Update rate: " + effect.getEveryXTick() + " ticks";
+            + "\nID: " + effect.getID()
+            + "\nUpdate rate: " + effect.getEveryXTick() + " ticks";
     }
 }

@@ -44,6 +44,7 @@ declare global {
     type AbstractSkinType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractSkinType').AbstractSkinType;
     type AbstractTacticalVariant = import('./com/veil/extendedscripts/extendedapi/constants/AbstractTacticalVariant').AbstractTacticalVariant;
     type AbstractTimeAvailability = import('./com/veil/extendedscripts/extendedapi/constants/AbstractTimeAvailability').AbstractTimeAvailability;
+    type IAbilityHandler = import('./noppes/npcs/extendedapi/handler/IAbilityHandler').IAbilityHandler;
     type IArmorChangedEvent = import('./com/veil/extendedscripts/extendedapi/event/IArmorChangedEvent').IArmorChangedEvent;
     type IArmorDamagedEvent = import('./com/veil/extendedscripts/extendedapi/event/IArmorDamagedEvent').IArmorDamagedEvent;
     type IAttributeRecalculateEvent = import('./com/veil/extendedscripts/extendedapi/event/IAttributeRecalculateEvent').IAttributeRecalculateEvent;

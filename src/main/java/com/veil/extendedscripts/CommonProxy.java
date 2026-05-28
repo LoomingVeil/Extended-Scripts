@@ -101,6 +101,8 @@ public class CommonProxy {
         ScriptGlobalRegistry.register(new DialogIdGlobalDescriptor());
         ScriptGlobalRegistry.register(new CustomEffectGlobalDescriptor());
         ScriptGlobalRegistry.register(new AnimationNameGlobalDescriptor());
+        ScriptGlobalRegistry.register(new AbilityGlobalDescriptor());
+        ScriptGlobalRegistry.register(new AbilityUUIDGlobalDescriptor());
 
         int NUM_CLONE_TABS = 15;
         for (int i = 0; i < NUM_CLONE_TABS; i++) {

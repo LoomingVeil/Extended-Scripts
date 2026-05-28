@@ -26,6 +26,7 @@ Things I want to add:
  - Do after function
  - Attaching abilities to energy projectiles
  - Add descriptions when hovering over classes.
+ - Fix an issue where rendering linked items crashes your game
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more

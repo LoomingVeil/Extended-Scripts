@@ -12,6 +12,7 @@ import noppes.npcs.client.ClientCacheHandler;
 import noppes.npcs.client.renderer.ImageData;
 import noppes.npcs.client.renderer.items.ItemCustomRenderer;
 import noppes.npcs.scripted.NpcAPI;
+import noppes.npcs.scripted.item.ScriptLinkedItem;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,7 +36,7 @@ public abstract class MixinItemCustomRenderer {
     @Inject(method = "renderItem", at = @At("HEAD"), cancellable = true)
     public void mixinRenderItem(IItemRenderer.ItemRenderType type, ItemStack itemStack, Object[] data, CallbackInfo ci) {
         IItemStack iItemStack = NpcAPI.Instance().getIItemStack(itemStack);
-        if (!(iItemStack instanceof IItemCustomizable)) return;
+        if (!(iItemStack instanceof IItemCustomizable) || iItemStack instanceof ScriptLinkedItem) return;
 
         IItemCustomizable scriptCustomItem = (IItemCustomizable)iItemStack;
         if (scriptCustomItem.isNormalItem() || type != IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON) return;
@@ -86,6 +87,7 @@ public abstract class MixinItemCustomRenderer {
         )
     )
     private void onAfterRenderInventoryCustomItem(IItemCustomizable scriptCustomItem, CallbackInfo ci) {
+        if (scriptCustomItem instanceof ScriptLinkedItem) return;
         noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
         String overlayTexture = extendedItem.getItemOverlayTexture();
         if (overlayTexture == null || overlayTexture.isEmpty()) return;
@@ -104,6 +106,7 @@ public abstract class MixinItemCustomRenderer {
         )
     )
     private void onBeforeGlintItem3d(IItemCustomizable scriptCustomItem, EntityLivingBase entityLivingBase, ItemStack itemStack, CallbackInfo ci) {
+        if (scriptCustomItem instanceof ScriptLinkedItem) return;
         noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
         String overlayTexture = extendedItem.getItemOverlayTexture();
         if (overlayTexture == null || overlayTexture.isEmpty()) return;
@@ -122,6 +125,7 @@ public abstract class MixinItemCustomRenderer {
         )
     )
     private void onBeforeGlintEntityCustomItem(IItemCustomizable scriptCustomItem, ItemStack itemStack, EntityItem entityItem, CallbackInfo ci) {
+        if (scriptCustomItem instanceof ScriptLinkedItem) return;
         noppes.npcs.extendedapi.item.IItemCustomizable extendedItem = (noppes.npcs.extendedapi.item.IItemCustomizable) (scriptCustomItem);
         String overlayTexture = extendedItem.getItemOverlayTexture();
         if (overlayTexture == null || overlayTexture.isEmpty()) return;

@@ -6,6 +6,8 @@ import noppes.npcs.api.event.IItemEvent;
 
 /**
  * Called when an equipped scripted item that has the armor_value attribute and is equipped in the armor or hand.
+ *
+ * @hookName armorDamaged
  */
 public interface IArmorDamagedEvent extends IItemEvent {
     /**

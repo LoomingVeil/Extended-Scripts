@@ -3,6 +3,11 @@ package com.veil.extendedscripts.extendedapi.event;
 import noppes.npcs.api.event.IPlayerEvent;
 import noppes.npcs.api.item.IItemStack;
 
+/**
+ * Fired when the player equips/unequips armor.
+ *
+ * @hookName armorChanged
+ */
 public interface IArmorChangedEvent extends IPlayerEvent {
     IItemStack[] getOldArmor();
 

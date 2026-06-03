@@ -4,8 +4,11 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.IResolutionChangedEvent
- */
+ * Fired when a player changes their screen resolution.
+ *
+ * @hookName resolutionChanged
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.IResolutionChangedEvent
+*/
 export interface IResolutionChangedEvent extends IPlayerEvent {
     getOldResolution(): import('../IScreenResolution').IScreenResolution;
     getNewResolution(): import('../IScreenResolution').IScreenResolution;

@@ -4,8 +4,11 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent
- */
+ * Custom projectile update.
+ *
+ * @hookName customProjectileTick
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent
+*/
 export interface ICustomProjectileTickEvent {
     getHookName(): String;
     getProjectile(): import('../entity/ICustomProjectile').ICustomProjectile;

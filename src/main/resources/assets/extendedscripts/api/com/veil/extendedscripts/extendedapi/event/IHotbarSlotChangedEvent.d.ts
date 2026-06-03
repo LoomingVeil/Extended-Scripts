@@ -4,8 +4,11 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.IHotbarSlotChangedEvent
- */
+ * Fired when a player switches their selected hotbar slot.
+ *
+ * @hookName hotbarSlotChanged
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.IHotbarSlotChangedEvent
+*/
 export interface IHotbarSlotChangedEvent extends IPlayerEvent {
     getOldSlot(): import('./int').int;
     getNewSlot(): import('./int').int;

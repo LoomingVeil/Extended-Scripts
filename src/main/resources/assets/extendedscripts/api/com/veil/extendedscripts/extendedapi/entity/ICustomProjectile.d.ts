@@ -42,6 +42,7 @@ export interface ICustomProjectile {
     getInitialVelocity(): import('./float').float;
     /**
      * Change this value before spawning the entity and when it is spawned in, it will start with this velocity.
+     * Default is 1.5
      */
     setInitialVelocity(initialVelocity: import('./float').float): import('./void').void;
     getParticleTrail(): String;
@@ -79,7 +80,7 @@ export interface ICustomProjectile {
     /**
      * Sets the ID. This ID is used in {@link com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent}
      * and {@link com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent}. Multiple projectiles can share ids.
-     * ID will be 0 if not specified.
+     * ID will be 0 if not specified with this function.
      */
     setID(id: import('./int').int): import('./void').void;
     getOwner(): IEntity;
@@ -96,4 +97,19 @@ export interface ICustomProjectile {
      * Instead, you can call them on this object.
      */
     getIEntity(): IEntity;
+    isInGround(): import('./boolean').boolean;
+    /**
+     * Gets the length of time the projectile has existed for in ticks.
+     */
+    getAge(): import('./int').int;
+    /**
+     * Gets the length of time the projectile has been lodged in the ground in ticks.
+     */
+    getTimeInGround(): import('./int').int;
+    /**
+     * By default, the customProjectileTick event is called every 10 ticks to prevent lag with large amounts of projectiles.
+     * You can set this value to 0 to disable tick update events or to 1 to trigger every tick.
+     */
+    setUpdateRate(updateRate: import('./int').int): import('./void').void;
+    getUpdateRate(): import('./int').int;
 }

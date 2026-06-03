@@ -4,7 +4,10 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.IAttributeRecalculateEvent
- */
+ * Fired at various times including switching the held item, equipping armor, and logging in.
+ *
+ * @hookName attributeRecalculate
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.IAttributeRecalculateEvent
+*/
 export interface IAttributeRecalculateEvent extends IPlayerEvent {
 }

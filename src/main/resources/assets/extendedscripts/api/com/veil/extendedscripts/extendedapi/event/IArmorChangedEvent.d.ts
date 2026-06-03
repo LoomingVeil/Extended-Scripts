@@ -4,8 +4,11 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.IArmorChangedEvent
- */
+ * Fired when the player equips/unequips armor.
+ *
+ * @hookName armorChanged
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.IArmorChangedEvent
+*/
 export interface IArmorChangedEvent extends IPlayerEvent {
     getOldArmor(): IItemStack[];
     getNewArmor(): IItemStack[];

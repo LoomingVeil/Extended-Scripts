@@ -4,8 +4,11 @@
  */
 
 /**
- * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent
- */
+ * Fired a custom projectile hits a mob or entity.
+ *
+ * @hookName customProjectileImpact
+  * @javaFqn com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent
+*/
 export interface ICustomProjectileImpactEvent {
     getHookName(): String;
     getProjectile(): import('../entity/ICustomProjectile').ICustomProjectile;

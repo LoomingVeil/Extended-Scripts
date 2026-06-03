@@ -55,6 +55,7 @@ public interface ICustomProjectile {
 
     /**
      * Change this value before spawning the entity and when it is spawned in, it will start with this velocity.
+     * Default is 1.5
      */
     void setInitialVelocity(float initialVelocity);
 
@@ -110,7 +111,7 @@ public interface ICustomProjectile {
     /**
      * Sets the ID. This ID is used in {@link com.veil.extendedscripts.extendedapi.event.ICustomProjectileImpactEvent}
      * and {@link com.veil.extendedscripts.extendedapi.event.ICustomProjectileTickEvent}. Multiple projectiles can share ids.
-     * ID will be 0 if not specified.
+     * ID will be 0 if not specified with this function.
      */
     void setID(int id);
 
@@ -131,4 +132,24 @@ public interface ICustomProjectile {
      * Instead, you can call them on this object.
      */
     IEntity getIEntity();
+
+    boolean isInGround();
+
+    /**
+     * Gets the length of time the projectile has existed for in ticks.
+     */
+    int getAge();
+
+    /**
+     * Gets the length of time the projectile has been lodged in the ground in ticks.
+     */
+    int getTimeInGround();
+
+    /**
+     * By default, the customProjectileTick event is called every 10 ticks to prevent lag with large amounts of projectiles.
+     * You can set this value to 0 to disable tick update events or to 1 to trigger every tick.
+     */
+    void setUpdateRate(int updateRate);
+
+    int getUpdateRate();
 }

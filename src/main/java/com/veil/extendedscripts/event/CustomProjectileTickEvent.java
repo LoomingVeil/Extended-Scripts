@@ -8,6 +8,7 @@ import noppes.npcs.scripted.event.player.PlayerEvent;
 public class CustomProjectileTickEvent extends PlayerEvent implements ICustomProjectileTickEvent {
     public ICustomProjectile projectile;
     public int projectileID;
+    public int ticks;
 
     public CustomProjectileTickEvent() {
         super(null);
@@ -18,6 +19,7 @@ public class CustomProjectileTickEvent extends PlayerEvent implements ICustomPro
         super(player);
         this.projectile = projectile;
         this.projectileID = projectile.getID();
+        this.ticks = projectile.getAge();
     }
 
     public String getHookName() {

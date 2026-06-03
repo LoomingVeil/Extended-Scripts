@@ -78,7 +78,8 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
     private float initialVelocity = 1.5F;
     private String hitSound = "random.bowhit";
     private int id = 0;
-    private  boolean updateClient = false;
+    private int updateRate = 10;
+    private boolean updateClient = false;
     private CustomProjectileRenderProperties renderProperties;
 
     public EntityCustomProjectile(World world) {
@@ -199,7 +200,7 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
             renderProperties.setRotatingRotation(renderProperties.getRotationOffset());
         }
 
-        if (!worldObj.isRemote && this.ticksExisted % 10 == 0) {
+        if (!worldObj.isRemote && this.updateRate != 0 && this.ticksExisted % updateRate == 0) {
             CustomProjectileTickEvent tickEvent = new CustomProjectileTickEvent(null, this);
 
             PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(tickEvent.getPlayer());
@@ -1027,8 +1028,27 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
     }
 
     public void setOwner(IEntity owner) {
-        // FIX
-        owner.getMCEntity();
+        this.thrower = (EntityLivingBase) owner.getMCEntity();
+    }
+
+    public boolean isInGround() {
+        return this.inGround;
+    }
+
+    public int getAge() {
+        return this.ticksExisted;
+    }
+
+    public int getTimeInGround() {
+        return this.ticksInGround;
+    }
+
+    public void setUpdateRate(int updateRate) {
+        this.updateRate = updateRate;
+    }
+
+    public int getUpdateRate() {
+        return updateRate;
     }
 
     public Entity getShooter() {
@@ -1050,54 +1070,6 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
                 this.setDead();
             }
         }
-    }
-
-    public NBTTagCompound writeProjectileData(NBTTagCompound baseNbt) {
-        baseNbt.setShort("xTile", (short) this.xTile);
-        baseNbt.setShort("yTile", (short) this.yTile);
-        baseNbt.setShort("zTile", (short) this.zTile);
-        baseNbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inTile));
-        baseNbt.setByte("inData", (byte) this.inData);
-        baseNbt.setByte("shake", (byte) this.throwableShake);
-        baseNbt.setBoolean("inGround", this.inGround);
-        baseNbt.setString("particleTrail", this.particleTrail);
-        baseNbt.setDouble("damage", this.damage);
-        baseNbt.setBoolean("doesVelocityAddDamage", this.doesVelocityAddDamage);
-        baseNbt.setInteger("knockbackStrength", this.knockbackStrength);
-        baseNbt.setBoolean("pickupable", this.pickupable);
-        baseNbt.setBoolean("shatterOnImpact", this.shatterOnImpact);
-        baseNbt.setString("shatterParticle", this.shatterParticle);
-        baseNbt.setByte("invulnerableCollisionBehavior", this.invulnerableCollisionBehavior);
-        baseNbt.setInteger("penetrationCount", this.penetrationCount);
-        baseNbt.setInteger("numPenetrated", this.numPenetrated);
-        baseNbt.setFloat("hitboxSizeX", this.hitboxSizeX);
-        baseNbt.setFloat("hitboxSizeY", this.hitboxSizeY);
-        baseNbt.setFloat("gravity", this.gravity);
-        baseNbt.setFloat("initialVelocity", this.initialVelocity);
-        baseNbt.setString("hitSound", this.hitSound);
-        baseNbt.setInteger("projectileId", this.id);
-
-        if (this.pickupItem != null) {
-            NBTTagCompound itemTag = new NBTTagCompound();
-            this.pickupItem.writeToNBT(itemTag);
-            baseNbt.setTag("pickupItem", itemTag);
-        }
-
-        if (this.renderProperties != null) {
-            NBTTagCompound renderTag = new NBTTagCompound();
-            renderTag.setByte("renderType", this.renderProperties.getRenderType());
-            renderTag.setString("texturePath", this.renderProperties.getTexturePath());
-            renderTag.setInteger("numSimpleRenderPlanes", this.renderProperties.getNumSimpleRenderPlanes());
-            renderTag.setFloat("rollOffset", this.renderProperties.getRollOffset());
-            renderTag.setFloat("rotationOffset", this.renderProperties.getRotationOffset());
-            renderTag.setFloat("rotatingRotation", this.renderProperties.getRotatingRotation());
-            renderTag.setFloat("forwardOffset", this.renderProperties.getForwardOffset());
-            renderTag.setFloat("rotationSpeed", this.renderProperties.getRotationSpeed());
-            renderTag.setFloat("scale", this.renderProperties.getScale());
-            baseNbt.setTag("renderProperties", renderTag);
-        }
-
-        return baseNbt;
     }
 
     public NBTTagCompound writeProjectileData() {
@@ -1182,6 +1154,9 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
         if (nbt.hasKey("projectileId", 3)) {
             this.id = nbt.getInteger("projectileId");
         }
+        if (nbt.hasKey("updateRate", 3)) {
+            this.updateRate = nbt.getInteger("updateRate");
+        }
 
         if (nbt.hasKey("pickupItem", 10)) {
             NBTTagCompound itemTag = nbt.getCompoundTag("pickupItem");
@@ -1220,5 +1195,54 @@ public class EntityCustomProjectile extends EntityThrowable implements ICustomPr
         }
 
         loadedFromNbt = true;
+    }
+
+    public NBTTagCompound writeProjectileData(NBTTagCompound baseNbt) {
+        baseNbt.setShort("xTile", (short) this.xTile);
+        baseNbt.setShort("yTile", (short) this.yTile);
+        baseNbt.setShort("zTile", (short) this.zTile);
+        baseNbt.setByte("inTile", (byte) Block.getIdFromBlock(this.inTile));
+        baseNbt.setByte("inData", (byte) this.inData);
+        baseNbt.setByte("shake", (byte) this.throwableShake);
+        baseNbt.setBoolean("inGround", this.inGround);
+        baseNbt.setString("particleTrail", this.particleTrail);
+        baseNbt.setDouble("damage", this.damage);
+        baseNbt.setBoolean("doesVelocityAddDamage", this.doesVelocityAddDamage);
+        baseNbt.setInteger("knockbackStrength", this.knockbackStrength);
+        baseNbt.setBoolean("pickupable", this.pickupable);
+        baseNbt.setBoolean("shatterOnImpact", this.shatterOnImpact);
+        baseNbt.setString("shatterParticle", this.shatterParticle);
+        baseNbt.setByte("invulnerableCollisionBehavior", this.invulnerableCollisionBehavior);
+        baseNbt.setInteger("penetrationCount", this.penetrationCount);
+        baseNbt.setInteger("numPenetrated", this.numPenetrated);
+        baseNbt.setFloat("hitboxSizeX", this.hitboxSizeX);
+        baseNbt.setFloat("hitboxSizeY", this.hitboxSizeY);
+        baseNbt.setFloat("gravity", this.gravity);
+        baseNbt.setFloat("initialVelocity", this.initialVelocity);
+        baseNbt.setString("hitSound", this.hitSound);
+        baseNbt.setInteger("projectileId", this.id);
+        baseNbt.setInteger("updateRate", this.updateRate);
+
+        if (this.pickupItem != null) {
+            NBTTagCompound itemTag = new NBTTagCompound();
+            this.pickupItem.writeToNBT(itemTag);
+            baseNbt.setTag("pickupItem", itemTag);
+        }
+
+        if (this.renderProperties != null) {
+            NBTTagCompound renderTag = new NBTTagCompound();
+            renderTag.setByte("renderType", this.renderProperties.getRenderType());
+            renderTag.setString("texturePath", this.renderProperties.getTexturePath());
+            renderTag.setInteger("numSimpleRenderPlanes", this.renderProperties.getNumSimpleRenderPlanes());
+            renderTag.setFloat("rollOffset", this.renderProperties.getRollOffset());
+            renderTag.setFloat("rotationOffset", this.renderProperties.getRotationOffset());
+            renderTag.setFloat("rotatingRotation", this.renderProperties.getRotatingRotation());
+            renderTag.setFloat("forwardOffset", this.renderProperties.getForwardOffset());
+            renderTag.setFloat("rotationSpeed", this.renderProperties.getRotationSpeed());
+            renderTag.setFloat("scale", this.renderProperties.getScale());
+            baseNbt.setTag("renderProperties", renderTag);
+        }
+
+        return baseNbt;
     }
 }

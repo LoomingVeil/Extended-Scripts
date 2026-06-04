@@ -19,14 +19,14 @@ Things I want to add:
  - Add the Extended Scripts API tab to scripting (It only doesn't work outside of the development environment)
  - Fix scripted item attack event
  - Fix the inspect command not allowing you to choose indexes of tag lists
- - See if I can mess with the skybox
- - See if we can mess with name tags
+ - See if I can mess with the skybox.
+ - See if we can mess with name tags.
  - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.
- - See if we can make NPCs real mounts
- - Do after function
+ - See if we can make NPCs real mounts.
  - Attaching abilities to energy projectiles
  - Add descriptions when hovering over classes.
- - Add a function for calling scripts
+ - Add a function for calling scripts.
+ - Add a function to get the duration of an ability.
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more

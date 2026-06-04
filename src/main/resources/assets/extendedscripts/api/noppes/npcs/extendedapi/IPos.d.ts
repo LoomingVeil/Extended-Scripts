@@ -8,6 +8,10 @@
  */
 export interface IPos {
     /**
+     * Gets the magnitude (for vectors)
+     */
+    getMagnitude(): import('./double').double;
+    /**
      * Offsets the position in some direction some distance
      * @param direction the direction of travel
      * @param distance

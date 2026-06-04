@@ -1,4 +1,4 @@
-package com.veil.extendedscripts.mixins;
+package com.veil.extendedscripts.mixins.script;
 
 import net.minecraft.util.math.BlockPos;
 import noppes.npcs.api.IPos;
@@ -29,6 +29,11 @@ public abstract class MixinIPosExtension implements noppes.npcs.extendedapi.IPos
 
     @Shadow
     public BlockPos blockPos;
+
+    @Unique
+    public double getMagnitude() {
+        return Math.sqrt(this.blockPos.getXD() * this.blockPos.getXD() + this.blockPos.getYD() * this.blockPos.getYD() + this.blockPos.getZD() * this.blockPos.getZD());
+    }
 
     @Unique
     public IPos offset(IPos direction, double distance) {

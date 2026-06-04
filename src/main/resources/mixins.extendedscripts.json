@@ -27,7 +27,7 @@
     "MixinItemCustomRenderer",
     "MixinScriptContainerGlobals",
     "vanilla.MixinNetHandlerPlayServer",
-    "MixinIPosExtension"
+    "script.MixinIPosExtension"
   ],
   "client": [
     "MixinJSAutocompletePro",

@@ -1,6 +1,10 @@
 package noppes.npcs.extendedapi;
 
 public interface IPos {
+    /**
+     * Gets the magnitude (for vectors)
+     */
+    double getMagnitude();
 
     /**
      * Offsets the position in some direction some distance

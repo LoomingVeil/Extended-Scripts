@@ -25,6 +25,7 @@ import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLivingBase;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.IAttributeDefinition;
+import noppes.npcs.scripted.entity.ScriptPlayer;
 
 import java.io.IOException;
 import java.util.*;
@@ -173,20 +174,38 @@ public class ExtendedAPI implements AbstractExtendedAPI {
     }
 
     public static float getAttribute(EntityPlayer player, EntityAttribute key) {
-        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
-
-        if (npcPlayer == null) {
-            return (Float) key.getDefaultValue();
+        IPlayer npcPlayer;
+        if (!player.worldObj.isRemote) {
+            npcPlayer = new ScriptPlayer((EntityPlayerMP) player);
+        } else {
+            try {
+                npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
+                if (npcPlayer == null) {
+                    return (Float) key.getDefaultValue();
+                }
+            } catch (NullPointerException e) {
+                return (Float) key.getDefaultValue();
+            }
         }
 
         return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
     }
 
     public static float getAttribute(EntityPlayer player, PlayerAttribute key) {
-        IPlayer npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
-
-        if (npcPlayer == null) {
-            return (Float) key.getDefaultValue();
+        IPlayer npcPlayer;
+        if (!player.worldObj.isRemote) {
+            npcPlayer = new ScriptPlayer((EntityPlayerMP) player);
+        } else {
+            try {
+                npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
+                if (npcPlayer == null) {
+                    // System.out.println("Unable to get attribute value for "+player.getCommandSenderName());
+                    return (Float) key.getDefaultValue();
+                }
+            } catch (NullPointerException e) {
+                // System.out.println("Unable to get attribute value for attribute"+key.toString());
+                return (Float) key.getDefaultValue();
+            }
         }
 
         return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());

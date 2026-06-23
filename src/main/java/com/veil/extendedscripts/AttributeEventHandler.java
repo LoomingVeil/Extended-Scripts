@@ -86,7 +86,12 @@ public class AttributeEventHandler {
             EntityPlayer player = event.player;
 
             if (player.worldObj.isRemote) {
-                EntityPlayerSP ClientPlayer = (EntityPlayerSP) player;
+                EntityPlayerSP ClientPlayer;
+                try {
+                    ClientPlayer = (EntityPlayerSP) player;
+                } catch (ClassCastException e) {
+                    return;
+                }
 
                 boolean isFlying = ClientPlayer.capabilities.isFlying;
                 boolean isMovingUp = ClientPlayer.movementInput.jump;
@@ -94,7 +99,7 @@ public class AttributeEventHandler {
 
                 if (isFlying) {
                     float verticalFlightSpeed = ExtendedAPI.getAttribute(player, PlayerAttribute.FLIGHT_SPEED_VERTICAL) * 0.01F;
-                    if (verticalFlightSpeed != 0) {
+                    if (verticalFlightSpeed != 0 && verticalFlightSpeed != (Float)PlayerAttribute.FLIGHT_SPEED_VERTICAL.getDefaultValue()) {
                         if (isMovingUp && !isMovingDown) {
                             player.motionY = verticalFlightSpeed * 0.2;
                         } else if (isMovingDown && !isMovingUp) {

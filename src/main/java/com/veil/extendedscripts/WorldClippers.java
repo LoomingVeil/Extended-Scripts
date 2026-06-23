@@ -183,6 +183,7 @@ public class WorldClippers extends ItemSword {
         super.onUpdate(item, world, _entity, slot, isHeld);
         NBTTagCompound inspectTag = getInspectTag(item);
 
+        if (_entity.worldObj.isRemote) return;
         WorldServer targetWorld = MinecraftServer.getServer().worldServerForDimension(inspectTag.getInteger("TargetDimension"));
         if (targetWorld == null) {
             return;

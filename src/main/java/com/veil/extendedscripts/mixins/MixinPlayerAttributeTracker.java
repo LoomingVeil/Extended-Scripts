@@ -1,5 +1,7 @@
 package com.veil.extendedscripts.mixins;
 
+import com.veil.extendedscripts.BaublesCompatability;
+import com.veil.extendedscripts.CommonProxy;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import kamkeel.npcs.controllers.data.attribute.tracker.PlayerAttributeTracker;
@@ -17,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Mixin(value={PlayerAttributeTracker.class})
@@ -46,9 +49,17 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
         remap = false
     )
     private ItemStack[] modifyEquipmentArray(ItemStack[] original) {
-        ItemStack[] newArray = Arrays.copyOf(original, original.length + 1);
-        newArray[original.length] = ExtendedScripts.getPlayerProperties(player).getAttributeCore();
-        return newArray;
+        ArrayList<ItemStack> equipment = new ArrayList<>(Arrays.asList(original));
+        if (CommonProxy.isBaublesPreset) {
+            ItemStack[] baubles = BaublesCompatability.getPlayerBaubles(player);
+            if (baubles != null) {
+                for (int i = 0; i < 4; i++) {
+                    if (baubles[i] != null) equipment.add(baubles[i]);
+                }
+            }
+        }
+
+        return equipment.toArray(new ItemStack[0]);
     }
 
     /**

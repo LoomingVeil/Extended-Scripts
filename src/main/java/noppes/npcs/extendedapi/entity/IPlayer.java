@@ -173,4 +173,14 @@ public interface IPlayer {
      * Use this if the screen resolution is -1 to force an update.
      */
     void resyncScreenResolution();
+
+    /**
+     * Returns a player's baubles. If Baubles is not installed, null will be returned.
+     */
+    IItemStack[] getBaubles();
+
+    /**
+     * Returns a player's baubles as a container. If Baubles is not installed, null will be returned.
+     */
+    IContainer getBaubleContainer();
 }

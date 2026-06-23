@@ -26,20 +26,27 @@ public class CloneTabDescriptor implements ScriptGlobalDescriptor {
 
     @Override
     public List<MemberEntry> getMembers() {
-        ServerCloneController controller = ServerCloneController.Instance;
-        List<MemberEntry> members = new ArrayList<MemberEntry>(controller.getClones(tab).size());
+        try {
+            ServerCloneController controller = ServerCloneController.Instance;
+            List<MemberEntry> members = new ArrayList<MemberEntry>(controller.getClones(tab).size());
 
-        for (String cloneName : controller.getClones(tab)) {
-            String key = ScriptGlobalRegistry.toIdentifier(cloneName);
-            members.add(new MemberEntry(
-                key,
-                cloneName,
-                getTypeName(),
-                buildDocumentation(cloneName)
-            ));
+            for (String cloneName : controller.getClones(tab)) {
+                String key = ScriptGlobalRegistry.toIdentifier(cloneName);
+                members.add(new MemberEntry(
+                    key,
+                    cloneName,
+                    getTypeName(),
+                    buildDocumentation(cloneName)
+                ));
+            }
+
+            return members;
+        } catch (Exception e) {
+//            System.out.println("[Extended Scripts]: There was an error while trying to get server side clones. "+e);
+//            e.printStackTrace();
+            return new ArrayList<>();
         }
 
-        return members;
     }
 
     public String buildDocumentation(String cloneName) {

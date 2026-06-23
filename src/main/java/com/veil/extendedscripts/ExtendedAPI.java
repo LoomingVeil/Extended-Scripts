@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import noppes.npcs.api.AbstractNpcAPI;
+import noppes.npcs.api.INbt;
 import noppes.npcs.api.IParticle;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.entity.IEntity;
@@ -292,5 +293,67 @@ public class ExtendedAPI implements AbstractExtendedAPI {
         newParticle.setOffset(row * 8, col * 8);
 
         return newParticle;
+    }
+
+    /**
+     * Given a Nbt starting point and a list of the nbt keys or list indices, it will return that nbt.
+     */
+    public static Object traverseNbt(INbt baseNbt, String[] args) {
+        if (baseNbt == null || args.length == 0) return baseNbt;
+
+        INbt currentNbt = baseNbt;
+        int i = 0;
+
+        while (i < args.length) {
+            String key = args[i];
+            if (!currentNbt.has(key)) return null; // Path broken
+
+            int type = currentNbt.getType(key);
+            boolean isLastArg = (i == args.length - 1);
+
+            if (type == 10) { // Compound Tag
+                if (isLastArg) return currentNbt.getCompound(key);
+
+                currentNbt = currentNbt.getCompound(key);
+                i++;
+            } else if (type == 9) { // List Tag
+                if (isLastArg) return currentNbt.getList(key, currentNbt.getListType(key));
+
+                int index;
+                try {
+                    index = Integer.parseInt(args[i + 1]);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+
+                Object[] list = currentNbt.getList(key, currentNbt.getListType(key));
+                if (index < 0 || index >= list.length) return null;
+
+                Object listElement = list[index];
+                boolean isLastIndexArg = (i + 1 == args.length - 1);
+
+                if (isLastIndexArg) return listElement;
+
+                if (listElement instanceof INbt) {
+                    currentNbt = (INbt) listElement;
+                    i += 2; // Skip both list key and index
+                } else {
+                    return null; // Cannot traverse further through a primitive list element
+                }
+            } else { // Primitive Tag
+                if (isLastArg) {
+                    if (type == 1) return currentNbt.getByte(key);
+                    if (type == 2) return currentNbt.getShort(key);
+                    if (type == 3) return currentNbt.getInteger(key);
+                    if (type == 4) return currentNbt.getLong(key);
+                    if (type == 5) return currentNbt.getFloat(key);
+                    if (type == 6) return currentNbt.getDouble(key);
+                    if (type == 8) return currentNbt.getString(key);
+                }
+                return null; // Cannot traverse further through a primitive
+            }
+        }
+
+        return null;
     }
 }

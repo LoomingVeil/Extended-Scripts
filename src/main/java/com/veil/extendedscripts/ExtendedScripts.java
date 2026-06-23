@@ -30,7 +30,7 @@ import java.util.logging.Logger;
     modid = ExtendedScripts.MODID, version = Tags.VERSION,
     name = "Veil's Extended Scripts",
     acceptedMinecraftVersions = "[1.7.10]",
-    dependencies = "required-after:customnpcs@[1.10.1,);after:StatusEffectHUD;after:bspkrsCore"
+    dependencies = "required-after:customnpcs@[1.10.1,);after:StatusEffectHUD;after:bspkrsCore;after:Baubles"
 )
 public class ExtendedScripts {
     public static final String MODID = "extendedscripts";

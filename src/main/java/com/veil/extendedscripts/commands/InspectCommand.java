@@ -469,7 +469,7 @@ public class InspectCommand extends CommandBase {
                 if (values[j] instanceof INbt) {
                     showNbt(sender, (INbt)values[j], indent + "    ");
                 } else {
-                    String valueStr = (String)values[j];
+                    String valueStr = values[j].toString();
                     if (listType == 8) {
                         int length = valueStr.length();
                         if (length > maxStringLength) valueStr = valueStr.substring(0, maxStringLength - 1) + "... " + white + " [Length "+length+"]";

@@ -12,7 +12,7 @@ Things I want to add:
  - Add custom projectile disable damage, hit endermen, can hurt owner, make sure all attributes are saved to nbt
  - Fix shatterParticle not appearing when shattering on mobs
  - Make a command for viewing and managing stored data
- - Add bounciness, multi-jump, damage reflection, and sprint speed
+ - Add bounciness, multi-jump, damage reflection, attack range, and sprint speed
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
@@ -26,6 +26,9 @@ Things I want to add:
  - Add descriptions when hovering over classes.
  - Add a function for calling scripts.
  - Add a function to get the duration of an ability.
+ - Fix an issue where CloneTabGlobalDescriptor does not work in multiplayer.
+ - Add attribute conditions.
+ - Change core attributes so that they can be separated into sections all with unique names to make managing core attributes easier.
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more

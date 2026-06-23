@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class CommonProxy {
+    public static boolean isBaublesPreset;
+
     public void preInit(FMLPreInitializationEvent event) {
         Config.init(event.getSuggestedConfigurationFile());
 
@@ -110,6 +112,13 @@ public class CommonProxy {
         }
 
         CraftingManager.getInstance().getRecipeList().add(new ScriptedItemDyeRecipe());
+        ExtraAttributeSlots.addExtraSlot(new String[]{});
+
+        if (Loader.isModLoaded("Baubles")) {
+            isBaublesPreset = true;
+        } else {
+            isBaublesPreset = false;
+        }
     }
 
     public void postInit(FMLPostInitializationEvent event) {

@@ -20,9 +20,12 @@ import noppes.npcs.constants.EnumRoleType;
 import noppes.npcs.controllers.data.PlayerData;
 import noppes.npcs.entity.EntityNPCInterface;
 import noppes.npcs.scripted.entity.ScriptPlayer;
+import noppes.npcs.scripted.item.ScriptItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+
+import java.util.ArrayList;
 
 @Mixin(value={ScriptPlayer.class})
 public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.entity.IPlayer {
@@ -358,5 +361,40 @@ public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.en
      */
     public void resyncScreenResolution() {
         PacketHandler.INSTANCE.sendTo(new UpdateScreenResolutionPacket(), player);
+    }
+
+    /**
+     * Returns a player's baubles. If Baubles is not installed, null will be returned.
+     */
+    public IItemStack[] getBaubles() {
+        if (CommonProxy.isBaublesPreset) {
+            ItemStack[] itemBaubles = BaublesCompatability.getPlayerBaubles(player);
+            IItemStack[] iItemBaubles = new IItemStack[itemBaubles.length];
+            for (int i = 0; i < itemBaubles.length; i++) {
+                if (itemBaubles[i] == null) {
+                    System.out.println("Empty Slot");
+                    iItemBaubles[i] = null;
+                } else {
+                    System.out.println("Bauble: "+itemBaubles[i].getDisplayName());
+                    iItemBaubles[i] = new ScriptItemStack(itemBaubles[i]);
+                }
+            }
+
+            return iItemBaubles;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a player's baubles as a container. If Baubles is not installed, null will be returned.
+     */
+    public IContainer getBaubleContainer() {
+        if (CommonProxy.isBaublesPreset) {
+            IInventory inventory = BaublesCompatability.getBaublesInventory(player);
+            return AbstractNpcAPI.Instance().getIContainer(inventory);
+        }
+
+        return null;
     }
 }

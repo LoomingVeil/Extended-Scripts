@@ -274,13 +274,13 @@ public class InspectCommand extends CommandBase {
 
         TileEntity tileEntity = targetWorld.getTileEntity(x, y, z);
         if (tileEntity == null) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Nothing to see here. This block has no NBT."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "Nothing to see here. "+Block.blockRegistry.getNameForObject(block)+" has no NBT."));
             return;
         }
 
         NBTTagCompound blockNBT = new NBTTagCompound();
         tileEntity.writeToNBT(blockNBT);
-        INbt npcNbt = AbstractNpcAPI.Instance().getINbt(blockNBT);
+        INbt blockNbt = AbstractNpcAPI.Instance().getINbt(blockNBT);
 
         List<String> newArgs = new ArrayList<>();
         boolean skipNext = false;
@@ -309,20 +309,18 @@ public class InspectCommand extends CommandBase {
             }
         }
 
-        handleShowingNbt(npcNbt, sender, newArgs.toArray(new String[0]), GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), onlyShowKeys, page);
+        handleShowingNbt(blockNbt, sender, newArgs.toArray(new String[0]), GameData.getItemRegistry().getNameForObject(block.getItem(targetWorld, x, y, z)), onlyShowKeys, page);
     }
 
     public static void handleShowingNbt(INbt baseNbt, ICommandSender sender, String[] args, String display, boolean onlyShowKeys, int page) {
         if (baseNbt == null || baseNbt.getKeys().length == 0) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "This item has no NBT."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + yellow + display + white + " has no NBT."));
             return;
         }
 
-        // System.out.println("args: " + Arrays.asList(args) + " onlyShowKeys: "+onlyShowKeys);
-
         // If no arguments are provided, show the entire NBT tree.
         if (args.length == 0) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + display + ":"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + yellow + display + white + ":"));
             if (onlyShowKeys) {
                 showKeys(sender, baseNbt, page);
             } else {
@@ -331,36 +329,99 @@ public class InspectCommand extends CommandBase {
             return;
         }
 
-        // Traverse down the tree to the parent of the final tag.
         INbt currentNbt = baseNbt;
-        for (int i = 0; i < args.length - 1; i++) {
+        int i = 0;
+
+        // Traverse down the tree to the parent of the final tag.
+        while (i < args.length - 1) {
             String key = args[i];
-            if (!currentNbt.has(key) || currentNbt.getType(key) != 10) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red + "Error: Invalid NBT path. Tag '" + yellow + key + red +"' is not a valid compound tag."));
+
+            if (!currentNbt.has(key)) {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Invalid NBT path. Tag '" + yellow + key + red + "' not found."));
                 return;
             }
-            currentNbt = currentNbt.getCompound(key);
+
+            int type = currentNbt.getType(key);
+
+            if (type == 10) { // Compound
+                currentNbt = currentNbt.getCompound(key);
+                i++;
+            } else if (type == 9) { // List
+                // A list requires an integer index for the next argument
+                String nextArg = args[i + 1];
+                int index;
+                try {
+                    index = Integer.parseInt(nextArg);
+                } catch (NumberFormatException e) {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Expected an integer index for list '" + yellow + key + red + "', got '" + nextArg + "'."));
+                    return;
+                }
+
+                int listType = currentNbt.getListType(key);
+                Object[] list = currentNbt.getList(key, listType);
+
+                if (index < 0 || index >= list.length) {
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Index " + index + " out of bounds for list '" + yellow + key + red + "' (size " + list.length + ")."));
+                    return;
+                }
+
+                // Is this index the absolute final target to display?
+                if (i + 1 == args.length - 1) {
+                    Object targetVal = list[index];
+                    if (onlyShowKeys) {
+                        if (targetVal instanceof INbt) {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow +display + white + " at " + yellow + String.join(".", args) + white + ":"));
+                            showKeys(sender, (INbt) targetVal, page);
+                        } else {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(red + "List item at index " + yellow + index + red + " is a value and has no keys."));
+                        }
+                    } else {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + yellow +display + white + " at " + yellow + String.join(".", args) + white + ":"));
+                        if (targetVal instanceof INbt) {
+                            showNbt(sender, (INbt) targetVal, "");
+                        } else {
+                            sender.addChatMessage(ChatUtils.fillChatWithColor(colors.getOrDefault(listType, UNKNOWN_COLOR) + targetVal.toString()));
+                        }
+                    }
+                    return; // Early return because we handled the final item
+                } else {
+                    // Must keep traversing; targetVal MUST be a compound
+                    Object targetVal = list[index];
+                    if (targetVal instanceof INbt) {
+                        currentNbt = (INbt) targetVal;
+                        i += 2; // Skip both the list name and the index argument
+                    } else {
+                        sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Cannot traverse through primitive list element at index " + index + "."));
+                        return;
+                    }
+                }
+            } else {
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Invalid NBT path. Tag '" + yellow + key + red + "' is not a compound or list."));
+                return;
+            }
         }
 
-        // Get the final tag to display from the last argument.
+        // Get the final tag to display from the last argument (if it wasn't already caught by the list index logic)
         String finalKey = args[args.length - 1];
         if (!currentNbt.has(finalKey)) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red + "Error: Invalid NBT path. Final tag '" + yellow + finalKey + red + "' not found."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix + dark_red + "Error: " + red + "Invalid NBT path. Final tag '" + yellow + finalKey + red + "' not found."));
             return;
         }
 
         if (onlyShowKeys) {
-            if (currentNbt.getType(finalKey) == 10) {
+            int finalType = currentNbt.getType(finalKey);
+            if (finalType == 10) {
                 INbt targetNbt = currentNbt.getCompound(finalKey);
-                sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow + String.join(".", args) + white + ":"));
+                sender.addChatMessage(ChatUtils.fillChatWithColor("NBT keys for " + yellow + display + white + " at " + yellow + String.join(".", args) + white + ":"));
                 showKeys(sender, targetNbt, page);
-            } else if (currentNbt.getType(finalKey) == 9) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor("Tag List navigation coming soon."));
+            } else if (finalType == 9) {
+                int listSize = currentNbt.getList(finalKey, currentNbt.getListType(finalKey)).length;
+                sender.addChatMessage(ChatUtils.fillChatWithColor(yellow + finalKey + white + " is a List of size " + listSize + ". Use indices 0 through " + (listSize - 1) + " to navigate it."));
             } else {
                 sender.addChatMessage(ChatUtils.fillChatWithColor(red + "Tag '" + yellow + finalKey + red + "' is a value and has no keys to display."));
             }
         } else {
-            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + yellow + String.join(".", args) + white + ":"));
+            sender.addChatMessage(ChatUtils.fillChatWithColor("NBT for " + yellow + display + white + " at " + yellow + String.join(".", args) + white + ":"));
             displayTagValue(sender, currentNbt, finalKey, "");
         }
     }
@@ -408,7 +469,13 @@ public class InspectCommand extends CommandBase {
                 if (values[j] instanceof INbt) {
                     showNbt(sender, (INbt)values[j], indent + "    ");
                 } else {
-                    sender.addChatMessage(ChatUtils.fillChatWithColor(indent + colors.getOrDefault(listType, UNKNOWN_COLOR) + "    " + values[j]));
+                    String valueStr = (String)values[j];
+                    if (listType == 8) {
+                        int length = valueStr.length();
+                        if (length > maxStringLength) valueStr = valueStr.substring(0, maxStringLength - 1) + "... " + white + " [Length "+length+"]";
+                        valueStr = STRING_COLOR + "\"" + valueStr + STRING_COLOR + "\"";
+                    }
+                    sender.addChatMessage(ChatUtils.fillChatWithColor(indent + colors.getOrDefault(listType, UNKNOWN_COLOR) + "    " + valueStr));
                 }
             }
         } else {
@@ -424,7 +491,7 @@ public class InspectCommand extends CommandBase {
                 String value = parentNbt.getString(key);
                 int length = value.length();
                 if (length > maxStringLength) value = value.substring(0, maxStringLength - 1) + "... " + white + " [Length "+length+"]";
-                valueStr = STRING_COLOR + value;
+                valueStr = STRING_COLOR + "\"" + value + STRING_COLOR + "\"";
             } else {
                 valueStr = UNKNOWN_COLOR + "Unknown Type (" + type + ")";
             }

@@ -34,7 +34,7 @@ public class InspectTargetCommand implements IVeilSubCommand {
         }
 
         if (inspectTag.getByte("TargetType") == 1) { // Block
-            InspectCommand.inspectBlock(inspectTag, targetWorld, sender, Arrays.copyOfRange(args, 2, args.length));
+            InspectCommand.inspectBlock(inspectTag, targetWorld, sender, Arrays.copyOfRange(args, 1, args.length));
         } else if (inspectTag.getByte("TargetType") == 2) { // Entity
             InspectCommand.inspectEntity(inspectTag, targetWorld, sender, Arrays.copyOfRange(args, 1, args.length));
         }

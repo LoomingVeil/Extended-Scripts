@@ -18,7 +18,6 @@ Things I want to add:
  - Scripted Item Block Placing
  - Add the Extended Scripts API tab to scripting (It only doesn't work outside of the development environment)
  - Fix scripted item attack event
- - Fix the inspect command not allowing you to choose indexes of tag lists
  - See if I can mess with the skybox.
  - See if we can mess with name tags.
  - Look into using CustomNpc+'s ClientCacheHandler for the scripted armor rendering.

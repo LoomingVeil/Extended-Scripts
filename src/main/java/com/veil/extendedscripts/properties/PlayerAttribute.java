@@ -4,11 +4,11 @@ package com.veil.extendedscripts.properties;
  * Attributes exclusive to players
  */
 public enum PlayerAttribute {
-    FLIGHT_SPEED_HORIZONTAL(Float.class, 1F),
-    FLIGHT_SPEED_VERTICAL(Float.class, 1F),
-    SWIM_BOOST_WATER(Float.class, 1F),
-    SWIM_BOOST_LAVA(Float.class, 1F),
-    ARMOR_VALUE(Float.class, 1F),
+    FLIGHT_SPEED_HORIZONTAL(Float.class, 0F),
+    FLIGHT_SPEED_VERTICAL(Float.class, 0F),
+    SWIM_BOOST_WATER(Float.class, 0F),
+    SWIM_BOOST_LAVA(Float.class, 0F),
+    ARMOR_VALUE(Float.class, 0F),
     SPRINT_BOOST(Float.class, 1F),
     ATTACK_REACH(Float.class, 3F),
     CAN_FLY(Boolean.class, false),
@@ -58,8 +58,13 @@ public enum PlayerAttribute {
         return newString;
     }
 
-    public EntityAttribute valueOfFromCamelCaseKey(String key) {
+    public PlayerAttribute valueOfFromCamelCase(String key) {
         key = toScreamingSnakeCase(key);
-        return EntityAttribute.valueOf(key);
+        return PlayerAttribute.valueOf(key);
+    }
+
+    public static PlayerAttribute valueOfFromSnakeCase(String key) {
+        key = key.toUpperCase();
+        return PlayerAttribute.valueOf(key);
     }
 }

@@ -21,12 +21,12 @@ public class PlayerPropertyUpdateMessage implements IMessage {
     private float attackReach = 3;
 
     // Entity attributes
-    private float gravity = 0f;
-    private float downwardGravity = 0f;
-    private float upwardGravity = 0f;
-    private float underwaterGravity = 0f;
-    private float underwaterDownwardGravity = 0f;
-    private float underwaterUpwardGravity = 0f;
+    private float gravity = 1.0f;
+    private float downwardGravity = -1.0f;
+    private float upwardGravity = -1.0f;
+    private float underwaterGravity = 1.0f;
+    private float underwaterDownwardGravity = -1.0f;
+    private float underwaterUpwardGravity = -1.0f;
     private float jumpPowerVertical = 0.0f;
     private float jumpPowerHorizontal = 0.0f;
     private float maxFallDistance = 0.0f;

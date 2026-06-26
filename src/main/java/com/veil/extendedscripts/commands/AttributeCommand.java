@@ -48,7 +48,7 @@ public class AttributeCommand implements IVeilSubCommand {
 
         IVeilSubCommand subCommand = subCommands.get(args[0]);
         if (subCommand == null) {
-            sender.addChatMessage(ChatUtils.fillChatWithColor(red+"Unknown subcommand "+args[1]));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(red+"Unknown subcommand "+args[0]));
             return;
         }
 

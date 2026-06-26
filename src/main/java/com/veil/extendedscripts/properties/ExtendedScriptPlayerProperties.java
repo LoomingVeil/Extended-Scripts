@@ -136,7 +136,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         }
     }
 
-    public void syncToPlayer() {
+    public void syncToClient() {
         if (!this.player.worldObj.isRemote && this.player instanceof EntityPlayerMP) {
             PacketHandler.INSTANCE.sendTo(new PlayerPropertyUpdateMessage(this), (EntityPlayerMP) this.player);
         }
@@ -185,7 +185,6 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
             throw new IllegalArgumentException("Invalid type for " + attr + ". Expected " + attr.getType());
         }
         playerAttributes.put(attr, value);
-        syncToPlayer();
     }
 
     public boolean getLastSeenFlying() {
@@ -196,7 +195,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         // System.out.println("Changing last seen flying from " + this.lastSeenFlying + " to " + lastSeenFlying);
         if (this.lastSeenFlying == lastSeenFlying) return;
         this.lastSeenFlying = lastSeenFlying;
-        syncToPlayer();
+        syncToClient();
     }
 
     public ItemStack getAttributeCore() {

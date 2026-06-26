@@ -1,5 +1,7 @@
 package com.veil.extendedscripts.mixins.vanilla;
 
+import com.veil.extendedscripts.ExtendedAPI;
+import com.veil.extendedscripts.properties.PlayerAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeHooks;
 import noppes.npcs.api.entity.IPlayer;
@@ -15,12 +17,7 @@ public class MixinForgeHooks {
     private static void onGetTotalArmorValue(EntityPlayer player, CallbackInfoReturnable<Integer> cir) {
         int base = cir.getReturnValue();
 
-        try {
-            IPlayer npcPlayer = NpcAPI.Instance().getPlayer(player.getCommandSenderName());
-            if (npcPlayer.getAttributes().hasAttribute("armor_value")) {
-                base += (int) npcPlayer.getAttributes().getAttribute("armor_value").getValue();
-            }
-        } catch (Exception ignored) { }
+        base += ExtendedAPI.getAttribute(player, PlayerAttribute.ARMOR_VALUE);
 
         cir.setReturnValue(base);
     }

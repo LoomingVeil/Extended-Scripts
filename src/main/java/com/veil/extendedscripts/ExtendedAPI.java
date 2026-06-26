@@ -7,6 +7,7 @@ import com.veil.extendedscripts.extendedapi.AbstractShapeMaker;
 import com.veil.extendedscripts.extendedapi.entity.ICustomProjectile;
 import com.veil.extendedscripts.properties.EntityAttribute;
 import com.veil.extendedscripts.projectile.EntityCustomProjectile;
+import com.veil.extendedscripts.properties.ExtendedScriptPlayerProperties;
 import com.veil.extendedscripts.properties.PlayerAttribute;
 import kamkeel.npcs.controllers.AttributeController;
 import kamkeel.npcs.controllers.data.attribute.AttributeDefinition;
@@ -175,41 +176,13 @@ public class ExtendedAPI implements AbstractExtendedAPI {
     }
 
     public static float getAttribute(EntityPlayer player, EntityAttribute key) {
-        IPlayer npcPlayer;
-        if (!player.worldObj.isRemote) {
-            npcPlayer = new ScriptPlayer((EntityPlayerMP) player);
-        } else {
-            try {
-                npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
-                if (npcPlayer == null) {
-                    return (Float) key.getDefaultValue();
-                }
-            } catch (NullPointerException e) {
-                return (Float) key.getDefaultValue();
-            }
-        }
-
-        return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
+        ExtendedScriptPlayerProperties props = ExtendedScriptPlayerProperties.get(player);
+        return props.get(key);
     }
 
     public static float getAttribute(EntityPlayer player, PlayerAttribute key) {
-        IPlayer npcPlayer;
-        if (!player.worldObj.isRemote) {
-            npcPlayer = new ScriptPlayer((EntityPlayerMP) player);
-        } else {
-            try {
-                npcPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
-                if (npcPlayer == null) {
-                    // System.out.println("Unable to get attribute value for "+player.getCommandSenderName());
-                    return (Float) key.getDefaultValue();
-                }
-            } catch (NullPointerException e) {
-                // System.out.println("Unable to get attribute value for attribute"+key.toString());
-                return (Float) key.getDefaultValue();
-            }
-        }
-
-        return npcPlayer.getAttributes().getAttributeValue(key.asSnakeCase());
+        ExtendedScriptPlayerProperties props = ExtendedScriptPlayerProperties.get(player);
+        return props.get(key);
     }
 
     /**

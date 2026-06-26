@@ -86,10 +86,14 @@ public class ExtendedScriptEntityProperties implements IExtendedEntityProperties
         entityAttributes.put(attr, value);
     }
 
-    public void syncToPlayer() {
+    public void syncToClient() {
         if (!this.entity.worldObj.isRemote && this.entity instanceof EntityPlayerMP) {
             PacketHandler.INSTANCE.sendTo(new EntityPropertyUpdateMessage(this), (EntityPlayerMP) this.entity);
         }
+    }
+
+    public EnumMap<EntityAttribute, Object> getEntityAttributes() {
+        return this.entityAttributes;
     }
 
     /*public float getGravity() {

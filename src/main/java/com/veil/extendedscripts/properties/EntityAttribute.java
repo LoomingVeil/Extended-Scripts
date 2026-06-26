@@ -1,15 +1,15 @@
 package com.veil.extendedscripts.properties;
 
 public enum EntityAttribute {
-    GRAVITY(Float.class, 1F),
-    DOWNWARD_GRAVITY(Float.class, -1F),
-    UPWARD_GRAVITY(Float.class, -1F),
-    UNDERWATER_GRAVITY(Float.class, 1F),
-    UNDERWATER_DOWNWARD_GRAVITY(Float.class, -1F),
-    UNDERWATER_UPWARD_GRAVITY(Float.class, -1F),
-    JUMP_POWER_VERTICAL(Float.class, 1F),
-    JUMP_POWER_HORIZONTAL(Float.class, 1F),
-    MAX_FALL_DISTANCE(Float.class, 3F),
+    GRAVITY(Float.class, 0F),
+    DOWNWARD_GRAVITY(Float.class, 0F),
+    UPWARD_GRAVITY(Float.class, 0F),
+    UNDERWATER_GRAVITY(Float.class, 0F),
+    UNDERWATER_DOWNWARD_GRAVITY(Float.class, 0F),
+    UNDERWATER_UPWARD_GRAVITY(Float.class, 0F),
+    JUMP_POWER_VERTICAL(Float.class, 0F),
+    JUMP_POWER_HORIZONTAL(Float.class, 0F),
+    MAX_FALL_DISTANCE(Float.class, 0F),
     CAN_MOVE(Boolean.class, true);
 
     private final Class<?> type;
@@ -57,6 +57,11 @@ public enum EntityAttribute {
 
     public EntityAttribute valueOfFromCamelCaseKey(String key) {
         key = toScreamingSnakeCase(key);
+        return EntityAttribute.valueOf(key);
+    }
+
+    public static EntityAttribute valueOfFromSnakeCase(String key) {
+        key = key.toUpperCase();
         return EntityAttribute.valueOf(key);
     }
 }

@@ -154,7 +154,7 @@ public class PlayerPropertyUpdateMessage implements IMessage {
                             player.capabilities.setFlySpeed(0.05F + message.flightSpeedHorizontal / 20);
                             player.sendPlayerAbilities();
 
-                            System.out.println("Client received attribute packet data");
+//                            System.out.println("Client received attribute packet data");
                         } else {
                             System.out.println("Extended Player Properties was unexpectedly null");
                         }

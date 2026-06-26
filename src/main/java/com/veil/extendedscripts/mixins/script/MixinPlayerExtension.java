@@ -66,39 +66,6 @@ public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.en
     }
 
     /**
-     * @deprecated Use {@link #getCoreAttribute(String)}
-     */
-    @Unique
-    public float getFlightSpeed() {
-        return getCoreAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase());
-    }
-
-    /**
-     * @deprecated Use {@link #setAttribute(String, float)}
-     * Sets the player's horizontal fly speed. Default is 1. See {@link #setVerticalFlightSpeed(float)} for vertical flight speed.
-     */
-    @Unique
-    public void setFlightSpeed(float value) {
-        setAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase(), value);
-    }
-
-    /**
-     * @deprecated Use {@link #getCoreAttribute(String)}
-     */
-    @Unique
-    public float getVerticalFlightSpeed() {
-        return getCoreAttribute(PlayerAttribute.FLIGHT_SPEED_HORIZONTAL.asSnakeCase());
-    }
-
-    /**
-     * @deprecated Use {@link #setAttribute(String, float)}
-     */
-    @Unique
-    public void setVerticalFlightSpeed(float value) {
-        setAttribute(PlayerAttribute.FLIGHT_SPEED_VERTICAL.asSnakeCase(), value);
-    }
-
-    /**
      * Enables keep inventory per player. However, your items may be lost if you close the game between dying and respawning.
      * Use at your own risk.
      */
@@ -110,43 +77,6 @@ public abstract class MixinPlayerExtension implements noppes.npcs.extendedapi.en
     @Unique
     public boolean getKeepInventory() {
         return ExtendedScripts.getPlayerProperties(player).get(PlayerAttribute.KEEP_INVENTORY);
-    }
-
-    /**
-     * Gives attributes to the player. These attributes are the same that can be applied to item except these attributes are always active until removed.
-     */
-    @Unique
-    public void setAttribute(String key, float value) {
-        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
-        props.setCoreAttribute(key, value);
-    }
-
-    /**
-     * Gets core attributes. These attributes are separate from equipment attributes.
-     */
-    @Unique
-    public float getCoreAttribute(String key) {
-        ExtendedScriptPlayerProperties props = ExtendedScripts.getPlayerProperties(player);
-        return props.getCoreAttribute(key);
-    }
-
-    @Unique
-    public void resetCoreAttributes() {
-        ExtendedScripts.getPlayerProperties(player).setAttributeCore(null);
-    }
-
-    /**
-     * Gets the attribute core as an item that can be given to the player.
-     */
-    @Unique
-    public IItemStack getAttributeCore() {
-        return AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
-    }
-
-    @Unique
-    public String[] getCoreAttributeKeys() {
-        IItemStack attributeCore = getAttributeCore();
-        return attributeCore.getCustomAttributeKeys();
     }
 
     /**

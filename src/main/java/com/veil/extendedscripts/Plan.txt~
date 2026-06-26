@@ -30,6 +30,7 @@ Things I want to add:
  - Add attribute conditions.
  - Change core attributes so that they can be separated into sections all with unique names to make managing core attributes easier.
  - Add a command to add global customnpc files to current world.
+ - Check to see if the extra info for /kam attribute is still working
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more

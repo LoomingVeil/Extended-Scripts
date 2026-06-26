@@ -85,7 +85,7 @@ public class AttributeListCorePlayerCommand implements IVeilSubCommand {
             sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"No core attributes!"));
             return;
         }
-
+        
         sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"---------------------"));
         sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+EnumChatFormatting.GREEN+"Core Attributes by Group"));
 

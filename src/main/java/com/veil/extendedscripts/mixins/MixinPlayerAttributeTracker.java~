@@ -132,10 +132,9 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
      * Returns a combined core with all attributes from all groups.
      */
     @Unique
-    public IItemStack getWholeAttributeCore(String groupName) {
-        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getWholeAttributeCore());
+    public IItemStack getWholeAttributeCore() {
+        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
         core.getNbt().setBoolean("canBeRedeemed", false);
-        core.getNbt().setString("attributeGroup", groupName);
         return core;
     }
 
@@ -145,10 +144,9 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
      * Returns a combined core with all attributes from all groups.
      */
     @Unique
-    public IItemStack getWholeAttributeCore(String groupName, boolean canBeRedeemed) {
-        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getWholeAttributeCore());
+    public IItemStack getWholeAttributeCore(boolean canBeRedeemed) {
+        IItemStack core = AbstractNpcAPI.Instance().getIItemStack(ExtendedScripts.getPlayerProperties(player).getAttributeCore());
         core.getNbt().setBoolean("canBeRedeemed", canBeRedeemed);
-        core.getNbt().setString("attributeGroup", groupName);
         return core;
     }
 

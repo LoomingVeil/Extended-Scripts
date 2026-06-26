@@ -76,15 +76,6 @@ public class AttributeRemovePlayerCommand implements IVeilSubCommand {
             props.removeCoreAttribute(group, key);
 
             sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+ EnumChatFormatting.GREEN+"Successfully removed attribute "+key+" in "+group+" from "+player.getCommandSenderName()+"."));
-        } else {
-            String playerName = args[0];
-            EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
-            if (player == null) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Missing "+(2 - args.length)+" arguments!"));
-            } else {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Missing "+(3 - args.length)+" arguments!"));
-            }
-            sender.addChatMessage(ChatUtils.fillChatWithColor(red+"Usage: /veil attribute remove-player <player> <group> <key>"));
         }
     }
 

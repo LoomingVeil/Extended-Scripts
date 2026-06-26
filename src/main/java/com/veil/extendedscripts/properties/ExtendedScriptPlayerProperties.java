@@ -1,5 +1,6 @@
 package com.veil.extendedscripts.properties;
 
+import com.veil.extendedscripts.ExtendedAPI;
 import com.veil.extendedscripts.ExtendedScripts;
 import com.veil.extendedscripts.PacketHandler;
 import com.veil.extendedscripts.ScreenResolution;
@@ -15,6 +16,7 @@ import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.scripted.NpcAPI;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperties implements IExtendedEntityProperties {
@@ -23,7 +25,7 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
     private final EnumMap<PlayerAttribute, Object> playerAttributes = new EnumMap<>(PlayerAttribute.class);
     private final EntityPlayer player;
     private VirtualFurnace virtualFurnace;
-    private ItemStack attributeCore; // Attributes added to the core apply to the player.
+    private Map<String, ItemStack> attributeCores = new HashMap<>(); // Multiple attribute cores (groups)
     private boolean canFly = false;
     private boolean lastSeenFlying = false;
     public ScreenResolution screenResolution = new ScreenResolution();
@@ -40,7 +42,6 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         playerAttributes.put(PlayerAttribute.CAN_FLY, PlayerAttribute.CAN_FLY.getDefaultValue());
         playerAttributes.put(PlayerAttribute.LAST_SEEN_FLYING, PlayerAttribute.LAST_SEEN_FLYING.getDefaultValue());
         playerAttributes.put(PlayerAttribute.KEEP_INVENTORY, PlayerAttribute.KEEP_INVENTORY.getDefaultValue());
-        this.attributeCore = createNewAttributeCore();
     }
 
     private ItemStack createNewAttributeCore() {
@@ -93,12 +94,14 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
             this.virtualFurnace.writeToNBT(savedNBT);
         }
 
-        // Save attributeCore directly
-        if (attributeCore != null) {
+        // Save attributeCores map
+        NBTTagCompound coresTag = new NBTTagCompound();
+        for (Map.Entry<String, ItemStack> entry : attributeCores.entrySet()) {
             NBTTagCompound coreTag = new NBTTagCompound();
-            attributeCore.writeToNBT(coreTag);
-            savedNBT.setTag("coreAttributes", coreTag);
+            entry.getValue().writeToNBT(coreTag);
+            coresTag.setTag(entry.getKey(), coreTag);
         }
+        savedNBT.setTag("attributeCores", coresTag);
 
         for (PlayerAttribute attr : playerAttributes.keySet()) {
             if (attr.getType() == Float.class) {
@@ -118,10 +121,17 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
             this.virtualFurnace = new VirtualFurnace();
             this.virtualFurnace.readFromNBT(savedNBT);
 
-            if (savedNBT.hasKey("coreAttributes")) {
-                this.attributeCore = ItemStack.loadItemStackFromNBT(savedNBT.getCompoundTag("coreAttributes"));
-            } else {
-                this.attributeCore = createNewAttributeCore();
+            // Load attributeCores map
+            attributeCores.clear();
+            if (savedNBT.hasKey("attributeCores")) {
+                NBTTagCompound coresTag = savedNBT.getCompoundTag("attributeCores");
+                for (Object groupName : coresTag.func_150296_c()) {
+                    NBTTagCompound coreTag = coresTag.getCompoundTag((String) groupName);
+                    ItemStack core = ItemStack.loadItemStackFromNBT(coreTag);
+                    if (core != null) {
+                        attributeCores.put((String) groupName, core);
+                    }
+                }
             }
 
             for (PlayerAttribute attr : playerAttributes.keySet()) {
@@ -198,23 +208,21 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
         syncToClient();
     }
 
-    public ItemStack getAttributeCore() {
-        if (attributeCore == null || !doesCoreHaveAttributes(attributeCore)) {
-            attributeCore = createNewAttributeCore();
+    // Group-based core attribute methods
+
+    public void setCoreAttribute(String group, String key, float value) {
+        // Check if attribute exists before setting
+        if (!ExtendedAPI.Instance.attributeExists(key)) {
+            throw new IllegalArgumentException("Attribute "+key+" does not exist");
         }
-        NBTTagCompound nbt = new NBTTagCompound();
-        attributeCore.writeToNBT(nbt);
-        return attributeCore;
-    }
 
-    public void setAttributeCore(ItemStack stack) {
-        this.attributeCore = stack != null ? stack : createNewAttributeCore();
-        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
-        npcPlayer.getAttributes().recalculate(npcPlayer);
-    }
+        ItemStack core = attributeCores.get(group);
+        if (core == null) {
+            core = createNewAttributeCore();
+            attributeCores.put(group, core);
+        }
 
-    public void setCoreAttribute(String key, float value) {
-        NBTTagCompound root = attributeCore.getTagCompound();
+        NBTTagCompound root = core.getTagCompound();
         NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
         NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
 
@@ -222,14 +230,22 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
 
         rpgCore.setTag("Attributes", attributes);
         root.setTag("RPGCore", rpgCore);
-        attributeCore.setTagCompound(root);
-        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+        core.setTagCompound(root);
 
+        IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
         npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 
-    public void removeCoreAttribute(String key) {
-        NBTTagCompound root = attributeCore.getTagCompound();
+    public void removeCoreAttribute(String group, String key) {
+        if (!ExtendedAPI.Instance.attributeExists(key)) {
+            throw new IllegalArgumentException("Attribute "+key+" does not exist");
+        }
+        ItemStack core = attributeCores.get(group);
+        if (core == null) {
+            return;
+        }
+
+        NBTTagCompound root = core.getTagCompound();
         NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
         NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
 
@@ -240,26 +256,115 @@ public class ExtendedScriptPlayerProperties extends ExtendedScriptEntityProperti
 
         rpgCore.setTag("Attributes", attributes);
         root.setTag("RPGCore", rpgCore);
-        attributeCore.setTagCompound(root);
+        core.setTagCompound(root);
+
         IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
         npcPlayer.getAttributes().recalculate(npcPlayer);
     }
 
-    public float getCoreAttribute(String key) {
-        NBTTagCompound root = attributeCore.getTagCompound();
+    public float getCoreAttribute(String group, String key) {
+        if (!ExtendedAPI.Instance.attributeExists(key)) {
+            throw new IllegalArgumentException("Attribute "+key+" does not exist");
+        }
+        ItemStack core = attributeCores.get(group);
+        if (core == null) {
+            return 0;
+        }
 
+        NBTTagCompound root = core.getTagCompound();
         NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
         NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
 
         if (attributes.hasKey(key)) {
             return attributes.getFloat(key);
         } else {
-            return 0;
+            throw new IllegalArgumentException("Attribute "+key+" does not exist in group "+group);
         }
     }
 
+    public boolean hasCoreAttribute(String group, String key) {
+        if (!ExtendedAPI.Instance.attributeExists(key)) {
+            throw new IllegalArgumentException("Attribute "+key+" does not exist");
+        }
+        ItemStack core = attributeCores.get(group);
+        if (core == null) {
+            return false;
+        }
+
+        NBTTagCompound root = core.getTagCompound();
+        NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
+        NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
+
+        return attributes.hasKey(key);
+    }
+
+    // Aggregated across all groups
+    public float getCoreAttribute(String key) {
+        if (!ExtendedAPI.Instance.attributeExists(key)) {
+            throw new IllegalArgumentException("Attribute "+key+" does not exist");
+        }
+        float total = 0;
+        for (ItemStack core : attributeCores.values()) {
+            if (core != null && core.hasTagCompound()) {
+                NBTTagCompound root = core.getTagCompound();
+                NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
+                NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
+                if (attributes.hasKey(key)) {
+                    total += attributes.getFloat(key);
+                }
+            }
+        }
+        return total;
+    }
+
+    public void removeGroup(String group) {
+        if (attributeCores.containsKey(group)) {
+            attributeCores.remove(group);
+            IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
+            npcPlayer.getAttributes().recalculate(npcPlayer);
+        }
+    }
+
+    public String[] getGroups() {
+        return attributeCores.keySet().toArray(new String[0]);
+    }
+
+    public ItemStack getAttributeCore(String group) {
+        return attributeCores.get(group);
+    }
+
+    // Combined attribute core - aggregates all groups
+    public ItemStack getWholeAttributeCore() {
+        ItemStack combinedCore = createNewAttributeCore();
+        NBTTagCompound root = combinedCore.getTagCompound();
+        NBTTagCompound rpgCore = root.getCompoundTag("RPGCore");
+        NBTTagCompound attributes = rpgCore.getCompoundTag("Attributes");
+
+        // Aggregate attributes from all groups
+        for (Map.Entry<String, ItemStack> entry : attributeCores.entrySet()) {
+            ItemStack core = entry.getValue();
+            if (core != null && core.hasTagCompound()) {
+                NBTTagCompound coreRoot = core.getTagCompound();
+                NBTTagCompound coreRpgCore = coreRoot.getCompoundTag("RPGCore");
+                NBTTagCompound coreAttributes = coreRpgCore.getCompoundTag("Attributes");
+
+                for (Object keyObj : coreAttributes.func_150296_c()) {
+                    String key = (String) keyObj;
+                    float value = coreAttributes.getFloat(key);
+                    float currentValue = attributes.hasKey(key) ? attributes.getFloat(key) : 0;
+                    attributes.setFloat(key, currentValue + value);
+                }
+            }
+        }
+
+        rpgCore.setTag("Attributes", attributes);
+        root.setTag("RPGCore", rpgCore);
+        combinedCore.setTagCompound(root);
+        return combinedCore;
+    }
+
     public void resetCoreAttributes() {
-        this.attributeCore = createNewAttributeCore();
+        this.attributeCores.clear();
         IPlayer npcPlayer = (IPlayer) NpcAPI.Instance().getIEntity(player);
         npcPlayer.getAttributes().recalculate(npcPlayer);
     }

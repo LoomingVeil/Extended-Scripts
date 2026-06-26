@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.CommandEvent;
@@ -191,12 +192,12 @@ public class AttributeEventHandler {
 
     @SubscribeEvent
     public void onCommand(CommandEvent event) {
-        String[] args = event.parameters;
-
-        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.sender;
-            ExtendedScripts.getPlayerProperties(player).syncToClient();
-        }
+//        String[] args = event.parameters;
+//
+//        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
+//            EntityPlayer player = (EntityPlayer) event.sender;
+//            ExtendedScripts.getPlayerProperties(player).syncToClient();
+//        }
     }
 
     @SubscribeEvent
@@ -404,8 +405,6 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
                 }
             }
         }
-
-        System.out.println("Attribute recalculation event. On client side? "+player.worldObj.isRemote);
 
         if (playerProperties != null) {
             // Sync to client after all attribute updates (server side only)

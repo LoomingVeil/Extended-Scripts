@@ -49,7 +49,7 @@ public interface IEntity {
     float getUnderwaterDownwardGravity();
 
     /**
-     * Sets the max fall distance before an entity (not players) takes fall damage. Default is 3.
+     * Increases the max fall distance before an entity (not players) takes fall damage. Default is 0.
      * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
      */
     void setMaxFallDistance(float value);

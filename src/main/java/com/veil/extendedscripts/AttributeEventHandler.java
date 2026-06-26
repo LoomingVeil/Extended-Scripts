@@ -17,7 +17,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -191,6 +194,15 @@ public class AttributeEventHandler {
 
     @SubscribeEvent
     public void onCommand(CommandEvent event) {
+        String[] args = event.parameters;
+
+        if (!event.command.getCommandName().equals("kamkeel")) {
+            return;
+        }
+
+        if (args.length == 1 && args[0].equals("attribute")) {
+            ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
+        }
 //        String[] args = event.parameters;
 //
 //        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
@@ -404,8 +416,6 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
                 }
             }
         }
-
-        System.out.println("Attribute recalculation event. On client side? "+player.worldObj.isRemote);
 
         if (playerProperties != null) {
             // Sync to client after all attribute updates (server side only)

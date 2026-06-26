@@ -29,7 +29,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
 
             String key = args[1];
             if (!ExtendedAPI.Instance.attributeExists(key)) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Attribute \""+key+"\" does not exist!"));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Attribute does not exist!"));
                 return;
             }
 
@@ -37,7 +37,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
             try {
                 value = Float.parseFloat(args[2]);
             } catch (Exception e) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+args[2]+" is not a valid attribute value! Must be a number."));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid attribute value!"));
                 return;
             }
 
@@ -62,7 +62,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
 
             String key = args[2];
             if (!ExtendedAPI.Instance.attributeExists(key)) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Attribute \""+key+"\" does not exist!"));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Attribute does not exist!"));
                 return;
             }
 
@@ -70,7 +70,7 @@ public class AttributeApplyPlayerCommand implements IVeilSubCommand {
             try {
                 value = Float.parseFloat(args[3]);
             } catch (Exception e) {
-                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+args[2]+" is not a valid attribute value! Must be a number."));
+                sender.addChatMessage(ChatUtils.fillChatWithColor(modPrefix+dark_red+"Error: "+red+"Invalid attribute value!"));
                 return;
             }
 

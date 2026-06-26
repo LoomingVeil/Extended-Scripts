@@ -39,7 +39,7 @@ export interface IEntity {
     setUnderwaterDownwardGravity(value: import('./float').float): import('./void').void;
     getUnderwaterDownwardGravity(): import('./float').float;
     /**
-     * Sets the max fall distance before an entity (not players) takes fall damage. Default is 3.
+     * Increases the max fall distance before an entity (not players) takes fall damage. Default is 0.
      * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
      */
     setMaxFallDistance(value: import('./float').float): import('./void').void;

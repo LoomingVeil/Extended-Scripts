@@ -34,16 +34,8 @@ public class AttributeCore extends Item {
         IPlayerAttributes attributes = (IPlayerAttributes) npcPlayer.getAttributes();
         IItemStack npcItem = NpcAPI.Instance().getIItemStack(stack);
 
-        String group = "default";
-        if (stack.hasTagCompound()) {
-            NBTTagCompound nbt = stack.getTagCompound();
-            if (nbt.hasKey("attributeGroup")) {
-                group = nbt.getString("attributeGroup");
-            }
-        }
-
         for (String attrKey : npcItem.getCustomAttributeKeys()) {
-            attributes.modifyCoreAttribute(group, attrKey, npcItem.getCustomAttribute(attrKey));
+            attributes.modifyCoreAttribute(attrKey, npcItem.getCustomAttribute(attrKey));
         }
 
         if (!player.capabilities.isCreativeMode) {

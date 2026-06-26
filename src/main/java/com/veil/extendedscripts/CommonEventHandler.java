@@ -130,21 +130,6 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public void onCommand(CommandEvent event) {
-        String[] args = event.parameters;
-
-        if (!event.command.getCommandName().equals("kamkeel")) {
-            return;
-        }
-
-        if (args.length == 1 && args[0].equals("attribute")) {
-            ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
-        }
-    }
-
-
-
-    @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         if (event.entityLiving instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.entityLiving;

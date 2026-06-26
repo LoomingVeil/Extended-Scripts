@@ -168,7 +168,7 @@ public abstract class MixinEntityExtension implements noppes.npcs.extendedapi.en
     }
 
     /**
-     * Increases the max fall distance before an entity (not players) takes fall damage. Default is 0.
+     * Sets the max fall distance before an entity (not players) takes fall damage. Default is 3.
      * For players, use {@link noppes.npcs.extendedapi.entity.IPlayer#setAttribute(String, float)}
      */
     @Unique

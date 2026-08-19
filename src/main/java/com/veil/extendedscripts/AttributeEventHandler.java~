@@ -19,6 +19,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -192,6 +194,15 @@ public class AttributeEventHandler {
 
     @SubscribeEvent
     public void onCommand(CommandEvent event) {
+        String[] args = event.parameters;
+
+        if (!event.command.getCommandName().equals("kamkeel")) {
+            return;
+        }
+
+        if (args.length == 1 && args[0].equals("attribute")) {
+            ChatUtils.sendDelayedChatMessage(event.sender, new ChatComponentText(EnumChatFormatting.GRAY+"For more related commands, see "+EnumChatFormatting.YELLOW+"/veil attribute"), 100);
+        }
 //        String[] args = event.parameters;
 //
 //        if (event.command.getCommandName().equals("gamemode") && event.sender instanceof EntityPlayer) {
@@ -420,10 +431,20 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
             }
         }
 
-        AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player));
+        IPlayer scriptPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
 
-        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
-        handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
-        AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
+        if (scriptPlayer != null) {
+            AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent(scriptPlayer);
+
+            PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
+            handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
+            AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
+        } else {
+            if (player != null) {
+                System.out.println("Could not fire attribute recalculate event, Could not find player " + player.getCommandSenderName());
+            } else {
+                System.out.println("Could not fire attribute recalculate event, Player is null");
+            }
+        }
     }
 }

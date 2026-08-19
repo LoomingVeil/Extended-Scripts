@@ -22,6 +22,7 @@ declare global {
     type AbstractAttributeSection = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAttributeSection').AbstractAttributeSection;
     type AbstractAttributeValueType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAttributeValueType').AbstractAttributeValueType;
     type AbstractAuctionStatus = import('./com/veil/extendedscripts/extendedapi/constants/AbstractAuctionStatus').AbstractAuctionStatus;
+    type AbstractBaubleSlot = import('./com/veil/extendedscripts/extendedapi/constants/AbstractBaubleSlot').AbstractBaubleSlot;
     type AbstractBlockSide = import('./com/veil/extendedscripts/extendedapi/constants/AbstractBlockSide').AbstractBlockSide;
     type AbstractClaimType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractClaimType').AbstractClaimType;
     type AbstractCollisionType = import('./com/veil/extendedscripts/extendedapi/constants/AbstractCollisionType').AbstractCollisionType;

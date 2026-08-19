@@ -25,6 +25,9 @@ public class LateMixins implements ILateMixinLoader {
             mixins.add("MixinGuiScriptInterface");
 //            mixins.add("MixinGuiNPCInterfaceKeyboardNav");
         }
+        mixins.add("MixinSlotBauble");
+        mixins.add("MixinInventoryBaubles");
+        mixins.add("MixinContainerBaubles");
         return mixins;
     }
 }

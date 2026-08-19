@@ -11,7 +11,7 @@ public class MixinLoader implements IFMLLoadingPlugin {
 
     static {
         System.setProperty("mixin.hotSwap", "false");
-        System.setProperty("mixin.env.disableRefMap", "true");
+        // System.setProperty("mixin.env.disableRefMap", "true");
 
         org.spongepowered.asm.launch.MixinBootstrap.init();
         org.spongepowered.asm.mixin.Mixins.addConfiguration("mixins.extendedscripts.json");

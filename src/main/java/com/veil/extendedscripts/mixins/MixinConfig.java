@@ -41,6 +41,11 @@ public class MixinConfig implements IMixinConfigPlugin {
             }
         }
 
+        // Only apply Baubles mixins if Baubles is present
+        if (mixinClassName.equals("com.veil.extendedscripts.mixins.MixinSlotBauble") || mixinClassName.equals("com.veil.extendedscripts.mixins.MixinInventoryBaubles") || mixinClassName.equals("com.veil.extendedscripts.mixins.MixinContainerBaubles")) {
+            return classExists("baubles.common.container.SlotBauble");
+        }
+
         return true;
     }
 

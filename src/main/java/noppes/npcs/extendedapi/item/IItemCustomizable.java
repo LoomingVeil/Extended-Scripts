@@ -88,4 +88,13 @@ public interface IItemCustomizable {
     void setFirstPersonTranslate(Float x, Float y, Float z);
     void setFirstPersonScale(Float x, Float y, Float z);
     void setFirstPersonRotation(Float x, Float y, Float z);
+
+    /**
+     * Gets the type of bauble this item can be equipped as.
+     * -2: None, -1: Any, 0: Ring, 1: Amulet, 2: Belt
+     * This function is designed to be used in conjunction with the Baubles mod.
+     * Naturally, it will be of no use without it.
+     */
+    int getBaubleType();
+    void setBaubleType(int baubleType);
 }

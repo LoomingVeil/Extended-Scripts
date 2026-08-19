@@ -431,10 +431,14 @@ class AttributeRecalcEventHandler implements AttributeRecalcEvent.Listener {
             }
         }
 
-        AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent((IPlayer) AbstractNpcAPI.Instance().getIEntity(player));
+        IPlayer scriptPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
 
-        PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
-        handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
-        AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
+        if (scriptPlayer != null) {
+            AttributeRecalculateEvent attributeRecalcEvent = new AttributeRecalculateEvent(scriptPlayer);
+
+            PlayerDataScript handler = ScriptController.Instance.getPlayerScripts(attributeRecalcEvent.getPlayer());
+            handler.callScript(attributeRecalcEvent.getHookName(), attributeRecalcEvent);
+            AbstractNpcAPI.Instance().events().post(attributeRecalcEvent);
+        }
     }
 }

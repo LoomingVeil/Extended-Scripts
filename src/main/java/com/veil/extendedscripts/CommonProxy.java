@@ -116,6 +116,7 @@ public class CommonProxy {
 
         if (Loader.isModLoaded("Baubles")) {
             isBaublesPreset = true;
+            API.addGlobalObject("BaubleSlot", BaubleSlot.Instance);
         } else {
             isBaublesPreset = false;
         }

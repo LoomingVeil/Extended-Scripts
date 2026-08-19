@@ -45,6 +45,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     public Float fpRotationX = 0.0F;
     public Float fpRotationY = 0.0F;
     public Float fpRotationZ = 0.0F;
+    private int baubleType = -2;
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void onInit(ItemStack item, CallbackInfo ci) {
@@ -256,6 +257,17 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
     }
 
     @Unique
+    public int getBaubleType() {
+        return baubleType;
+    }
+
+    @Unique
+    public void setBaubleType(int baubleType) {
+        this.baubleType = baubleType;
+        saveExtendedItemData();
+    }
+
+    @Unique
     public void saveExtendedItemData() {
         NBTTagCompound tag = item.getTagCompound();
 
@@ -302,6 +314,8 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         itemData.setFloat("firstPersonRotationX", fpRotationX);
         itemData.setFloat("firstPersonRotationY", fpRotationY);
         itemData.setFloat("firstPersonRotationZ", fpRotationZ);
+
+        itemData.setInteger("baubleType", baubleType);
     }
 
     @Unique
@@ -360,5 +374,7 @@ public class MixinScriptedItemScriptExtension implements IItemCustomizable {
         fpRotationX = itemData.getFloat("firstPersonRotationX");
         fpRotationY = itemData.getFloat("firstPersonRotationY");
         fpRotationZ = itemData.getFloat("firstPersonRotationZ");
+
+        baubleType = itemData.getInteger("baubleType");
     }
 }

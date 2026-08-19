@@ -1,0 +1,10 @@
+package com.veil.extendedscripts.constants;
+
+public class BaubleSlot {
+    public static final BaubleSlot Instance = new BaubleSlot();
+    public final int NONE = -2;
+    public final int ALL = -1;
+    public final int RING = 0;
+    public final int NECKLACE = 1;
+    public final int AMULET = 2;
+}

@@ -68,4 +68,12 @@ export interface IItemCustomizable {
     setFirstPersonTranslate(x: Float, y: Float, z: Float): import('./void').void;
     setFirstPersonScale(x: Float, y: Float, z: Float): import('./void').void;
     setFirstPersonRotation(x: Float, y: Float, z: Float): import('./void').void;
+    /**
+     * Gets the type of bauble this item can be equipped as.
+     * -2: None, -1: Any, 0: Ring, 1: Amulet, 2: Belt
+     * This function is designed to be used in conjunction with the Baubles mod.
+     * Naturally, it will be of no use without it.
+     */
+    getBaubleType(): import('./int').int;
+    setBaubleType(baubleType: import('./int').int): import('./void').void;
 }

@@ -39,7 +39,7 @@ export interface AbstractShapeMaker {
      * @param radiusX Radius along X.
      * @param radiusY Height of the dome above (or below) the base.
      * @param radiusZ Radius along Z.
-     * @param faceUp  {@code true} ? dome rises upward; {@code false} ? dome hangs downward.
+     * @param faceUp  {@code true} → dome rises upward; {@code false} → dome hangs downward.
      */
     getHemisphere(center: IPos, radiusX: import('./int').int, radiusY: import('./int').int, radiusZ: import('./int').int, faceUp: import('./boolean').boolean): IPos[];
     /** Solid hemisphere with equal XZ radius and configurable direction. */

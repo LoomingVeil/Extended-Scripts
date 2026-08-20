@@ -112,7 +112,6 @@ public class CommonProxy {
         }
 
         CraftingManager.getInstance().getRecipeList().add(new ScriptedItemDyeRecipe());
-        ExtraAttributeSlots.addExtraSlot(new String[]{});
 
         if (Loader.isModLoaded("Baubles")) {
             isBaublesPreset = true;

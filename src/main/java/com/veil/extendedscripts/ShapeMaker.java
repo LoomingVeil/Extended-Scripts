@@ -24,6 +24,10 @@ public class ShapeMaker implements AbstractShapeMaker {
         boolean accept(int dx, int dy, int dz);
     }
 
+    public AbstractShapeMaker Instance() {
+        return Instance;
+    }
+
     /** Creates a new IPos via the NPC API. */
     private static IPos pos(int x, int y, int z) {
         return AbstractNpcAPI.Instance().getIPos(x, y, z);

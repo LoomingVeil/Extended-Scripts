@@ -12,6 +12,7 @@ import noppes.npcs.api.handler.data.IAttributeDefinition;
  * This object stores functions available to all scripting handlers through the "extAPI" keyword.
  */
 public interface AbstractExtendedAPI {
+    AbstractExtendedAPI Instance();
     /**
      * Gets an array of the names of the registered entities in the game.
      * These names can be used in functions like {@link #createIEntity(String, IWorld)}.

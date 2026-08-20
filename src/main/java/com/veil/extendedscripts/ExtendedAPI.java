@@ -57,6 +57,10 @@ public class ExtendedAPI implements AbstractExtendedAPI {
         specialLetterLengths.put('@', 6);
     }
 
+    public AbstractExtendedAPI Instance() {
+        return Instance;
+    }
+
     public static Map<String, AttributeDefinition> getLastWorldsAttributes() {
         return lastWorldsAttributes;
     }
@@ -272,14 +276,15 @@ public class ExtendedAPI implements AbstractExtendedAPI {
      * Given a Nbt starting point and a list of the nbt keys or list indices, it will return that nbt.
      */
     public static Object traverseNbt(INbt baseNbt, String[] args) {
-        if (baseNbt == null || args.length == 0) return baseNbt;
+        if (baseNbt == null) throw new IllegalArgumentException("Invalid Nbt.");
+        if (args.length == 0) throw new IllegalArgumentException("Expected at least one key or index.");
 
         INbt currentNbt = baseNbt;
         int i = 0;
 
         while (i < args.length) {
             String key = args[i];
-            if (!currentNbt.has(key)) return null; // Path broken
+            if (!currentNbt.has(key)) throw new IllegalArgumentException("Nbt does not have key"+key+" It has keys "+String.join(", ", currentNbt.getKeys()));
 
             int type = currentNbt.getType(key);
             boolean isLastArg = (i == args.length - 1);

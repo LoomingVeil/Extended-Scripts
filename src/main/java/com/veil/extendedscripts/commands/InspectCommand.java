@@ -106,7 +106,7 @@ public class InspectCommand extends CommandBase {
             return;
         }
 
-        if (heldItem == null && !args[0].equals("self")) {
+        if (heldItem == null && !args[0].equals("self") && !args[0].equals("keys")) {
             sender.addChatMessage(ChatUtils.fillChatWithColor(UNKNOWN_COLOR + "You must be holding an item to use this command!"));
             return;
         }
@@ -525,9 +525,10 @@ public class InspectCommand extends CommandBase {
     public void showCommandUsage(ICommandSender sender) {
         sender.addChatMessage(ChatUtils.fillChatWithColor(dark_gray+"------- "+ EnumChatFormatting.GREEN+" Inspect Command "+dark_gray+"-------"));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect hand"+dark_gray+": "+gray+"Inspects the item in your hand."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect self"+dark_gray+": "+gray+"Inspects your own player data."));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect target"+dark_gray+": "+gray+"Inspects an item bound to a pair of World Clippers."));
-        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tp <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports you to the target. Destination arguments are optional. '~' Can be used for relative (to the target) coordinates."));
-        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tphere <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports the target to you. Destination arguments are optional. '~' Can be used for relative (to the player) coordinates."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tp <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports you to the target designated by your World Clippers. Destination arguments are optional. '~' Can be used for relative (to the target) coordinates."));
+        sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect tphere <x> <y> <z> <dim>"+dark_gray+": "+gray+"Teleports the target designated by your World Clippers to you. Destination arguments are optional. '~' Can be used for relative (to the player) coordinates."));
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"inspect keys"+dark_gray+": "+gray+"Lists what color corresponds to each data type."));
 
         sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"After the 1st parameter, parameters can be used to navigate Nbt. Take note they are case sensitive."));

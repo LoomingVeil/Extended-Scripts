@@ -25,12 +25,9 @@ Things I want to add:
  - Attaching abilities to energy projectiles
  - Add descriptions when hovering over classes.
  - Add a function for calling scripts.
- - Add a function to get the duration of an ability.
  - Fix an issue where CloneTabGlobalDescriptor does not work in multiplayer.
  - Add attribute conditions.
- - Change core attributes so that they can be separated into sections all with unique names to make managing core attributes easier.
  - Add a command to add global customnpc files to current world.
- - Don't forget to fix shift clicking in the baubles window not crash you.
  - Investigate getType() for MixinItemExtension
 
 Lists to add when we see something:

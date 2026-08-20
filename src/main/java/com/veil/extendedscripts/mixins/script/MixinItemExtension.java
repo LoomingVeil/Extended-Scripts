@@ -79,9 +79,4 @@ public abstract class MixinItemExtension implements noppes.npcs.extendedapi.item
 
         return String.format("%s:textures/items/%s.png", domain, texturePath);
     }
-
-    @Unique
-    public int getType() { // This function is never used because it already exists in ScriptItemStack
-        return 0;
-    }
 }

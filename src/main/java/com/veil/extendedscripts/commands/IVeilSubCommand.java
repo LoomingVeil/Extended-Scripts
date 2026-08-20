@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface IVeilSubCommand {
-    Map<String, IVeilSubCommand> subCommands = new HashMap<>();
     String gray = "§"+ ColorCodes.Instance.GRAY;
     String dark_gray = "§"+ColorCodes.Instance.DARK_GRAY;
     String red = "§"+ColorCodes.Instance.RED;

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import org.lwjgl.Sys;
 
 public class Config {
@@ -15,7 +16,7 @@ public class Config {
     public static boolean enableEffectPageModification;
     public static boolean showPotionEffectLevelsAsNumbers;
     public static boolean enableScriptedArmorTextures;
-    public static String[] extraAttributeSlots;
+    public static Property extraAttributeSlots;
     public static void init(File configFile) {
         if (!hasBeenLoaded) {
             if (config == null) {
@@ -47,7 +48,7 @@ public class Config {
             false,
             "When true, displays potions effect levels as arabic numerals instead of roman numerals."
         );
-        extraAttributeSlots = config.getStringList("extraAttributeSlots", Configuration.CATEGORY_GENERAL, new String[] {""},
+        extraAttributeSlots = config.get(Configuration.CATEGORY_GENERAL, "extraAttributeSlots", new String[] {""},
             "Here you can add nbt paths that point to item slots in order to add slots which that will be checked when calculating attributes\n"
                 + "Usage: <tag1>.<tag2>.<tag...>:<container_index> The container index is optional. Example: 'Inventory:0' accesses the first slot in the inventory\n"
                 + "These paths are constructed by placing '.' between each NBT tag key and ':' between the path and the container index if needed.\n"

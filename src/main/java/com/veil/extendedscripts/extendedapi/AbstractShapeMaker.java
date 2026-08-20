@@ -6,7 +6,9 @@ import noppes.npcs.api.IPos;
  * Interface for generating sets of block positions that form 3D shapes.
  */
 public interface AbstractShapeMaker {
-    AbstractShapeMaker Instance();
+    static AbstractShapeMaker Instance() {
+        return null;
+    }
 
     // =========================================================================
     // BOX

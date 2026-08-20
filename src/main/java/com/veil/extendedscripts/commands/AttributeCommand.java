@@ -7,8 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AttributeCommand implements IVeilSubCommand {
+    private final Map<String, IVeilSubCommand> subCommands = new HashMap<>();
     private final static String gray = "§"+ColorCodes.Instance.GRAY;
     private final static String dark_gray = "§"+ColorCodes.Instance.DARK_GRAY;
     private final static String red = "§"+ColorCodes.Instance.RED;
@@ -27,6 +30,7 @@ public class AttributeCommand implements IVeilSubCommand {
         subCommands.put("list-core-player", new AttributeListCorePlayerCommand());
         subCommands.put("copy", new AttributeCopyCommand());
         subCommands.put("paste", new AttributePasteCommand());
+        subCommands.put("slot", new AttributeSlotCommand());
     }
 
     @Override
@@ -43,6 +47,7 @@ public class AttributeCommand implements IVeilSubCommand {
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"list-core-player"+dark_gray+": "+gray+"Lists all core attributes."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"copy"+dark_gray+": "+gray+"Copy attributes from an item into temp data."));
             sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"paste"+dark_gray+": "+gray+"Paste saved attributes to an item. Use TAB completion to see paste modes."));
+            sender.addChatMessage(ChatUtils.fillChatWithColor(gray+"> "+yellow+"slot"+dark_gray+": "+gray+"Manage extra attribute slot NBT paths."));
             return;
         }
 

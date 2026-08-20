@@ -16,7 +16,6 @@ Things I want to add:
  - Make it so that scripted items can have custom eating sounds and custom eating particles
  - Barrier blocks
  - Scripted Item Block Placing
- - Add the Extended Scripts API tab to scripting (It only doesn't work outside of the development environment)
  - Fix scripted item attack event
  - See if I can mess with the skybox.
  - See if we can mess with name tags.
@@ -28,7 +27,6 @@ Things I want to add:
  - Fix an issue where CloneTabGlobalDescriptor does not work in multiplayer.
  - Add attribute conditions.
  - Add a command to add global customnpc files to current world.
- - Investigate getType() for MixinItemExtension
 
 Lists to add when we see something:
  - Continue searching for more Enums to implement (overlay component default alignment? Quest kill type) look through noppes.npcs.constants for more

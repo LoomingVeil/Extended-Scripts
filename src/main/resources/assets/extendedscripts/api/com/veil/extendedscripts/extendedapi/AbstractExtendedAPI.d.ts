@@ -8,6 +8,7 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.AbstractExtendedAPI
 */
 export interface AbstractExtendedAPI {
+    Instance(): import('./AbstractExtendedAPI').AbstractExtendedAPI;
     /**
      * Gets an array of the names of the registered entities in the game.
      * These names can be used in functions like {@link #createIEntity(String, IWorld)}.

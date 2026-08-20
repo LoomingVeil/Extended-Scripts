@@ -74,10 +74,10 @@ public abstract class MixinPlayerAttributeTracker implements IPlayerAttributes {
             }
         }
 
-        if (Config.extraAttributeSlots.length > 0) {
+        if (Config.extraAttributeSlots.getStringList().length > 0) {
             IPlayer iPlayer = AbstractNpcAPI.Instance().getPlayer(player.getCommandSenderName());
             INbt playerNbt = iPlayer.getAllNbt();
-            ArrayList<String> extraSlots = new ArrayList<>(Arrays.asList(Config.extraAttributeSlots));
+            ArrayList<String> extraSlots = new ArrayList<>(Arrays.asList(Config.extraAttributeSlots.getStringList()));
             for (String slotLocation : extraSlots) {
                 try {
                     if (slotLocation.contains(":")) {

@@ -8,6 +8,7 @@
   * @javaFqn com.veil.extendedscripts.extendedapi.AbstractShapeMaker
 */
 export interface AbstractShapeMaker {
+    Instance(): import('./AbstractShapeMaker').AbstractShapeMaker;
     /** Solid box centred on {@code center} with the given full width, height, and length. */
     getBox(center: IPos, width: import('./int').int, height: import('./int').int, length: import('./int').int): IPos[];
     /** Solid box from corner {@code pos1} to corner {@code pos2}. */
